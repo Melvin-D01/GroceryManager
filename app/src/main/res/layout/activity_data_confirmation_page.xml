@@ -98,9 +98,9 @@
         android:layout_width="409dp"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="286dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="376dp" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar8"
@@ -113,24 +113,27 @@
         tools:layout_editor_absoluteY="-5dp"
         tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="196dp" />
-
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date:"
+        android:text="Select Date:"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="212dp" />
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="211dp" />
+
+    <Button
+        android:id="@+id/btnDatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:hint="Select Date"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
     <EditText
         android:id="@+id/editTextTextPersonName"
@@ -176,8 +179,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm"
-        tools:layout_editor_absoluteX="156dp"
-        tools:layout_editor_absoluteY="336dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="424dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
