@@ -161,36 +161,10 @@
         tools:layout_editor_absoluteY="621dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-            <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
-        android:layout_width="416dp"
-        android:layout_height="247dp"
-        android:background="?attr/colorButtonNormal"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-3dp"
-        tools:layout_editor_absoluteY="368dp" />
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Expiry Date"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="156dp"
-        tools:layout_editor_absoluteY="391dp" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="324dp"
-        android:layout_height="29dp"
-        android:text="Position your Expiry date in the frame to scan it"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="435dp" />
+        </ScrollView>
 
     <Button
         android:id="@+id/button"
@@ -201,21 +175,4 @@
         tools:layout_editor_absoluteX="41dp"
         tools:layout_editor_absoluteY="516dp" />
 
-
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar2"
-            android:layout_width="417dp"
-            android:layout_height="78dp"
-            android:background="?attr/colorButtonNormal"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="-1dp"
-            tools:layout_editor_absoluteY="-1dp" />
-
-        </LinearLayout>
-
-        </ScrollView>
-
-    </LinearLayout>
+</LinearLayout>
