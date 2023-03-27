@@ -14,4 +14,8 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun fakeTest() {
+        //asdf asdf
+    }
+
 }
