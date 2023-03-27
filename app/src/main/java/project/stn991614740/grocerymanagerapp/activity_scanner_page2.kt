@@ -24,8 +24,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
-class ScannerPageActivity : AppCompatActivity() {
-
+class activity_scanner_page2 : AppCompatActivity() {
     // UI Views
     private lateinit var inputImageBtn: MaterialButton
     private lateinit var recognizeTextBtn: MaterialButton
@@ -49,7 +48,7 @@ class ScannerPageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_scanner_page2)
 
         // Initialize UI Views
         inputImageBtn = findViewById(R.id.inputImageBtn)

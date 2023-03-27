@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:orientation="vertical"
-    tools:context=".ScannerPageActivity">
+    tools:context=".activity_scanner_page2">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,23 +44,76 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageIv"
                 android:layout_width="match_parent"
-                app:strokeWidth="2dp"
-                android:src="@drawable/ic_baseline_image_24"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:layout_height="wrap_content"/>
+                android:src="@drawable/ic_baseline_image_24"
+                app:strokeWidth="2dp" />
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Recognized Text: "/>
+                android:text="Recognized Text: " />
 
             <EditText
                 android:id="@+id/recognizedTextEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/imageButton5"
+                android:layout_width="77dp"
+                android:layout_height="69dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="25dp"
+                tools:layout_editor_absoluteY="621dp"
+                tools:srcCompat="@tools:sample/backgrounds/scenic"
+                android:layout_gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/imageButton6"
+                android:layout_width="77dp"
+                android:layout_height="69dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="115dp"
+                tools:layout_editor_absoluteY="621dp"
+                tools:srcCompat="@tools:sample/backgrounds/scenic"
+                android:layout_gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/imageButton7"
+                android:layout_width="77dp"
+                android:layout_height="69dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="211dp"
+                tools:layout_editor_absoluteY="621dp"
+                tools:srcCompat="@tools:sample/backgrounds/scenic"
+                android:layout_gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/imageButton8"
+                android:layout_width="77dp"
+                android:layout_height="69dp"
+                android:layout_gravity="center"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="306dp"
+                tools:layout_editor_absoluteY="621dp"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
 
         </LinearLayout>
 
@@ -74,97 +127,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MyFridge"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="690dp" />
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="77dp"
+                android:layout_height="20dp"
+                android:text="MyFridge"
+                android:textColor="@color/cardview_light_background"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="33dp"
+                tools:layout_editor_absoluteY="690dp" />
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Browse"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="125dp"
-        tools:layout_editor_absoluteY="690dp" />
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="77dp"
+                android:layout_height="20dp"
+                android:text="Browse"
+                android:textColor="@color/cardview_light_background"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="125dp"
+                tools:layout_editor_absoluteY="690dp" />
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scan"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="232dp"
-        tools:layout_editor_absoluteY="690dp" />
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="77dp"
+                android:layout_height="20dp"
+                android:text="Scan"
+                android:textColor="@color/cardview_light_background"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="232dp"
+                tools:layout_editor_absoluteY="690dp" />
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="317dp"
-        tools:layout_editor_absoluteY="690dp" />
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="77dp"
+                android:layout_height="20dp"
+                android:text="Settings"
+                android:textColor="@color/cardview_light_background"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="317dp"
+                tools:layout_editor_absoluteY="690dp" />
 
         </LinearLayout>
     </ScrollView>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="115dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton7"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton8"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="306dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-
-        </LinearLayout>
-
-        </ScrollView>
 
     <Button
         android:id="@+id/button"
@@ -173,6 +178,7 @@
         android:text="Enter Expiry Date Manually"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="516dp" />
+        tools:layout_editor_absoluteY="516dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
