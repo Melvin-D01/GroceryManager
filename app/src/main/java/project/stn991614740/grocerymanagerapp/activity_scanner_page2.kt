@@ -24,6 +24,10 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
+// firebase firestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
 class activity_scanner_page2 : AppCompatActivity() {
     // UI Views
     private lateinit var inputImageBtn: MaterialButton
@@ -45,6 +49,10 @@ class activity_scanner_page2 : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var textRecognizer: TextRecognizer
+
+
+    // firestore
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +111,9 @@ class activity_scanner_page2 : AppCompatActivity() {
                     val recognizedText = text.text
 
                     recognizedTextEt.setText(recognizedText)
+
+                    val expiryDateString = recognizedTextEt.text.toString()
+                    db.collection("expiryDate").document("new-expiry-date").set(expiryDateString)
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception
@@ -161,7 +172,7 @@ class activity_scanner_page2 : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         // This will receive the image, if picked
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             // Image picked
             val data = result.data
             imageUri = data!!.data
@@ -190,7 +201,7 @@ class activity_scanner_page2 : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         // This will receive the image, if picked
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             // Image picked
             // Set to imageView -> imageIv
             imageIv.setImageURI(imageUri)
