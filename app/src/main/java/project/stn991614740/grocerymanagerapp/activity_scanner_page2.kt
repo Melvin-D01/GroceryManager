@@ -113,7 +113,11 @@ class activity_scanner_page2 : AppCompatActivity() {
                     recognizedTextEt.setText(recognizedText)
 
                     val expiryDateString = recognizedTextEt.text.toString()
-                    db.collection("expiryDate").document("new-expiry-date").set(expiryDateString)
+                    val data = hashMapOf(
+                        "expiryDate" to expiryDateString
+                    )
+                    db.collection("expiryDate").document("new-expiry-date").set(data)
+
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception
