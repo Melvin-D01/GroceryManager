@@ -4,10 +4,8 @@ import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.TextView
 import java.text.SimpleDateFormat
-import java.time.Year
 import java.util.*
 
 class DataConfirmationPage : AppCompatActivity() {
@@ -16,7 +14,7 @@ class DataConfirmationPage : AppCompatActivity() {
     private lateinit var btnDatePicker: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_data_confirmation_page)
+        setContentView(R.layout.oldactivity_data_confirmation_page)
 
         tvDatePicker = findViewById(R.id.tvDate)
         btnDatePicker = findViewById(R.id.btnDatePicker)

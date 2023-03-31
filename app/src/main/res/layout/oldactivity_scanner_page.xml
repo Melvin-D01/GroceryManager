@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InventoryPage">
+    tools:context=".ScannerPage">
 
     <TableLayout
         android:id="@+id/layout"
@@ -186,93 +186,6 @@
         </TableRow>
     </TableLayout>
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="413dp"
-        android:layout_height="110dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="621dp" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MyFridge"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="690dp" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Browse"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="125dp"
-        tools:layout_editor_absoluteY="690dp" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scan"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="232dp"
-        tools:layout_editor_absoluteY="690dp" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="317dp"
-        tools:layout_editor_absoluteY="690dp" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic"
-        tools:ignore="MissingConstraints" />
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="115dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="77dp"
-        android:layout_height="69dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="306dp"
-        tools:layout_editor_absoluteY="621dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
@@ -281,5 +194,26 @@
         tools:layout_editor_absoluteX="175dp"
         tools:layout_editor_absoluteY="19dp"
         tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnknownIdInLayout">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,6 @@ import android.os.Bundle
 class InventoryPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scanner_page)
+        setContentView(R.layout.oldactivity_scanner_page)
     }
 }

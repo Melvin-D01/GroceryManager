@@ -1,6 +1,5 @@
 package project.stn991614740.grocerymanagerapp
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
@@ -56,7 +55,7 @@ class activity_scanner_page2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scanner_page2)
+        setContentView(R.layout.oldactivity_scanner_page2)
 
         // Initialize UI Views
         inputImageBtn = findViewById(R.id.inputImageBtn)
