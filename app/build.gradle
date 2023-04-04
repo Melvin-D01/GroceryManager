@@ -51,14 +51,28 @@ dependencies {
     //Add Text Recognition Google ML library
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:18.0.0'
+    implementation 'com.google.firebase:firebase-common-ktx:20.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    // firebase
-    implementation platform('com.google.firebase:firebase-bom:31.3.0')
 
-    // firestore
+    //google dependency
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+
+    //github glide
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+
+    // Declare the dependency for the Cloud Firestore library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
 }

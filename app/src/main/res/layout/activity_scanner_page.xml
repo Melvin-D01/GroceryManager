@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context=".ScannerPage">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/inputImageBtn"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_baseline_add_a_photo_24"
+            android:text="Take Image"
+            android:layout_marginEnd="5dp"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/recognizeTextBtn"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_baseline_document_scanner_24"
+            android:text="Process Image"
+            android:layout_marginEnd="5dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageIv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_baseline_image_24"
+                app:strokeWidth="2dp" />
+
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Recognized Text: " />
+
+            <EditText
+                android:id="@+id/recognizedTextEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="328dp"
+                android:layout_height="56dp"
+                android:text="Enter Expiry Date Manually"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="516dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom">
+
+            <ImageButton
+                android:id="@+id/imageButton5"
+                android:layout_width="0dp"
+                android:layout_height="69dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_image_24" />
+
+            <ImageButton
+                android:id="@+id/imageButton6"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="69dp"
+                android:src="@drawable/ic_baseline_image_24" />
+
+            <ImageView
+                android:id="@+id/imageButton7"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="69dp"
+                android:src="@drawable/ic_baseline_image_24" />
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>
