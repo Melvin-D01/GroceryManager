@@ -32,7 +32,6 @@ import com.squareup.picasso.Picasso
 import com.bumptech.glide.Glide
 
 
-
 class ScannerPage : AppCompatActivity() {
 
     // UI Views
@@ -40,6 +39,10 @@ class ScannerPage : AppCompatActivity() {
     private lateinit var recognizeTextBtn: MaterialButton
     private lateinit var imageIv: ImageView
     private lateinit var recognizedTextEt: EditText
+    private lateinit var imageButton5: ImageButton
+    private  lateinit var imageButton6: ImageButton
+    private lateinit var imageButton7: ImageButton
+
 
     private companion object {
         // Handles the result of camera/gallery permissions in onRequestPermissionsResult
@@ -62,19 +65,40 @@ class ScannerPage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_scanner_page)
+
+        val imageButton6 = findViewById<ImageButton>(R.id.imageButton6)
+        imageButton6.setOnClickListener{
+           val intent = Intent(this, AddActivity::class.java)
+            print("this is printing")
+            startActivity(intent)
+        }
+
+
+         /*
+
+        mButtonSettingsActivity.setOnClickListener{
+            val i = Intent(this, project.stn991614740.grocerymanagerapp.SettingsActivity::class.java)
+            startActivity(i)
+        }
 
 
 
+          */
 
+
+
+    /*
         // needed for images to show up
         setContentView(R.layout.activity_scanner_page)
 
         //firebase images
         val fridgeImg = findViewById<ImageButton>(R.id.imageButton5) as ImageButton
         val addImg = findViewById<ImageButton>(R.id.imageButton6) as ImageButton
-        val settingsImg = findViewById<ImageView>(R.id.imageButton7) as ImageView
+        val settingsImg = findViewById<ImageButton>(R.id.imageButton7) as ImageButton
 
         val data = FirebaseFirestore.getInstance()
+
 
 
         val docRef = data.collection("Mydatabase").document("FirebaseData")
@@ -82,24 +106,23 @@ class ScannerPage : AppCompatActivity() {
             if (document != null) {
 
                 val mImageViewUsingPicassoFridge = document.getString("FridgePng")
-                val mImageViewUsingPicassoAdd = document.getString("AddPng")
+                val mImageViewUsingPicassoAdd = document.getString("GlideImgUrl")
                 val mImageViewUsingPicassoSettings = document.getString("SettingsPng")
 
                 //Glide.with(this).load(mImageViewUsingPicassoFridge).into(fridgeImg);
-                //Glide.with(this).load(mImageViewUsingPicassoAdd).into(addImg);
+                Glide.with(this).load(mImageViewUsingPicassoAdd).into(addImg);
                 //Glide.with(this).load(mImageViewUsingPicassoSettings).into(settingsImg);
 
-                Picasso.get().load(mImageViewUsingPicassoFridge).into(fridgeImg);
-                Picasso.get().load(mImageViewUsingPicassoAdd).into(addImg);
-                Picasso.get().load(mImageViewUsingPicassoSettings).into(settingsImg);
+                //Picasso.get().load(mImageViewUsingPicassoFridge).into(fridgeImg);
+                //Picasso.get().load(mImageViewUsingPicassoAdd).into(addImg);
+                //Picasso.get().load(mImageViewUsingPicassoSettings).into(settingsImg);
 
 
             } else {
                 //Log.d(TAG, "No such document")
             }
         }
-
-
+     */
 
 
         setContentView(R.layout.activity_scanner_page)
