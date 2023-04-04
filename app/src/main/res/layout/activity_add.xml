@@ -24,38 +24,79 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textSize="50px"
-            android:text="MyFridge" />
+            android:text="Categories" />
 
     </ScrollView>
-
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="8">
+        android:layout_weight="1">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:padding="10dp"
-                android:text="Add"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-
-        </RelativeLayout>
+        <SearchView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </ScrollView>
 
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="2"
+            android:columnCount="3"
+            android:layout_weight="7"
+            >
 
+            <ImageButton
+                android:id="@+id/redMeatsButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_meat"
+                android:layout_margin="10dp"/>
+
+            <ImageButton
+                android:id="@+id/chickenButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_chicken"
+                android:layout_margin="10dp"/>
+
+            <ImageButton
+                android:id="@+id/vegetablesImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_veg"
+                android:layout_margin="10dp" />
+
+            <ImageButton
+                android:id="@+id/fruitsButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_fruit"
+                android:layout_margin="10dp" />
+
+            <ImageButton
+                android:id="@+id/dairyButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_dairy"
+                android:layout_margin="10dp"/>
+
+            <ImageButton
+                android:id="@+id/restButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@mipmap/ic_rest"/>
+
+        </GridLayout>
 
 
 
@@ -74,21 +115,21 @@
                 android:layout_width="0dp"
                 android:layout_height="69dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@mipmap/ic_fridge" />
 
             <ImageButton
                 android:id="@+id/imageButton6"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="69dp"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@mipmap/ic_add" />
 
             <ImageButton
                 android:id="@+id/imageButton7"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="69dp"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@mipmap/ic_settings" />
 
         </LinearLayout>
 

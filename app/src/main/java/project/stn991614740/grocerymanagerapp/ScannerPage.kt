@@ -89,6 +89,8 @@ class ScannerPage : AppCompatActivity() {
         fridgeButton = findViewById(R.id.imageButton5)
         settingsButton = findViewById(R.id.imageButton7)
 
+
+        /*
     val data = FirebaseFirestore.getInstance()
 
     val docRef = data.collection("Mydatabase").document("FirebaseData")
@@ -108,6 +110,8 @@ class ScannerPage : AppCompatActivity() {
         }
     }
 
+
+         */
 
         // Initialize arrays of permissions required for camera and gallery
         cameraPermissions =
