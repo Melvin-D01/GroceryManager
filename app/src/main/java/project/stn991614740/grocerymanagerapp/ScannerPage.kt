@@ -39,9 +39,9 @@ class ScannerPage : AppCompatActivity() {
     private lateinit var recognizeTextBtn: MaterialButton
     private lateinit var imageIv: ImageView
     private lateinit var recognizedTextEt: EditText
-    private lateinit var imageButton5: ImageButton
-    private  lateinit var imageButton6: ImageButton
-    private lateinit var imageButton7: ImageButton
+    private lateinit var addButton: ImageButton
+    private  lateinit var fridgeButton: ImageButton
+    private lateinit var settingsButton: ImageButton
 
 
     private companion object {
@@ -66,14 +66,6 @@ class ScannerPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner_page)
-
-        val imageButton6 = findViewById<ImageButton>(R.id.imageButton6)
-        imageButton6.setOnClickListener{
-           val intent = Intent(this, AddActivity::class.java)
-            print("this is printing")
-            startActivity(intent)
-        }
-
 
          /*
 
@@ -132,6 +124,10 @@ class ScannerPage : AppCompatActivity() {
         recognizeTextBtn = findViewById(R.id.recognizeTextBtn)
         imageIv = findViewById(R.id.imageIv)
         recognizedTextEt = findViewById(R.id.recognizedTextEt)
+        addButton = findViewById(R.id.imageButton6)
+        fridgeButton = findViewById(R.id.imageButton5)
+        settingsButton = findViewById(R.id.imageButton7)
+
 
         // Initialize arrays of permissions required for camera and gallery
         cameraPermissions =
@@ -147,6 +143,21 @@ class ScannerPage : AppCompatActivity() {
         // Handle click, show input image dialog
         inputImageBtn.setOnClickListener {
             showInputImageDialog()
+        }
+
+        addButton.setOnClickListener{
+            val intent = Intent(this, AddActivity::class.java)
+            startActivity(intent)
+        }
+
+        fridgeButton.setOnClickListener{
+            val intent = Intent(this, FridgeActivity::class.java)
+            startActivity(intent)
+        }
+
+        settingsButton.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         recognizeTextBtn.setOnClickListener {

@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, project.stn991614740.grocerymanagerapp.ScannerPage::class.java)
+        val intent = Intent(this, ScannerPage::class.java)
         startActivity(intent)
     }
 }
