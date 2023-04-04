@@ -94,21 +94,21 @@
                 android:layout_width="0dp"
                 android:layout_height="69dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_action_name" />
+                android:src="@drawable/ic_launcher_background" />
 
             <ImageButton
                 android:id="@+id/imageButton6"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="69dp"
-                android:src="@drawable/ic_action_name_add" />
+                android:src="@drawable/ic_launcher_background" />
 
             <ImageButton
                 android:id="@+id/imageButton7"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="69dp"
-                android:src="@drawable/ic_action_name_settings" />
+                android:src="@drawable/ic_launcher_background" />
 
         </LinearLayout>
 

@@ -78,45 +78,6 @@ class ScannerPage : AppCompatActivity() {
 
           */
 
-
-
-    /*
-        // needed for images to show up
-        setContentView(R.layout.activity_scanner_page)
-
-        //firebase images
-        val fridgeImg = findViewById<ImageButton>(R.id.imageButton5) as ImageButton
-        val addImg = findViewById<ImageButton>(R.id.imageButton6) as ImageButton
-        val settingsImg = findViewById<ImageButton>(R.id.imageButton7) as ImageButton
-
-        val data = FirebaseFirestore.getInstance()
-
-
-
-        val docRef = data.collection("Mydatabase").document("FirebaseData")
-        docRef.get().addOnSuccessListener { document ->
-            if (document != null) {
-
-                val mImageViewUsingPicassoFridge = document.getString("FridgePng")
-                val mImageViewUsingPicassoAdd = document.getString("GlideImgUrl")
-                val mImageViewUsingPicassoSettings = document.getString("SettingsPng")
-
-                //Glide.with(this).load(mImageViewUsingPicassoFridge).into(fridgeImg);
-                Glide.with(this).load(mImageViewUsingPicassoAdd).into(addImg);
-                //Glide.with(this).load(mImageViewUsingPicassoSettings).into(settingsImg);
-
-                //Picasso.get().load(mImageViewUsingPicassoFridge).into(fridgeImg);
-                //Picasso.get().load(mImageViewUsingPicassoAdd).into(addImg);
-                //Picasso.get().load(mImageViewUsingPicassoSettings).into(settingsImg);
-
-
-            } else {
-                //Log.d(TAG, "No such document")
-            }
-        }
-     */
-
-
         setContentView(R.layout.activity_scanner_page)
 
         // Initialize UI Views
@@ -127,6 +88,25 @@ class ScannerPage : AppCompatActivity() {
         addButton = findViewById(R.id.imageButton6)
         fridgeButton = findViewById(R.id.imageButton5)
         settingsButton = findViewById(R.id.imageButton7)
+
+    val data = FirebaseFirestore.getInstance()
+
+    val docRef = data.collection("Mydatabase").document("FirebaseData")
+    docRef.get().addOnSuccessListener { document ->
+        if (document != null) {
+
+            val mImageViewUsingPicassoFridge = document.getString("FridgePng")
+            val mImageViewUsingPicassoAdd = document.getString("AddPng")
+            val mImageViewUsingPicassoSettings = document.getString("SettingsImg")
+
+            Glide.with(this).load(mImageViewUsingPicassoFridge).into(fridgeButton);
+            Glide.with(this).load(mImageViewUsingPicassoAdd).into(addButton);
+            Glide.with(this).load(mImageViewUsingPicassoSettings).into(settingsButton);
+
+        } else {
+            //Log.d(TAG, "No such document")
+        }
+    }
 
 
         // Initialize arrays of permissions required for camera and gallery
