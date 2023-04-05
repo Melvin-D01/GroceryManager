@@ -20,11 +20,12 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
+            android:text="Categories"
+            android:textAlignment="center"
+            android:textColor="@color/material_dynamic_neutral50"
             android:textSize="50px"
-            android:text="Categories" />
+            android:textStyle="bold" />
 
     </ScrollView>
 

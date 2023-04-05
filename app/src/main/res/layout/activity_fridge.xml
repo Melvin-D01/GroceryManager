@@ -9,10 +9,9 @@
     tools:context=".FridgeActivity">
 
 
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_weight="1">
 
 
@@ -20,11 +19,11 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textSize="50px"
-            android:text="MyFridge" />
+            android:text="MyFridge"
+            android:textAlignment="center"
+            android:textColor="@color/material_dynamic_neutral60"
+            android:textSize="100px" />
 
     </ScrollView>
 
