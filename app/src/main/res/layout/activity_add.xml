@@ -41,15 +41,16 @@
 
 
         <GridLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:rowCount="2"
             android:columnCount="3"
             android:layout_weight="7"
+            android:layout_gravity="center"
             >
 
             <ImageButton
-                android:id="@+id/redMeatsButton"
+                android:id="@+id/redMeatsButton1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -57,7 +58,7 @@
                 android:layout_margin="10dp"/>
 
             <ImageButton
-                android:id="@+id/chickenButton"
+                android:id="@+id/chickenButton1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -65,7 +66,7 @@
                 android:layout_margin="10dp"/>
 
             <ImageButton
-                android:id="@+id/vegetablesImage"
+                android:id="@+id/vegetablesImage1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -73,7 +74,7 @@
                 android:layout_margin="10dp" />
 
             <ImageButton
-                android:id="@+id/fruitsButton"
+                android:id="@+id/fruitsButton1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -81,7 +82,7 @@
                 android:layout_margin="10dp" />
 
             <ImageButton
-                android:id="@+id/dairyButton"
+                android:id="@+id/dairyButto1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -89,7 +90,7 @@
                 android:layout_margin="10dp"/>
 
             <ImageButton
-                android:id="@+id/restButton"
+                android:id="@+id/restButton1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -97,6 +98,64 @@
                 android:src="@mipmap/ic_rest"/>
 
         </GridLayout>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="3"
+        android:layout_weight="7"
+        android:layout_gravity="center"
+        >
+
+        <ImageButton
+            android:id="@+id/redMeatsButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_meat"
+            android:layout_margin="10dp"/>
+
+        <ImageButton
+            android:id="@+id/chickenButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_chicken"
+            android:layout_margin="10dp"/>
+
+        <ImageButton
+            android:id="@+id/vegetablesImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_veg"
+            android:layout_margin="10dp" />
+
+        <ImageButton
+            android:id="@+id/fruitsButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_fruit"
+            android:layout_margin="10dp" />
+
+        <ImageButton
+            android:id="@+id/dairyButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_dairy"
+            android:layout_margin="10dp"/>
+
+        <ImageButton
+            android:id="@+id/restButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:src="@mipmap/ic_rest"/>
+
+    </GridLayout>
 
 
 
