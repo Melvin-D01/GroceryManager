@@ -30,21 +30,25 @@ import com.google.firebase.ktx.Firebase
 // display images from firebase
 import com.squareup.picasso.Picasso
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldValue
+import kotlin.math.exp
 
 
 class ScannerPage : AppCompatActivity() {
 
     // UI Views
     private lateinit var inputImageBtn: MaterialButton
-    private lateinit var recognizeTextBtn: MaterialButton
     private lateinit var imageIv: ImageView
-    private lateinit var recognizedTextEt: EditText
     private lateinit var addButton: ImageButton
     private lateinit var fridgeButton: ImageButton
     private lateinit var settingsButton: ImageButton
     private lateinit var textTestEt : EditText
     private lateinit var categoryText : EditText
-
+    private lateinit var expirationView : EditText
+    private lateinit var textRecognizer: TextRecognizer
+    private lateinit var addToFridgeButton : Button
+    private lateinit var progressDialog: ProgressDialog
+    private lateinit var expDate: String
 
     private companion object {
         // Handles the result of camera/gallery permissions in onRequestPermissionsResult
@@ -54,13 +58,9 @@ class ScannerPage : AppCompatActivity() {
 
     private var imageUri: Uri? = null
 
+    // Camera and storage permission arrays
     private lateinit var cameraPermissions: Array<String>
     private lateinit var storagePermissions: Array<String>
-
-    private lateinit var progressDialog: ProgressDialog
-
-    private lateinit var textRecognizer: TextRecognizer
-
 
     // firestore
     val db = Firebase.firestore
@@ -72,36 +72,15 @@ class ScannerPage : AppCompatActivity() {
 
         // Initialize UI Views
         inputImageBtn = findViewById(R.id.inputImageBtn)
-        recognizeTextBtn = findViewById(R.id.recognizeTextBtn)
         imageIv = findViewById(R.id.imageIv)
-        recognizedTextEt = findViewById(R.id.recognizedTextEt)
         addButton = findViewById(R.id.imageButton6)
         fridgeButton = findViewById(R.id.imageButton5)
         settingsButton = findViewById(R.id.imageButton7)
         textTestEt = findViewById(R.id.testText)
         categoryText = findViewById(R.id.categoryText)
-        /*
-    val data = FirebaseFirestore.getInstance()
+        addToFridgeButton = findViewById(R.id.AddToFridgeButton)
+        expirationView = findViewById(R.id.expirationText)
 
-    val docRef = data.collection("Mydatabase").document("FirebaseData")
-    docRef.get().addOnSuccessListener { document ->
-        if (document != null) {
-
-            val mImageViewUsingPicassoFridge = document.getString("FridgePng")
-            val mImageViewUsingPicassoAdd = document.getString("AddPng")
-            val mImageViewUsingPicassoSettings = document.getString("SettingsImg")
-
-            Glide.with(this).load(mImageViewUsingPicassoFridge).into(fridgeButton);
-            Glide.with(this).load(mImageViewUsingPicassoAdd).into(addButton);
-            Glide.with(this).load(mImageViewUsingPicassoSettings).into(settingsButton);
-
-        } else {
-            //Log.d(TAG, "No such document")
-        }
-    }
-
-
-         */
 
         // Initialize arrays of permissions required for camera and gallery
         cameraPermissions =
@@ -134,21 +113,26 @@ class ScannerPage : AppCompatActivity() {
             startActivity(intent)
         }
 
-        recognizeTextBtn.setOnClickListener {
-            if (imageUri == null) {
-                // Image not picked
-                showToast("Please pick an image first")
-            } else {
-                // Image picked, recognize text
-                recognizeTextFromImage()
-            }
-        }
         val data = intent.getStringExtra("key")
         textTestEt.setText(data)
         val data2 = intent.getStringExtra("key2")
         categoryText.setText(data2)
-    }
 
+        addToFridgeButton.setOnClickListener {
+            val descriptionString = data
+            val categoryString = data2
+            val expirationString = expDate
+                    val data = hashMapOf(
+                        "Description" to descriptionString,
+                        "Category" to categoryString,
+                        "ExpirationDate" to expirationString
+                    )
+                    val testing = db.collection("food")
+                    testing.add(data)
+            val intent = Intent(this, FridgeActivity::class.java)
+            startActivity(intent)
+        }
+    }
 
     private fun recognizeTextFromImage() {
         // Set message and show progress dialog
@@ -168,13 +152,13 @@ class ScannerPage : AppCompatActivity() {
 
                     val recognizedText = text.text
 
-                    recognizedTextEt.setText(recognizedText)
+                    var obj = ExpirationDateParser()
 
-                    val expiryDateString = recognizedTextEt.text.toString()
-                    val data = hashMapOf(
-                        "expiryDate" to expiryDateString
-                    )
-                    db.collection("expiryDate").document("new-expiry-date").set(data)
+                    var output = obj.parseExpirationDate(recognizedText).toString()
+
+                    expDate = output
+
+                    expirationView.setText(output)
 
                 }
                 .addOnFailureListener { e ->
@@ -240,6 +224,7 @@ class ScannerPage : AppCompatActivity() {
             imageUri = data!!.data
             // Set to imageView -> imageIv
             imageIv.setImageURI(imageUri)
+            recognizeTextFromImage()
         } else {
             // Cancelled
             showToast("Cancelled")
