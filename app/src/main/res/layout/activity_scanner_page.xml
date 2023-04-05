@@ -34,7 +34,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="491dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -55,23 +55,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Recognized Text: " />
+                android:text="Text Captured: " />
 
             <EditText
                 android:id="@+id/recognizedTextEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Processed Image to Text"
                 android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="328dp"
-                android:layout_height="56dp"
-                android:text="Enter Expiry Date Manually"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="516dp"
-                android:layout_gravity="center"/>
 
         </LinearLayout>
 
@@ -82,16 +74,51 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-        <EditText
-            android:id="@+id/testText"
-            android:layout_width="396dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="12sp" />
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/categoryText"
+                android:layout_width="329dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:hint="Item Category" />
+
+            <EditText
+                android:id="@+id/testText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Item Description" />
+
+            <EditText
+                android:id="@+id/expirationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Expire Date" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="328dp"
+            android:layout_height="56dp"
+            android:text="Add To Fridge"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="41dp"
+            tools:layout_editor_absoluteY="516dp"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
+
     </ScrollView>
 
 
@@ -110,21 +137,24 @@
                 android:layout_width="0dp"
                 android:layout_height="69dp"
                 android:layout_weight="1"
-                android:src="@mipmap/ic_fridge" />
+                android:src="@mipmap/ic_fridge"
+                android:contentDescription="fridgeButton"/>
 
             <ImageButton
                 android:id="@+id/imageButton6"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="69dp"
-                android:src="@mipmap/ic_add" />
+                android:src="@mipmap/ic_add"
+                android:contentDescription="addButton"/>
 
             <ImageButton
                 android:id="@+id/imageButton7"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="69dp"
-                android:src="@mipmap/ic_settings" />
+                android:src="@mipmap/ic_settings"
+                android:contentDescription="settingsButton"/>
 
         </LinearLayout>
 

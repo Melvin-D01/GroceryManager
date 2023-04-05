@@ -105,6 +105,7 @@ class AddActivity : AppCompatActivity() {
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
                     intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Fruits")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -136,6 +137,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Vegetable")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -167,6 +170,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Meat")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -198,6 +203,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Seafood")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -229,6 +236,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Dairy")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -260,6 +269,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Grains")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -291,6 +302,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Canned Goods")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -322,6 +335,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Snacks")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -353,6 +368,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Beverages")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -384,6 +401,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Condiments")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -415,6 +434,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Baked Goods")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -446,6 +467,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Frozen Foods")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -477,6 +500,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Prepped Meals")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -508,6 +533,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Baby Food")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -539,6 +566,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Pet Food")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid
@@ -570,6 +599,8 @@ class AddActivity : AppCompatActivity() {
                     handleFoodItemName(foodItemName)
                     Log.d("TAG", foodItemName)
                     val intent = Intent(this, ScannerPage::class.java)
+                    intent.putExtra("key", foodItemName)
+                    intent.putExtra("key2", "Other Foods")
                     startActivity(intent)
                 } else {
                     // Show an error message if the entered food item name is invalid

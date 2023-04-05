@@ -40,9 +40,10 @@ class ScannerPage : AppCompatActivity() {
     private lateinit var imageIv: ImageView
     private lateinit var recognizedTextEt: EditText
     private lateinit var addButton: ImageButton
-    private  lateinit var fridgeButton: ImageButton
+    private lateinit var fridgeButton: ImageButton
     private lateinit var settingsButton: ImageButton
     private lateinit var textTestEt : EditText
+    private lateinit var categoryText : EditText
 
 
     private companion object {
@@ -67,18 +68,6 @@ class ScannerPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner_page)
-
-         /*
-
-        mButtonSettingsActivity.setOnClickListener{
-            val i = Intent(this, project.stn991614740.grocerymanagerapp.SettingsActivity::class.java)
-            startActivity(i)
-        }
-
-
-
-          */
-
         setContentView(R.layout.activity_scanner_page)
 
         // Initialize UI Views
@@ -90,8 +79,7 @@ class ScannerPage : AppCompatActivity() {
         fridgeButton = findViewById(R.id.imageButton5)
         settingsButton = findViewById(R.id.imageButton7)
         textTestEt = findViewById(R.id.testText)
-
-
+        categoryText = findViewById(R.id.categoryText)
         /*
     val data = FirebaseFirestore.getInstance()
 
@@ -157,6 +145,8 @@ class ScannerPage : AppCompatActivity() {
         }
         val data = intent.getStringExtra("key")
         textTestEt.setText(data)
+        val data2 = intent.getStringExtra("key2")
+        categoryText.setText(data2)
     }
 
 
