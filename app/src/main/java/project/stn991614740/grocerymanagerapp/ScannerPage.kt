@@ -42,6 +42,7 @@ class ScannerPage : AppCompatActivity() {
     private lateinit var addButton: ImageButton
     private  lateinit var fridgeButton: ImageButton
     private lateinit var settingsButton: ImageButton
+    private lateinit var textTestEt : EditText
 
 
     private companion object {
@@ -88,6 +89,7 @@ class ScannerPage : AppCompatActivity() {
         addButton = findViewById(R.id.imageButton6)
         fridgeButton = findViewById(R.id.imageButton5)
         settingsButton = findViewById(R.id.imageButton7)
+        textTestEt = findViewById(R.id.testText)
 
 
         /*
@@ -153,6 +155,8 @@ class ScannerPage : AppCompatActivity() {
                 recognizeTextFromImage()
             }
         }
+        val data = intent.getStringExtra("key")
+        textTestEt.setText(data)
     }
 
 
