@@ -30,6 +30,7 @@ import com.google.firebase.ktx.Firebase
 // display images from firebase
 import com.squareup.picasso.Picasso
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldValue
 
 
 class ScannerPage : AppCompatActivity() {
@@ -174,7 +175,11 @@ class ScannerPage : AppCompatActivity() {
                     val data = hashMapOf(
                         "expiryDate" to expiryDateString
                     )
-                    db.collection("expiryDate").document("new-expiry-date").set(data)
+
+                    val testingDb = db.collection("expiryDate").document("new-expiry-date")
+
+                    testingDb.set(data)
+                    testingDb.update("id", FieldValue.increment(1))
 
                 }
                 .addOnFailureListener { e ->

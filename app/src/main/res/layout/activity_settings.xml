@@ -35,7 +35,20 @@
         android:layout_weight="8">
 
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dino Pasanbegovic"
+            android:textColor="@color/black"/>
+
+
+
+
     </ScrollView>
+
+
+
 
     <ScrollView
         android:layout_width="match_parent"

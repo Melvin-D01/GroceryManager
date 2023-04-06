@@ -1,8 +1,10 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import com.bumptech.glide.Glide
@@ -10,15 +12,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FridgeActivity : AppCompatActivity() {
 
-    private lateinit var addButton: ImageButton
-    private  lateinit var fridgeButton: ImageButton
-    private lateinit var settingsButton: ImageButton
-    private lateinit var buttonGo: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fridge)
 
+
+        /*
 
         addButton = findViewById(R.id.imageButton6)
         fridgeButton = findViewById(R.id.imageButton5)
@@ -26,27 +25,32 @@ class FridgeActivity : AppCompatActivity() {
         buttonGo = findViewById(R.id.buttonGo)
 
 
-        /*
+
+
 
         val data = FirebaseFirestore.getInstance()
+        val collectionRef = data.collection("food")
 
-        val docRef = data.collection("Mydatabase").document("FirebaseData")
-        docRef.get().addOnSuccessListener { document ->
-            if (document != null) {
+        collectionRef.get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    // Access the fields in the document
+                    val category = document.getString("Category")
+                    val description = document.getString("Description")
+                    val expirationDate = document.getString("ExpirationDate")
 
-                val mImageViewUsingPicassoFridge = document.getString("FridgePng")
-                val mImageViewUsingPicassoAdd = document.getString("AddPng")
-                val mImageViewUsingPicassoSettings = document.getString("SettingsImg")
-
-                Glide.with(this).load(mImageViewUsingPicassoFridge).into(fridgeButton);
-                Glide.with(this).load(mImageViewUsingPicassoAdd).into(addButton);
-                Glide.with(this).load(mImageViewUsingPicassoSettings).into(settingsButton);
-
-            } else {
-                //Log.d(TAG, "No such document")
+                    // Do something with the data
+                    // For example, print it to the console
+                    Log.d(TAG, "Category: $category, Description: $description, ExpirationDate: $expirationDate")
+                }
             }
 
-         */
+
+
+
+
+
+
 
             addButton.setOnClickListener{
                 val intent = Intent(this, AddActivity::class.java)
@@ -69,3 +73,8 @@ class FridgeActivity : AppCompatActivity() {
             }
         }
     }
+
+         */
+
+    }
+}

@@ -36,8 +36,6 @@ class AddActivity : AppCompatActivity() {
     private lateinit var petFoodButton: ImageButton
     private lateinit var otherFoodButton : ImageButton
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
