@@ -1,18 +1,24 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class FridgeActivity : AppCompatActivity() {
 
     private lateinit var addButton: ImageButton
     private  lateinit var fridgeButton: ImageButton
     private lateinit var settingsButton: ImageButton
+    val db = Firebase.firestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +43,24 @@ class FridgeActivity : AppCompatActivity() {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
             }
+
+            val db = Firebase.firestore
+            db.collection("food")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val myList = ArrayList<Food>()
+                    for (document in documents) {
+                        val myModel = document.toObject(Food::class.java)
+                        myList.add(myModel)
+                    }
+                    // Set up the RecyclerView with the retrieved data
+                    val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+                    val myAdapter = MyAdapter(myList)
+                    recyclerView.adapter = myAdapter
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "Error getting documents: ", exception)
+                }
 
         }
     }
