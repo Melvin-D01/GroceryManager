@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.Manifest
-import android.media.Image
+
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -23,15 +23,10 @@ import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 // firebase firestore
-import com.google.firebase.firestore.FirebaseFirestore
+
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-// display images from firebase
-import com.squareup.picasso.Picasso
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FieldValue
-import kotlin.math.exp
 
 
 class ScannerPage : AppCompatActivity() {
@@ -119,9 +114,12 @@ class ScannerPage : AppCompatActivity() {
         categoryText.setText(data2)
 
         addToFridgeButton.setOnClickListener {
-            val descriptionString = data
-            val categoryString = data2
-            val expirationString = expDate
+            var catText = textTestEt.text.toString()
+            var descText = categoryText.text.toString()
+            var expText =  expirationView.text.toString()
+            val descriptionString = catText
+            val categoryString = descText
+            val expirationString = expText
                     val data = hashMapOf(
                         "Description" to descriptionString,
                         "Category" to categoryString,

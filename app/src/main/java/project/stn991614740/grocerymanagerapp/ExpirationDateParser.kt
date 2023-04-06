@@ -2,15 +2,12 @@ package project.stn991614740.grocerymanagerapp
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 import java.util.regex.Pattern
 
 class ExpirationDateParser {
 
-    val patterns = arrayOf(
+    private val patterns = arrayOf(
         "(\\d{1,4}[-/ ]\\d{1,2}[-/ ]\\d{1,4}|\\d{1,4}[-/ ]\\w{3,4}[-/ ]\\d{1,4})",
         "(\\w{1,4}[-/ ]\\d{1,2}[-/ ]\\d{1,4}|\\d{1,4}[-/ ]\\w{3,4}[-/ ]\\d{1,4})",
         "(\\w{1,4}[-/ ]\\d{1,4}|\\d{1,4}[-/ ]\\w{3,4}[-/ ])",
@@ -35,7 +32,7 @@ class ExpirationDateParser {
         )
     }
 
-    fun parseExpirationDate(input: String): Date? {
+    fun parseExpirationDate(input: String): String? {
         for (patternIndex in patterns.indices) {
             val pattern = Pattern.compile(patterns[patternIndex])
             val matcher = pattern.matcher(input)
@@ -46,7 +43,9 @@ class ExpirationDateParser {
                     try {
                         val dateFormat = SimpleDateFormat(format, Locale.US)
                         dateFormat.isLenient = false
-                        return dateFormat.parse(dateString)
+                        val date = dateString?.let { dateFormat.parse(it) }
+                        val dateFormatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
+                        return date?.let { dateFormatter.format(it) }
                     } catch (e: ParseException) {
                         // Ignore, try the next format
                     }
