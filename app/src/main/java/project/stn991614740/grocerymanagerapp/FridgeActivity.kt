@@ -15,7 +15,7 @@ class FridgeActivity : AppCompatActivity() {
     private lateinit var addButton: ImageButton
     private  lateinit var fridgeButton: ImageButton
     private lateinit var settingsButton: ImageButton
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fridge)

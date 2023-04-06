@@ -8,10 +8,10 @@ import java.util.regex.Pattern
 class ExpirationDateParser {
 
     private val patterns = arrayOf(
-        "(\\d{1,4}[-/ ]\\d{1,2}[-/ ]\\d{1,4}|\\d{1,4}[-/ ]\\w{3,4}[-/ ]\\d{1,4})",
-        "(\\w{1,4}[-/ ]\\d{1,2}[-/ ]\\d{1,4}|\\d{1,4}[-/ ]\\w{3,4}[-/ ]\\d{1,4})",
-        "(\\w{1,4}[-/ ]\\d{1,4}|\\d{1,4}[-/ ]\\w{3,4}[-/ ])",
-        "(\\d{1,4}[-/ ]\\d{1,2}|\\d{1,4}[-/ ]\\w{3,4})"
+        "(\\d{1,4}[-/ .]\\d{1,2}[-/ .]\\d{1,4}|\\d{1,4}[-/ .]\\w{3,4}[-/ .]\\d{1,4})",
+        "(\\w{1,4}[-/ .]\\d{1,2}[-/ .]\\d{1,4}|\\d{1,4}[-/ .]\\w{3,4}[-/ .]\\d{1,4})",
+        "(\\w{1,4}[-/ .]\\d{1,4}|\\d{1,4}[-/ .]\\w{3,4}[-/ .])",
+        "(\\d{1,4}[-/ .]\\d{1,2}|\\d{1,4}[-/ .]\\w{3,4})"
     )
 
     companion object {
@@ -27,8 +27,30 @@ class ExpirationDateParser {
             "yy/MM/dd",
             "MM/dd",
             "MM/yyyy",
-            "MMM/yyyy"
-
+            "MMM/yyyy",
+            "dd.MM.yy",
+            "dd.MM.yyyy",
+            "dd MMM yy",
+            "dd MMM yyyy",
+            "yyyy.MM.dd",
+            "MMM dd yy",
+            "MMM dd yyyy",
+            "dd MMM",
+            "yy.MM.dd",
+            "MM.dd",
+            "MM.yyyy",
+            "MMM yyyy",
+            "dd MM yy",
+            "dd MM yyyy",
+            "yyyy MM dd",
+            "MMM dd yy",
+            "MMM dd yyyy",
+            "ddMMMyy",
+            "ddMMMyyyy",
+            "MMMyy",
+            "MMMyyyy",
+            "ddMMyy",
+            "ddMMyyyy"
         )
     }
 
