@@ -4,11 +4,13 @@ package project.stn991614740.grocerymanagerapp
 import android.Manifest
 import android.app.ProgressDialog
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -145,15 +147,27 @@ class ScannerPage : AppCompatActivity() {
 
             // collects the data and adds it to the firestore db
             val dF = db.collection("food").document().id
-                    val data = hashMapOf(
-                        "UID" to dF,
-                        "Description" to descriptionString,
-                        "Category" to categoryString,
-                        "ExpirationDate" to expirationString,
-                        "CategoryImage" to catImageString
-                    )
-                    val testing = db.collection("food")
-                    testing.add(data)
+
+            // Get the Firestore collection reference
+            val collectionRef = Firebase.firestore.collection("food")
+
+            // Set a custom ID for the new document
+            val customId = dF
+
+            // Create a new document with the custom ID
+            val documentRef = collectionRef.document(customId)
+
+            // Set the data for the new document
+            val data = hashMapOf(
+                "UID" to dF,
+                "Description" to descriptionString,
+                "Category" to categoryString,
+                "ExpirationDate" to expirationString,
+                "CategoryImage" to catImageString
+            )
+            documentRef.set(data)
+                .addOnSuccessListener { Log.d(TAG, "Document added with ID: $customId") }
+                .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
 
             // once add is completed, it will take user to the MyFridge view and show updated list of food items
             val intent = Intent(this, FridgeActivity::class.java)

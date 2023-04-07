@@ -1,13 +1,14 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,21 +31,78 @@ class MyAdapter(private val myList: List<Food>) :
         holder.textView.text = myModel.Category
         holder.textView1.text = myModel.Description
         holder.textView2.text = myModel.ExpirationDate
-        holder.textView3.text = myModel.UID
+//        holder.textView3.text = myModel.UID  //Commented out for testing
 
         // Set the image based on the resource ID of the category image.
         val resourceId = holder.itemView.context.resources.getIdentifier(
-            myModel.CategoryImage, "drawable", holder.itemView.context.packageName)
+            myModel.CategoryImage, "drawable", holder.itemView.context.packageName
+        )
         holder.imageView.setImageResource(resourceId)
 
         // Set a click listener for the delete button to delete the corresponding document in Firestore.
         holder.deleteButton.setOnClickListener {
             val db = Firebase.firestore
             val UID = myModel.UID
-            Log.d("LALALALALAL", UID)
-            db.collection("food").document(UID).delete()
-                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-                .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            // Build an alert dialog to confirm that the user wants to delete the selected item.
+            AlertDialog.Builder(holder.itemView.context)
+                .setTitle("Delete Item")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton("Yes") { dialog, which ->
+                    db.collection("food").document(UID).delete()
+                        .addOnSuccessListener {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                            // Finish the current activity and start a new instance of FridgeActivity.
+                            val intent = Intent(holder.itemView.context, FridgeActivity::class.java)
+                            holder.itemView.context.startActivity(intent)
+                            (holder.itemView.context as Activity).finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error deleting document", e)
+                        }
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
+
+        // Set a click listener for the edit button to edit the corresponding document in Firestore.
+        holder.editButton.setOnClickListener {
+            // Prompt the user to edit the description and expiration date.
+            val builder = AlertDialog.Builder(holder.itemView.context)
+            builder.setTitle("Edit Item")
+            val inputLayout = LinearLayout(holder.itemView.context)
+            inputLayout.orientation = LinearLayout.VERTICAL
+            val descriptionEditText = EditText(holder.itemView.context)
+            descriptionEditText.hint = "Description"
+            descriptionEditText.setText(myModel.Description)
+            inputLayout.addView(descriptionEditText)
+            val expirationEditText = EditText(holder.itemView.context)
+            expirationEditText.hint = "Expiration Date (MM/DD/YYYY)"
+            expirationEditText.setText(myModel.ExpirationDate)
+            inputLayout.addView(expirationEditText)
+            builder.setView(inputLayout)
+            builder.setPositiveButton(android.R.string.ok) { _, _ ->
+                val db = Firebase.firestore
+                val UID = myModel.UID
+                val description = descriptionEditText.text.toString().trim()
+                val expirationDate = expirationEditText.text.toString().trim()
+                val updateData = hashMapOf(
+                    "Description" to description,
+                    "ExpirationDate" to expirationDate
+                )
+                db.collection("food").document(UID).update(updateData as Map<String, Any>)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!")
+                        // Finish the current activity and start a new instance of FridgeActivity.
+                        val intent = Intent(holder.itemView.context, FridgeActivity::class.java)
+                        holder.itemView.context.startActivity(intent)
+                        (holder.itemView.context as Activity).finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error updating document", e)
+                    }
+            }
+            builder.setNegativeButton(android.R.string.cancel, null)
+            builder.show()
         }
     }
 
@@ -56,8 +114,9 @@ class MyAdapter(private val myList: List<Food>) :
         val textView: TextView = itemView.findViewById(R.id.categoryView)
         val textView1: TextView = itemView.findViewById(R.id.descriptionView)
         val textView2: TextView = itemView.findViewById(R.id.expirationView)
-        val textView3: TextView = itemView.findViewById(R.id.idView)
+//        val textView3: TextView = itemView.findViewById(R.id.idView)
         val imageView: ImageView = itemView.findViewById(R.id.myImageView)
         val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+        val editButton: Button = itemView.findViewById(R.id.editButton)
     }
 }
