@@ -7,6 +7,7 @@ import java.util.regex.Pattern
 
 class ExpirationDateParser {
 
+    // This array holds regular expressions for various date patterns that the parser can recognize.
     private val patterns = arrayOf(
         "(\\d{1,4}[-/ .]\\d{1,2}[-/ .]\\d{1,4}|\\d{1,4}[-/ .]\\w{3,4}[-/ .]\\d{1,4})",
         "(\\w{1,4}[-/ .]\\d{1,2}[-/ .]\\d{1,4}|\\d{1,4}[-/ .]\\w{3,4}[-/ .]\\d{1,4})",
@@ -15,6 +16,7 @@ class ExpirationDateParser {
     )
 
     companion object {
+        // This array holds different date formats that the parser can use to parse dates.
         private val DATE_FORMATS = arrayOf(
             "dd/MM/yy",
             "dd/MMM/yy",
@@ -54,11 +56,14 @@ class ExpirationDateParser {
         )
     }
 
+    // This function takes an input string and tries to parse an expiration date out of it.
     fun parseExpirationDate(input: String): String? {
         for (patternIndex in patterns.indices) {
+            // For each pattern in the patterns array, create a new regex pattern and try to match it against the input string.
             val pattern = Pattern.compile(patterns[patternIndex])
             val matcher = pattern.matcher(input)
             if (matcher.find()) {
+                // If a match is found, extract the matched date string and try to parse it using each date format in the DATE_FORMATS array.
                 val dateString = matcher.group(1)
                 for (formatIndex in DATE_FORMATS.indices) {
                     val format = DATE_FORMATS[formatIndex]
@@ -66,14 +71,16 @@ class ExpirationDateParser {
                         val dateFormat = SimpleDateFormat(format, Locale.US)
                         dateFormat.isLenient = false
                         val date = dateString?.let { dateFormat.parse(it) }
+                        // If a valid date object is obtained, format it as "yyyy/MM/dd" and return it.
                         val dateFormatter = SimpleDateFormat("yyyy/MM/dd", Locale.US)
                         return date?.let { dateFormatter.format(it) }
                     } catch (e: ParseException) {
-                        // Ignore, try the next format
+                        // If the current format fails to parse the date, ignore the exception and try the next format in the DATE_FORMATS array.
                     }
                 }
             }
         }
+        // If no valid date is obtained, return null.
         return null
     }
 }

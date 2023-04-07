@@ -1,71 +1,70 @@
+// This line imports various Android packages required for the app
 package project.stn991614740.grocerymanagerapp
 
-// added
+import android.Manifest
 import android.app.ProgressDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
-import android.Manifest
-
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
-// firebase firestore
-
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-
-
-
+// This is the main class of the app that extends AppCompatActivity class
 class ScannerPage : AppCompatActivity() {
 
     // UI Views
+    // These variables are views used in the UI
     private lateinit var inputImageBtn: MaterialButton
     private lateinit var imageIv: ImageView
     private lateinit var addButton: ImageButton
     private lateinit var fridgeButton: ImageButton
     private lateinit var settingsButton: ImageButton
-    private lateinit var textTestEt : EditText
-    private lateinit var categoryText : EditText
-    private lateinit var expirationView : EditText
+    private lateinit var textTestEt: EditText
+    private lateinit var categoryText: EditText
+    private lateinit var expirationView: EditText
     private lateinit var textRecognizer: TextRecognizer
-    private lateinit var addToFridgeButton : Button
+    private lateinit var addToFridgeButton: Button
     private lateinit var progressDialog: ProgressDialog
     private lateinit var expDate: String
-
-    private companion object {
-        // Handles the result of camera/gallery permissions in onRequestPermissionsResult
-        private const val CAMERA_REQUEST_CODE = 100
-        private const val STORAGE_REQUEST_CODE = 101
-    }
 
     private var imageUri: Uri? = null
 
     // Camera and storage permission arrays
+    // These variables are used to store the required permissions for camera and storage
     private lateinit var cameraPermissions: Array<String>
     private lateinit var storagePermissions: Array<String>
 
     // firestore
-    val db = Firebase.firestore
+    // This variable is used to connect to the Firebase Firestore database
+    private val db = Firebase.firestore
+
+    companion object {
+        // Handles the result of camera/gallery permissions in onRequestPermissionsResult
+        // These are constants that are used to handle permission requests
+        private const val CAMERA_REQUEST_CODE = 100
+        private const val STORAGE_REQUEST_CODE = 101
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner_page)
-        setContentView(R.layout.activity_scanner_page)
 
         // Initialize UI Views
+        // These variables are initialized with the views from the layout XML file
         inputImageBtn = findViewById(R.id.inputImageBtn)
         imageIv = findViewById(R.id.imageIv)
         addButton = findViewById(R.id.imageButton6)
@@ -76,62 +75,93 @@ class ScannerPage : AppCompatActivity() {
         addToFridgeButton = findViewById(R.id.AddToFridgeButton)
         expirationView = findViewById(R.id.expirationText)
 
-
         // Initialize arrays of permissions required for camera and gallery
-        cameraPermissions =
-            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        // These variables are initialized with the permissions required for camera and storage
+        cameraPermissions = arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
         storagePermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+        // Initialize progress dialog
+        // This variable is initialized with a new ProgressDialog object
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
 
+        // Initialize TextRecognizer
+        // This variable is initialized with a new TextRecognizer object
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
         // Handle click, show input image dialog
+        // This function sets a click listener to the inputImageBtn and calls showInpitImageDialog function
         inputImageBtn.setOnClickListener {
             showInputImageDialog()
         }
 
-        addButton.setOnClickListener{
+        // Handle click, add a new food item and takes you do the category selection screen also known as Add activity
+        // This function sets a click listener to the addBtn and starts a new activity
+        addButton.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
         }
 
-        fridgeButton.setOnClickListener{
+        // Handle click, takes you to MyFridge activity and shows list of sorted food items
+        // This function sets a click listener to the fridgeBtn and starts a new activity
+        fridgeButton.setOnClickListener {
             val intent = Intent(this, FridgeActivity::class.java)
             startActivity(intent)
         }
 
-        settingsButton.setOnClickListener{
+        // Handle click, takes you to settings activity currently under development
+        // This function sets a click listener to the settingsBtn and starts a new activity
+        settingsButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
+        // passing data by setting intent with extra method
         val data = intent.getStringExtra("key")
         textTestEt.setText(data)
         val data2 = intent.getStringExtra("key2")
         categoryText.setText(data2)
+        val data3 = intent.getStringExtra("key3")
 
+
+        // Handle click, takes you to MyFridge activity and adds what user had inputted
+        // This function sets a click listener to the addToFridgeButton and starts a new activity
         addToFridgeButton.setOnClickListener {
-            var catText = textTestEt.text.toString()
-            var descText = categoryText.text.toString()
-            var expText =  expirationView.text.toString()
+
+            // these sets the text from category and description inputted by the user from the previous step
+            val catText = textTestEt.text.toString()
+            val descText = categoryText.text.toString()
+            val expText =  expirationView.text.toString()
+
+            // sets the corresponding values and passes it to the hashmap to be uploaded to firestore
             val descriptionString = catText
             val categoryString = descText
             val expirationString = expText
+            val catImageString = data3
+
+            // collects the data and adds it to the firestore db
+            val dF = db.collection("food").document().id
                     val data = hashMapOf(
+                        "UID" to dF,
                         "Description" to descriptionString,
                         "Category" to categoryString,
-                        "ExpirationDate" to expirationString
+                        "ExpirationDate" to expirationString,
+                        "CategoryImage" to catImageString
                     )
                     val testing = db.collection("food")
                     testing.add(data)
+
+            // once add is completed, it will take user to the MyFridge view and show updated list of food items
             val intent = Intent(this, FridgeActivity::class.java)
             startActivity(intent)
         }
     }
 
+    // function that handles image to text recognition
     private fun recognizeTextFromImage() {
         // Set message and show progress dialog
         progressDialog.setMessage("Recognizing text...")
@@ -171,6 +201,7 @@ class ScannerPage : AppCompatActivity() {
         }
     }
 
+    // function that prompts the user an option to upload image via gallery or snapping a picture
     private fun showInputImageDialog() {
         val popupMenu = PopupMenu(this, inputImageBtn)
 
@@ -205,6 +236,7 @@ class ScannerPage : AppCompatActivity() {
         }
     }
 
+    // function that handles an image that was picked from gallery
     private fun pickImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
 
@@ -229,6 +261,7 @@ class ScannerPage : AppCompatActivity() {
         }
     }
 
+    // function that handles an image that was taken with the camera
     private fun pickImageCamera() {
         // Readies the image data to store
         val values = ContentValues()
@@ -256,6 +289,7 @@ class ScannerPage : AppCompatActivity() {
         }
     }
 
+    // function that checks for storage permissions
     private fun checkStoragePermission(): Boolean {
         // Check if storage permission is enabled
         return ContextCompat.checkSelfPermission(
@@ -264,6 +298,7 @@ class ScannerPage : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    // function that checks for camera permissions
     private fun checkCameraPermission(): Boolean {
         // Check if camera permission is enabled
         val cameraResult =
@@ -278,6 +313,7 @@ class ScannerPage : AppCompatActivity() {
         return cameraResult && storageResult
     }
 
+    // function that requests storage permissions
     private fun requestStoragePermission() {
         // Request runtime storage permission
         ActivityCompat.requestPermissions(this, storagePermissions,
@@ -285,6 +321,7 @@ class ScannerPage : AppCompatActivity() {
         )
     }
 
+    // function that request camera permissions
     private fun requestCameraPermission() {
         // Request runtime camera permission
         ActivityCompat.requestPermissions(this, cameraPermissions,
@@ -292,6 +329,7 @@ class ScannerPage : AppCompatActivity() {
         )
     }
 
+    // override function onRequestPermissionResult
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -330,6 +368,7 @@ class ScannerPage : AppCompatActivity() {
         }
     }
 
+    // function that shows a toast message
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
