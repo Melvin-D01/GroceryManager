@@ -16,6 +16,11 @@ import com.google.firebase.ktx.Firebase
 class MyAdapter(private val myList: List<Food>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
+    // Get the Food item at the specified position
+    fun getItem(position: Int): Food {
+        return myList[position]
+    }
+
     // Override onCreateViewHolder to inflate the item layout and create a MyViewHolder object.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -39,7 +44,7 @@ class MyAdapter(private val myList: List<Food>) :
         )
         holder.imageView.setImageResource(resourceId)
 
-        // Set a click listener for the delete button to delete the corresponding document in Firestore.
+/*        // Set a click listener for the delete button to delete the corresponding document in Firestore.
         holder.deleteButton.setOnClickListener {
             val db = Firebase.firestore
             val UID = myModel.UID
@@ -62,7 +67,7 @@ class MyAdapter(private val myList: List<Food>) :
                 }
                 .setNegativeButton("No", null)
                 .show()
-        }
+        }*/
 
         // Set a click listener for the edit button to edit the corresponding document in Firestore.
         holder.editButton.setOnClickListener {
@@ -116,7 +121,8 @@ class MyAdapter(private val myList: List<Food>) :
         val textView2: TextView = itemView.findViewById(R.id.expirationView)
 //        val textView3: TextView = itemView.findViewById(R.id.idView)
         val imageView: ImageView = itemView.findViewById(R.id.myImageView)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+//        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
         val editButton: Button = itemView.findViewById(R.id.editButton)
     }
+
 }
