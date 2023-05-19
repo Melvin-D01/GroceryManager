@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:orientation="vertical"
-    tools:context=".ScannerPage">
+    tools:context=".ScannerFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,55 +48,55 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/categoryText"
-                android:layout_width="329dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="12"
-                android:hint="Item Category"
-                android:focusable="false"
-                android:clickable="false"/>
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/testText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="12"
-                android:hint="Item Description" />
+                <EditText
+                    android:id="@+id/categoryText"
+                    android:layout_width="329dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ems="12"
+                    android:hint="Item Category"
+                    android:focusable="false"
+                    android:clickable="false"/>
 
-            <EditText
-                android:id="@+id/expirationText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="12"
-                android:hint="Expire Date" />
+                <EditText
+                    android:id="@+id/testText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="12"
+                    android:hint="Item Description" />
+
+                <EditText
+                    android:id="@+id/expirationText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="12"
+                    android:hint="Expire Date" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/AddToFridgeButton"
+                android:layout_width="328dp"
+                android:layout_height="56dp"
+                android:text="Add To Fridge"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="41dp"
+                tools:layout_editor_absoluteY="516dp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/AddToFridgeButton"
-            android:layout_width="328dp"
-            android:layout_height="56dp"
-            android:text="Add To Fridge"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="41dp"
-            tools:layout_editor_absoluteY="516dp"
-            android:layout_gravity="center"/>
-
-    </LinearLayout>
 
     </ScrollView>
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:orientation="vertical"
-    tools:context=".ScannerPage">
+    tools:context=".AddFragment">
 
 
 
@@ -55,22 +55,22 @@
             android:gravity="center"
             android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/fruitButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:src="@drawable/fruits"
-            android:layout_margin="10dp"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/fruitButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/fruits"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fruits"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fruits"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
 
         <LinearLayout
@@ -80,48 +80,22 @@
             android:gravity="center"
             android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/vegiButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:src="@drawable/vegetable"
-            android:layout_margin="10dp"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/vegiButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/vegetable"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vegetables"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1">
-
-        <ImageButton
-            android:id="@+id/meatButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:src="@drawable/meat"
-            android:layout_margin="10dp"
-            android:scaleType="fitCenter"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meat"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vegetables"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
@@ -132,48 +106,22 @@
             android:gravity="center"
             android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/seafoodButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/seafood"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/meatButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/meat"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Seafood"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1">
-
-        <ImageButton
-            android:id="@+id/dairyButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:src="@drawable/dairy"
-            android:layout_margin="10dp"
-            android:scaleType="fitCenter"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dairy"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meat"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
@@ -184,48 +132,22 @@
             android:gravity="center"
             android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/grainsButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/grains"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/seafoodButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/seafood"
+                android:scaleType="fitCenter"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Grains"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="1">
-
-        <ImageButton
-            android:id="@+id/canButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/canfood"
-            android:scaleType="fitCenter"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Canned Food"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seafood"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
@@ -236,26 +158,104 @@
             android:gravity="center"
             android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/snacksButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/snack"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/dairyButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/dairy"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Snacks"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dairy"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
-        </GridLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/grainsButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/grains"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grains"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/canButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/canfood"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Canned Food"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/snacksButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/snack"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Snacks"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+    </GridLayout>
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -367,13 +367,13 @@
             android:gravity="center"
             android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/foodPrepMealsButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/bento"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/foodPrepMealsButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/bento"
+                android:scaleType="fitCenter"/>
 
             <TextView
                 android:layout_width="wrap_content"

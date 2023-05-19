@@ -3,44 +3,55 @@ package project.stn991614740.grocerymanagerapp
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.DialogInterface
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
 
-class FridgeActivity : AppCompatActivity() {
 
-    // Use lazy initialization for the ImageButton properties.
-    private val addButton by lazy { findViewById<ImageButton>(R.id.imageButton6) }
-    private val fridgeButton by lazy { findViewById<ImageButton>(R.id.imageButton5) }
-    private val settingsButton by lazy { findViewById<ImageButton>(R.id.imageButton7) }
+class FridgeFragment : Fragment(), DatabaseUpdateListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fridge)
+    private var _binding: FragmentFridgeBinding? = null
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
-        // Set a click listener for the "add" button to start the AddActivity.
-        addButton.setOnClickListener {
-            val intent = Intent(this, AddActivity::class.java)
-            startActivity(intent)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentFridgeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Set a click listener for the "add" button to start the AddFragment.
+        binding.imageButton6.setOnClickListener {
+            findNavController().navigate(R.id.action_fridgeFragment_to_addFragment)
         }
 
-        // Set a click listener for the "fridge" button to reload the current activity (FridgeActivity).
-        fridgeButton.setOnClickListener {
-            recreate()
+        // Set a click listener for the "fridge" button to reload the current fragment.
+        binding.imageButton5.setOnClickListener {
+            findNavController().navigate(R.id.action_fridgeFragment_self)
         }
 
-        // Set a click listener for the "settings" button to start the SettingsActivity.
-        settingsButton.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
+        // Set a click listener for the "settings" button to start the SettingsFragment.
+        binding.imageButton7.setOnClickListener {
+            //findNavController().navigate(R.id.action_fridgeFragment_to_settingsFragment)
         }
 
+        fetchDataFromDatabase()
+    }
+
+    private fun fetchDataFromDatabase() {
         // Connect to the Firestore database and retrieve data from the "food" collection, sorted by expiration date.
         val db = Firebase.firestore
         db.collection("food")
@@ -54,9 +65,8 @@ class FridgeActivity : AppCompatActivity() {
                     myList.add(myModel)
                 }
                 // Set up the RecyclerView with the retrieved data
-                val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-                val myAdapter = MyAdapter(myList)
-                recyclerView.adapter = myAdapter
+                val myAdapter = MyAdapter(myList, this)
+                binding.recyclerView.adapter = myAdapter
 
                 // Define the swipe-to-delete callback for the RecyclerView
                 val swipeCallback = object : ItemTouchHelper.SimpleCallback(
@@ -78,7 +88,7 @@ class FridgeActivity : AppCompatActivity() {
                         // Get the item at the swiped position from the adapter
                         val item = myAdapter.getItem(position)
                         // Build the confirmation dialog
-                        val builder = AlertDialog.Builder(this@FridgeActivity)
+                        val builder = AlertDialog.Builder(requireContext())
                         builder.setTitle("Delete Item")
                             .setMessage("Are you sure you want to delete this item?")
                             .setPositiveButton(
@@ -97,22 +107,31 @@ class FridgeActivity : AppCompatActivity() {
                                         }
                                 })
                             .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
-                                    // Cancel the swipe and return the item to its original position
-                                    myAdapter.notifyItemChanged(position)
-                                })
+                                // Cancel the swipe and return the item to its original position
+                                myAdapter.notifyItemChanged(position)
+                            })
                             .setCancelable(false)
                             .show()
                     }
                 }
                 // Attach the swipe-to-delete callback to the RecyclerView
                 val itemTouchHelper = ItemTouchHelper(swipeCallback)
-                itemTouchHelper.attachToRecyclerView(recyclerView)
+                itemTouchHelper.attachToRecyclerView(binding.recyclerView)
             }
             .addOnFailureListener { exception ->
                 Log.e(TAG, "Error getting documents", exception)
                 // Handle the exception here.
             }
     }
+
+    // Implement the listener method
+    override fun onDatabaseUpdated() {
+        // Refresh your RecyclerView here by calling the function that fetches data from the database
+        fetchDataFromDatabase()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
-
-

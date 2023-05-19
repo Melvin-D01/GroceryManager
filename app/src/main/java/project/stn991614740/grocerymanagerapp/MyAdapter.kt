@@ -1,9 +1,7 @@
 package project.stn991614740.grocerymanagerapp
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class MyAdapter(private val myList: List<Food>) :
+class MyAdapter(private val myList: List<Food>, private val databaseUpdateListener: DatabaseUpdateListener) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     // Get the Food item at the specified position
@@ -97,10 +95,8 @@ class MyAdapter(private val myList: List<Food>) :
                 db.collection("food").document(UID).update(updateData as Map<String, Any>)
                     .addOnSuccessListener {
                         Log.d(TAG, "DocumentSnapshot successfully updated!")
-                        // Finish the current activity and start a new instance of FridgeActivity.
-                        val intent = Intent(holder.itemView.context, FridgeActivity::class.java)
-                        holder.itemView.context.startActivity(intent)
-                        (holder.itemView.context as Activity).finish()
+                        // Notify the listener that the database has been updated.
+                        databaseUpdateListener.onDatabaseUpdated()
                     }
                     .addOnFailureListener { e ->
                         Log.w(TAG, "Error updating document", e)
