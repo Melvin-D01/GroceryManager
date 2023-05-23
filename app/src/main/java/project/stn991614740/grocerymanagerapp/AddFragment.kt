@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 
 class AddFragment : Fragment() {
 
@@ -31,89 +32,36 @@ class AddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // listener for the add nav button
-        binding.imageButton6.setOnClickListener{
-            // Already on Add fragment
+        val catDataSet = listOf(
+            CatGridItem(R.drawable.fruits, "Fruit", "fruits"),
+            CatGridItem(R.drawable.vegetable, "Vegetable", "vegetable"),
+            CatGridItem(R.drawable.meat, "Meat", "meat"),
+            CatGridItem(R.drawable.seafood, "Seafood", "seafood"),
+            CatGridItem(R.drawable.dairy, "Dairy", "dairy"),
+            CatGridItem(R.drawable.grains, "Grains", "grains"),
+            CatGridItem(R.drawable.canfood, "Canned Goods", "canfood"),
+            CatGridItem(R.drawable.snack, "Snacks", "snack"),
+            CatGridItem(R.drawable.bev, "Beverages", "bev"),
+            CatGridItem(R.drawable.condiments, "Condiments", "condiments"),
+            CatGridItem(R.drawable.bakery, "Baked Goods", "bakery"),
+            CatGridItem(R.drawable.frozenfood, "Frozen Foods", "frozenfood"),
+            CatGridItem(R.drawable.bento, "Prepped Meals", "bento"),
+            CatGridItem(R.drawable.babyfood, "Baby Food", "babyfood"),
+            CatGridItem(R.drawable.petfood, "Pet Food", "petfood"),
+            CatGridItem(R.drawable.menu, "Other Food", "menu")
+        )
+
+
+        val numColumns = 4 // or however many columns you want to display
+        binding.myRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColumns)
+
+
+        val onClick: (CatGridItem) -> Unit = { item ->
+            addItem(item.text, item.imageName)
         }
 
-        // listener for the MyFridge(home) nav button
-        binding.imageButton5.setOnClickListener{
-            findNavController().navigate(R.id.action_addFragment_to_fridgeFragment)
-        }
-
-        // listener for the settings nav button
-        binding.imageButton7.setOnClickListener{
-
-        }
-
-        // listener for the category selection
-        // also handles the sending the category selection along with an alert box that asks user to enter food item description
-        // this may get replaced with machine learning portion in second half of the capstone project, where it will auto detect the item specifics
-        // please note that it also saves a string that is used to load the associated category image as key3
-        // key2 is for category and key takes what the user inputted into the alert box
-        binding.fruitButton.setOnClickListener{
-            addItem("Fruit", "fruits")
-        }
-
-        binding.vegiButton.setOnClickListener{
-            addItem("Vegetable", "vegetable")
-        }
-
-        binding.meatButton.setOnClickListener{
-            addItem("Meat", "meat")
-        }
-
-        binding.seafoodButton.setOnClickListener{
-            addItem("Seafood", "seafood")
-        }
-
-        binding.dairyButton.setOnClickListener{
-            addItem("Dairy", "dairy")
-        }
-
-        binding.grainsButton.setOnClickListener{
-            addItem("Grains", "grains")
-        }
-
-        binding.canButton.setOnClickListener{
-            addItem("Canned Goods", "canfood")
-        }
-
-        binding.snacksButton.setOnClickListener{
-            addItem("Snacks", "snack")
-        }
-
-        binding.beveragesButton.setOnClickListener{
-            addItem("Beverages", "bev")
-        }
-
-        binding.condimentsButton.setOnClickListener{
-            addItem("Condiments", "condiments")
-        }
-
-        binding.bakedGoodsButton.setOnClickListener{
-            addItem("Baked Goods", "bakery")
-        }
-
-        binding.frozenFoodsButton.setOnClickListener{
-            addItem("Frozen Foods", "frozenfood")
-        }
-
-        binding.foodPrepMealsButton.setOnClickListener{
-            addItem("Prepped Meals", "bento")
-        }
-
-        binding.babyFoodButton.setOnClickListener{
-            addItem("Baby Food", "babyfood")
-        }
-
-        binding.petFoodButton.setOnClickListener{
-            addItem("Pet Food", "petfood")
-        }
-
-        binding.condimentsButton.setOnClickListener{
-            addItem("Other Food", "Menu")
-        }
+        val myAdapter = CatGridAdapter(requireContext(), catDataSet, onClick)
+        binding.myRecyclerView.adapter = myAdapter
 
     }
 

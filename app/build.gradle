@@ -79,4 +79,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-core:19.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
+
+    // recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
 }

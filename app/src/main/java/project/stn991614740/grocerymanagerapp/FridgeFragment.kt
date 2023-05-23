@@ -33,20 +33,6 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Set a click listener for the "add" button to start the AddFragment.
-        binding.imageButton6.setOnClickListener {
-            findNavController().navigate(R.id.action_fridgeFragment_to_addFragment)
-        }
-
-        // Set a click listener for the "fridge" button to reload the current fragment.
-        binding.imageButton5.setOnClickListener {
-            findNavController().navigate(R.id.action_fridgeFragment_self)
-        }
-
-        // Set a click listener for the "settings" button to start the SettingsFragment.
-        binding.imageButton7.setOnClickListener {
-            //findNavController().navigate(R.id.action_fridgeFragment_to_settingsFragment)
-        }
 
         fetchDataFromDatabase()
     }

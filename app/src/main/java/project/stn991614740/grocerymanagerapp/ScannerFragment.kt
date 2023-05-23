@@ -109,23 +109,6 @@ class ScannerFragment : Fragment() {
             showInputImageDialog()
         }
 
-        // Handle click, navigates to add fragment
-        // This function sets a click listener to the addBtn and navigated to a new fragment
-        binding.imageButton6.setOnClickListener {
-            findNavController().navigate(R.id.action_scannerFragment_to_addFragment)
-        }
-
-        // Handle click, takes you to MyFridge fragment and shows list of sorted food items
-        // This function sets a click listener to the fridgeBtn and opens a new fragment
-        binding.imageButton5.setOnClickListener {
-            findNavController().navigate(R.id.action_scannerFragment_to_fridgeFragment)
-        }
-
-        // Handle click, takes you to settings activity currently under development
-        // This function sets a click listener to the settingsBtn and starts a new activity
-        binding.imageButton7.setOnClickListener {
-            // TO DO: add nav to settings.
-        }
 
         // passing data by args from fragment
         val data = args.description

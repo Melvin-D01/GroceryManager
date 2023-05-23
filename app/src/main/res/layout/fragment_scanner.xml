@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".ScannerFragment">
 
     <LinearLayout
@@ -26,7 +26,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="491dp"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -45,9 +45,12 @@
         </LinearLayout>
 
     </ScrollView>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,42 +103,4 @@
 
     </ScrollView>
 
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="bottom">
-
-            <ImageButton
-                android:id="@+id/imageButton5"
-                android:layout_width="0dp"
-                android:layout_height="69dp"
-                android:layout_weight="1"
-                android:src="@mipmap/ic_fridge"
-                android:contentDescription="fridgeButton"/>
-
-            <ImageButton
-                android:id="@+id/imageButton6"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="69dp"
-                android:src="@mipmap/ic_add"
-                android:contentDescription="addButton"/>
-
-            <ImageButton
-                android:id="@+id/imageButton7"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="69dp"
-                android:src="@mipmap/ic_settings"
-                android:contentDescription="settingsButton"/>
-
-        </LinearLayout>
-
-    </ScrollView>
 </LinearLayout>

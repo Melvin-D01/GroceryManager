@@ -8,12 +8,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +30,39 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // Setup BottomNavigationView
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_fridge -> {
+                    // Navigate to fridge fragmen
+                    findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.fridgeFragment)
+                    true
+                }
+                R.id.action_add -> {
+                    // Navigate to add fragment
+                    findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.addFragment)
+                    true
+                }
+                R.id.action_settings -> {
+                    // Navigate to settings fragment
+                    findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.startFragment) {
+                bottomNavigationView.visibility = View.GONE
+            } else {
+                bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
+
 
     }
 
