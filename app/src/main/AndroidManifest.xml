@@ -16,20 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryManagerApp"
         tools:targetApi="31" >
-        <activity
-            android:name=".FridgeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_fridge"
-            android:theme="@style/Theme.GroceryManagerApp.NoActionBar" />
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ScannerPage"
-            android:exported="false" />
 
         <activity
             android:name=".MainActivity"

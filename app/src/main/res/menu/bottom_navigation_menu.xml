@@ -1,14 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_fridge"
+        android:id="@+id/fridgeFragment"
         android:icon="@mipmap/ic_fridge"
         android:title="Fridge" />
     <item
-        android:id="@+id/action_add"
+        android:id="@+id/addFragment"
         android:icon="@mipmap/ic_add"
         android:title="Add" />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/settingsFragment"
         android:icon="@mipmap/ic_settings"
         android:title="Settings" />
 </menu>

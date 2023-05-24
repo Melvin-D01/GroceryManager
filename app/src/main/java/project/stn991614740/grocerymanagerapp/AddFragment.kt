@@ -95,7 +95,7 @@ class AddFragment : Fragment() {
             if (isValidFoodItemName(foodItemName)) {
                 handleFoodItemName(foodItemName)
                 Log.d("TAG", foodItemName)
-                val directions = AddFragmentDirections.actionAddFragmentToScannerFragment2(foodItemName, category, image)
+                val directions = AddFragmentDirections.actionAddFragmentToScannerFragment(foodItemName, category, image)
                 findNavController().navigate(directions)
 
             } else {

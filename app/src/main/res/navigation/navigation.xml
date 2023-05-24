@@ -17,37 +17,21 @@
     <fragment
         android:id="@+id/fridgeFragment"
         android:name="project.stn991614740.grocerymanagerapp.FridgeFragment"
-        android:label="FridgeFragment" >
-        <action
-            android:id="@+id/action_fridgeFragment_to_addFragment"
-            app:destination="@id/addFragment" />
-        <action
-            android:id="@+id/action_fridgeFragment_self"
-            app:destination="@id/fridgeFragment" />
-    </fragment>
+        android:label="FridgeFragment" />
     <fragment
         android:id="@+id/addFragment"
         android:name="project.stn991614740.grocerymanagerapp.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" >
         <action
-            android:id="@+id/action_addFragment_to_scannerFragment2"
+            android:id="@+id/action_addFragment_to_scannerFragment"
             app:destination="@id/scannerFragment" />
-        <action
-            android:id="@+id/action_addFragment_to_fridgeFragment"
-            app:destination="@id/fridgeFragment" />
     </fragment>
     <fragment
         android:id="@+id/scannerFragment"
         android:name="project.stn991614740.grocerymanagerapp.ScannerFragment"
         android:label="fragment_scanner"
         tools:layout="@layout/fragment_scanner" >
-        <action
-            android:id="@+id/action_scannerFragment_to_addFragment"
-            app:destination="@id/addFragment" />
-        <action
-            android:id="@+id/action_scannerFragment_to_fridgeFragment"
-            app:destination="@id/fridgeFragment" />
         <argument
             android:name="description"
             app:argType="string"
@@ -63,6 +47,9 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="image" />
+        <action
+            android:id="@+id/action_scannerFragment_to_fridgeFragment"
+            app:destination="@id/fridgeFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

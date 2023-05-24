@@ -1,5 +1,6 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -9,6 +10,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.ui.setupWithNavController
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -22,38 +25,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Load the setting
+        val sharedPreferences = this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val isDarkModeEnabled = sharedPreferences.getBoolean("DarkMode", false)
+        if (isDarkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        //setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+
 
         // Setup BottomNavigationView
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_fridge -> {
-                    // Navigate to fridge fragmen
-                    findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.fridgeFragment)
-                    true
-                }
-                R.id.action_add -> {
-                    // Navigate to add fragment
-                    findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.addFragment)
-                    true
-                }
-                R.id.action_settings -> {
-                    // Navigate to settings fragment
-                    findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
-                    true
-                }
-                else -> false
-            }
-        }
+        // Setting up BottomNavigationView with NavController
+        bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if(destination.id == R.id.startFragment) {
