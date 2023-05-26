@@ -105,6 +105,9 @@ class MyAdapter(private val myList: List<Food>, private val databaseUpdateListen
             builder.setNegativeButton(android.R.string.cancel, null)
             builder.show()
         }
+
+        // Reset the translation of the itemView
+        holder.itemView.translationX = 0f
     }
 
     // Override getItemCount to return the size of the list.

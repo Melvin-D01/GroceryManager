@@ -8,8 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -23,6 +25,8 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    private var currentSortType = "ExpirationDate"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,14 +38,44 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchDataFromDatabase()
+        val spinner: Spinner = binding.sortSpinner
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.sort_array,
+            R.layout.spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                if (view != null) {
+                    when (parent.getItemAtPosition(pos).toString()) {
+                        "Sort by Date" -> fetchDataFromDatabase("ExpirationDate")
+                        "Sort by Category" -> fetchDataFromDatabase("Category")
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+
+
+        fetchDataFromDatabase("ExpirationDate")
     }
 
-    private fun fetchDataFromDatabase() {
+    private fun fetchDataFromDatabase(orderBy: String) {
+        currentSortType = orderBy  // Update currentSortType
         // Connect to the Firestore database and retrieve data from the "food" collection, sorted by expiration date.
         val db = Firebase.firestore
         db.collection("food")
-            .orderBy("ExpirationDate")
+            .orderBy(orderBy)
             .get()
             .addOnSuccessListener { documents ->
                 val myList = ArrayList<Food>()
@@ -94,7 +128,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                                 })
                             .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
                                 // Cancel the swipe and return the item to its original position
-                                myAdapter.notifyItemChanged(position)
+                                fetchDataFromDatabase(currentSortType) // Refresh the list
                             })
                             .setCancelable(false)
                             .show()
@@ -113,7 +147,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     // Implement the listener method
     override fun onDatabaseUpdated() {
         // Refresh your RecyclerView here by calling the function that fetches data from the database
-        fetchDataFromDatabase()
+        fetchDataFromDatabase("ExpirationDate")
     }
 
     override fun onDestroyView() {

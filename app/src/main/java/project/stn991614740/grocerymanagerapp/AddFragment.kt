@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 class AddFragment : Fragment() {
 
+    // A binding object instance, corresponding to the fragment layout
     private var _binding: FragmentAddBinding? = null
-    // This property is only valid between onCreateView and onDestroyView.
+
+    // Get the current binding object instance
     private val binding get() = _binding!!
 
-
+    // Inflate the layout for this fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,9 +31,11 @@ class AddFragment : Fragment() {
         return binding.root
     }
 
+    // Called immediately after onCreateView has returned, perform any additional setup here
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Create a list of food categories for the grid
         val catDataSet = listOf(
             CatGridItem(R.drawable.fruits, "Fruit", "fruits"),
             CatGridItem(R.drawable.vegetable, "Vegetable", "vegetable"),
@@ -51,35 +55,36 @@ class AddFragment : Fragment() {
             CatGridItem(R.drawable.menu, "Other Food", "menu")
         )
 
-
+        // Set up a GridLayoutManager with 4 columns for the RecyclerView
         val numColumns = 4 // or however many columns you want to display
         binding.myRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColumns)
 
-
+        // Set the onClick listener for each grid item
         val onClick: (CatGridItem) -> Unit = { item ->
             addItem(item.text, item.imageName)
         }
 
+        // Set up the RecyclerView adapter
         val myAdapter = CatGridAdapter(requireContext(), catDataSet, onClick)
         binding.myRecyclerView.adapter = myAdapter
 
     }
 
-    // function that checks if foodItemName entered by user is valid or not, check if its black or greater than 50 chars
+    // Function to validate the food item name entered by the user
     fun isValidFoodItemName(foodItemName: String): Boolean {
-        // Implement your logic here to validate the food item name
-        // For example, you could check if the name is not empty or too long
+        // A name is valid if it's not blank and its length doesn't exceed 50
         return foodItemName.isNotBlank() && foodItemName.length <= 50
     }
 
-    // function that tells user that food item was added to the list in MyFridge
+    // Function to handle the addition of a new food item
     fun handleFoodItemName(foodItemName: String) {
-        // Implement your logic here to handle the entered food item name
-        // For example, you could add the food item name to a list, or save it to a database
+        // Display a short message indicating that the food item has been added
         Toast.makeText(requireContext(), "Added $foodItemName to list", Toast.LENGTH_SHORT).show()
     }
 
+    // Function to display a dialog box for the user to add a new food item
     fun addItem(category: String, image: String){
+        // Prepare a dialog builder
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Add Food Item")
         builder.setMessage("Please enter the name of the food item:")
@@ -112,6 +117,7 @@ class AddFragment : Fragment() {
         builder.show()
     }
 
+    // Set _binding to null when the view is destroyed to avoid memory leaks
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
