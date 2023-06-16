@@ -11,12 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class MyAdapter(private val myList: List<Food>, private val databaseUpdateListener: DatabaseUpdateListener) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(private val myList: ArrayList<Food>, private val databaseUpdateListener: DatabaseUpdateListener) :
+RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     // Get the Food item at the specified position
     fun getItem(position: Int): Food {
         return myList[position]
+    }
+
+    // Remove the Food item at the specified position
+    fun removeItem(position: Int) {
+        myList.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     // Override onCreateViewHolder to inflate the item layout and create a MyViewHolder object.
@@ -34,38 +40,11 @@ class MyAdapter(private val myList: List<Food>, private val databaseUpdateListen
         holder.textView.text = myModel.Category
         holder.textView1.text = myModel.Description
         holder.textView2.text = myModel.ExpirationDate
-//        holder.textView3.text = myModel.UID  //Commented out for testing
-
         // Set the image based on the resource ID of the category image.
         val resourceId = holder.itemView.context.resources.getIdentifier(
             myModel.CategoryImage, "drawable", holder.itemView.context.packageName
         )
         holder.imageView.setImageResource(resourceId)
-
-/*        // Set a click listener for the delete button to delete the corresponding document in Firestore.
-        holder.deleteButton.setOnClickListener {
-            val db = Firebase.firestore
-            val UID = myModel.UID
-            // Build an alert dialog to confirm that the user wants to delete the selected item.
-            AlertDialog.Builder(holder.itemView.context)
-                .setTitle("Delete Item")
-                .setMessage("Are you sure you want to delete this item?")
-                .setPositiveButton("Yes") { dialog, which ->
-                    db.collection("food").document(UID).delete()
-                        .addOnSuccessListener {
-                            Log.d(TAG, "DocumentSnapshot successfully deleted!")
-                            // Finish the current activity and start a new instance of FridgeActivity.
-                            val intent = Intent(holder.itemView.context, FridgeActivity::class.java)
-                            holder.itemView.context.startActivity(intent)
-                            (holder.itemView.context as Activity).finish()
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error deleting document", e)
-                        }
-                }
-                .setNegativeButton("No", null)
-                .show()
-        }*/
 
         // Set a click listener for the edit button to edit the corresponding document in Firestore.
         holder.editButton.setOnClickListener {
@@ -118,10 +97,7 @@ class MyAdapter(private val myList: List<Food>, private val databaseUpdateListen
         val textView: TextView = itemView.findViewById(R.id.categoryView)
         val textView1: TextView = itemView.findViewById(R.id.descriptionView)
         val textView2: TextView = itemView.findViewById(R.id.expirationView)
-//        val textView3: TextView = itemView.findViewById(R.id.idView)
         val imageView: ImageView = itemView.findViewById(R.id.myImageView)
-//        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
         val editButton: Button = itemView.findViewById(R.id.editButton)
     }
-
 }

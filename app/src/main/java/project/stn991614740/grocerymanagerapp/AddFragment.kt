@@ -122,6 +122,4 @@ class AddFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

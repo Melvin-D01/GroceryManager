@@ -6,15 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.ui.setupWithNavController
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,10 +35,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //setSupportActionBar(binding.toolbar)
-
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-
 
         // Setup BottomNavigationView
         bottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -56,7 +51,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
+        // Add navigation item selection listener
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.fridgeFragment -> {
+                    navController.navigate(R.id.fridgeFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.addFragment -> {
+                    navController.navigate(R.id.addFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.settingsFragment -> {
+                    navController.navigate(R.id.settingsFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+            }
+            false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -66,9 +78,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
@@ -77,7 +86,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

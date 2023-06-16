@@ -25,6 +25,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var myAdapter: MyAdapter
     private var currentSortType = "ExpirationDate"
 
     override fun onCreateView(
@@ -66,8 +67,22 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
         }
 
-
         fetchDataFromDatabase("ExpirationDate")
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false  // not needed as we are only implementing swipe to delete
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val foodItem = myAdapter.getItem(position)
+                deleteItemFromDatabase(foodItem)
+                myAdapter.removeItem(position)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     private fun fetchDataFromDatabase(orderBy: String) {
@@ -85,58 +100,8 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                     myList.add(myModel)
                 }
                 // Set up the RecyclerView with the retrieved data
-                val myAdapter = MyAdapter(myList, this)
+                myAdapter = MyAdapter(myList, this)
                 binding.recyclerView.adapter = myAdapter
-
-                // Define the swipe-to-delete callback for the RecyclerView
-                val swipeCallback = object : ItemTouchHelper.SimpleCallback(
-                    0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-                ) {
-                    // onMove is not used for swipe-to-delete, so return false
-                    override fun onMove(
-                        recyclerView: RecyclerView,
-                        viewHolder: RecyclerView.ViewHolder,
-                        target: RecyclerView.ViewHolder
-                    ): Boolean {
-                        return false
-                    }
-
-                    // onSwiped is called when the user swipes an item left or right
-                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        // Get the position of the swiped item
-                        val position = viewHolder.adapterPosition
-                        // Get the item at the swiped position from the adapter
-                        val item = myAdapter.getItem(position)
-                        // Build the confirmation dialog
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder.setTitle("Delete Item")
-                            .setMessage("Are you sure you want to delete this item?")
-                            .setPositiveButton(
-                                "Delete", DialogInterface.OnClickListener { dialog, which ->
-                                    // Delete the item from Firestore using its UID
-                                    db.collection("food").document(item.UID)
-                                        .delete()
-                                        .addOnSuccessListener {
-                                            // Handle deletion success
-                                            myList.removeAt(position)
-                                            myAdapter.notifyItemRemoved(position)
-                                        }
-                                        .addOnFailureListener {
-                                            // Handle deletion failure
-                                            Log.e(TAG, "Error deleting document", it)
-                                        }
-                                })
-                            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
-                                // Cancel the swipe and return the item to its original position
-                                fetchDataFromDatabase(currentSortType) // Refresh the list
-                            })
-                            .setCancelable(false)
-                            .show()
-                    }
-                }
-                // Attach the swipe-to-delete callback to the RecyclerView
-                val itemTouchHelper = ItemTouchHelper(swipeCallback)
-                itemTouchHelper.attachToRecyclerView(binding.recyclerView)
             }
             .addOnFailureListener { exception ->
                 Log.e(TAG, "Error getting documents", exception)
@@ -144,10 +109,23 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
     }
 
+    private fun deleteItemFromDatabase(food: Food) {
+        val db = Firebase.firestore
+        db.collection("food").document(food.UID)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                onDatabaseUpdated()
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error deleting document", e)
+            }
+    }
+
     // Implement the listener method
     override fun onDatabaseUpdated() {
         // Refresh your RecyclerView here by calling the function that fetches data from the database
-        fetchDataFromDatabase("ExpirationDate")
+        fetchDataFromDatabase(currentSortType)
     }
 
     override fun onDestroyView() {
