@@ -1,6 +1,8 @@
 <resources>
     <string-array name="sort_array">
-        <item>Sort by Date</item>
-        <item>Sort by Category</item>
+        <item>Sort by Date (Soonest)</item>
+        <item>Sort by Date (Furthest)</item>
+        <item>Sort by Category (A-Z)</item>
+        <item>Sort by Category (Z-A)</item>
     </string-array>
 </resources>

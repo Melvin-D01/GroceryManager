@@ -14,6 +14,7 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
@@ -27,6 +28,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
 
     private lateinit var myAdapter: MyAdapter
     private var currentSortType = "ExpirationDate"
+    private var currentSortAscending = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,8 +58,22 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
                 if (view != null) {
                     when (parent.getItemAtPosition(pos).toString()) {
-                        "Sort by Date" -> fetchDataFromDatabase("ExpirationDate")
-                        "Sort by Category" -> fetchDataFromDatabase("Category")
+                        "Sort by Date (Soonest)" -> {
+                            currentSortAscending = true
+                            fetchDataFromDatabase("ExpirationDate", currentSortAscending)
+                        }
+                        "Sort by Date (Furthest)" -> {
+                            currentSortAscending = false
+                            fetchDataFromDatabase("ExpirationDate", currentSortAscending)
+                        }
+                        "Sort by Category (A-Z)" -> {
+                            currentSortAscending = true
+                            fetchDataFromDatabase("Category", currentSortAscending)
+                        }
+                        "Sort by Category (Z-A)" -> {
+                            currentSortAscending = false
+                            fetchDataFromDatabase("Category", currentSortAscending)
+                        }
                     }
                 }
             }
@@ -67,7 +83,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
         }
 
-        fetchDataFromDatabase("ExpirationDate")
+        fetchDataFromDatabase("ExpirationDate", currentSortAscending)
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
@@ -85,13 +101,12 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun fetchDataFromDatabase(orderBy: String) {
+    private fun fetchDataFromDatabase(orderBy: String, isAscending: Boolean) {
         currentSortType = orderBy  // Update currentSortType
-        // Connect to the Firestore database and retrieve data from the "food" collection, sorted by expiration date.
+        // Connect to the Firestore database and retrieve data from the "food" collection, sorted by the orderBy field.
         val db = Firebase.firestore
-        db.collection("food")
-            .orderBy(orderBy)
-            .get()
+        val query = db.collection("food").orderBy(orderBy, if (isAscending) Query.Direction.ASCENDING else Query.Direction.DESCENDING)
+        query.get()
             .addOnSuccessListener { documents ->
                 val myList = ArrayList<Food>()
                 // For each document in the collection, convert it to a Food object and add it to the myList ArrayList.
@@ -109,6 +124,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
     }
 
+
     private fun deleteItemFromDatabase(food: Food) {
         val db = Firebase.firestore
         db.collection("food").document(food.UID)
@@ -125,7 +141,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     // Implement the listener method
     override fun onDatabaseUpdated() {
         // Refresh your RecyclerView here by calling the function that fetches data from the database
-        fetchDataFromDatabase(currentSortType)
+        fetchDataFromDatabase(currentSortType,currentSortAscending)
     }
 
     override fun onDestroyView() {
