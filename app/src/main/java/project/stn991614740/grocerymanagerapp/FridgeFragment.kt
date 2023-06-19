@@ -18,6 +18,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FridgeFragment : Fragment(), DatabaseUpdateListener {
@@ -28,7 +30,8 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
 
     private lateinit var myAdapter: MyAdapter
     private var currentSortType = "ExpirationDate"
-    private var currentSortAscending = true
+    private var currentSortAscending = false
+    private var currentCategory = "All"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,21 +61,33 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
                 if (view != null) {
                     when (parent.getItemAtPosition(pos).toString()) {
-                        "Sort by Date (Soonest)" -> {
-                            currentSortAscending = true
-                            fetchDataFromDatabase("ExpirationDate", currentSortAscending)
-                        }
-                        "Sort by Date (Furthest)" -> {
+                        "Date (Soonest)" -> {
                             currentSortAscending = false
-                            fetchDataFromDatabase("ExpirationDate", currentSortAscending)
+                            fetchDataFromDatabaseWithCategory("ExpirationDate", currentSortAscending, currentCategory)
                         }
-                        "Sort by Category (A-Z)" -> {
+                        "Date (Furthest)" -> {
                             currentSortAscending = true
-                            fetchDataFromDatabase("Category", currentSortAscending)
+                            fetchDataFromDatabaseWithCategory("ExpirationDate", currentSortAscending, currentCategory)
                         }
-                        "Sort by Category (Z-A)" -> {
+                        "Category (A-Z)" -> {
+                            currentSortAscending = true
+                            fetchDataFromDatabaseWithCategory("Category", currentSortAscending, currentCategory)
+                        }
+                        "Category (Z-A)" -> {
                             currentSortAscending = false
-                            fetchDataFromDatabase("Category", currentSortAscending)
+                            fetchDataFromDatabaseWithCategory("Category", currentSortAscending, currentCategory)
+                        }
+                        "Expiring soon (5 Days)" -> {
+                            currentSortAscending = true
+                            fetchDataFromDatabaseWithCategoryAndDate("ExpirationDate", currentSortAscending, currentCategory, 5)
+                        }
+                        "Expiring Now (2 Day)" -> {
+                            currentSortAscending = true
+                            fetchDataFromDatabaseWithCategoryAndDate("ExpirationDate", currentSortAscending, currentCategory, 2)
+                        }
+                        "Expired" -> {
+                            currentSortAscending = false
+                            fetchDataFromDatabaseExpired(currentCategory)
                         }
                     }
                 }
@@ -83,7 +98,45 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
         }
 
-        fetchDataFromDatabase("ExpirationDate", currentSortAscending)
+
+        val categorySpinner: Spinner = binding.categorySpinner
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.cat_array,
+            R.layout.spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            categorySpinner.adapter = adapter
+        }
+
+        categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                val selectedCategory = parent.getItemAtPosition(pos).toString()
+                fetchDataFromDatabaseWithCategory(currentSortType, currentSortAscending, selectedCategory)
+
+                // Change sortSpinner options based on the selected category
+                val sortOptions = if (selectedCategory == "All") R.array.sort_array else R.array.sort_array_date_only
+                ArrayAdapter.createFromResource(
+                    requireContext(),
+                    sortOptions,
+                    R.layout.spinner_item
+                ).also { adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner.adapter = adapter
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+
+
+        fetchDataFromDatabaseWithCategory("ExpirationDate", currentSortAscending, "All")
+
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
@@ -101,20 +154,26 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun fetchDataFromDatabase(orderBy: String, isAscending: Boolean) {
-        currentSortType = orderBy  // Update currentSortType
-        // Connect to the Firestore database and retrieve data from the "food" collection, sorted by the orderBy field.
+
+    private fun fetchDataFromDatabaseWithCategory(orderBy: String, isAscending: Boolean, category: String) {
+        // Update currentSortType and currentCategory
+        currentSortType = orderBy
+        currentCategory = category
+
         val db = Firebase.firestore
-        val query = db.collection("food").orderBy(orderBy, if (isAscending) Query.Direction.ASCENDING else Query.Direction.DESCENDING)
+        val query = if (category == "All") {
+            db.collection("food").orderBy(orderBy, if (isAscending) Query.Direction.ASCENDING else Query.Direction.DESCENDING)
+        } else {
+            db.collection("food").whereEqualTo("Category", category).orderBy(orderBy, if (isAscending) Query.Direction.ASCENDING else Query.Direction.DESCENDING)
+        }
+
         query.get()
             .addOnSuccessListener { documents ->
                 val myList = ArrayList<Food>()
-                // For each document in the collection, convert it to a Food object and add it to the myList ArrayList.
                 for (document in documents) {
                     val myModel = document.toObject(Food::class.java)
                     myList.add(myModel)
                 }
-                // Set up the RecyclerView with the retrieved data
                 myAdapter = MyAdapter(myList, this)
                 binding.recyclerView.adapter = myAdapter
             }
@@ -124,6 +183,71 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
     }
 
+    private fun fetchDataFromDatabaseWithCategoryAndDate(orderBy: String, isAscending: Boolean, category: String, days: Int) {
+        currentSortType = orderBy
+        currentCategory = category
+
+        val db = Firebase.firestore
+        val currentDate = Calendar.getInstance().time
+        val targetDate = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, days) }.time
+
+        val query = if (category == "All") {
+            db.collection("food").whereGreaterThanOrEqualTo(orderBy, currentDate)
+                .whereLessThanOrEqualTo(orderBy, targetDate)
+                .orderBy(orderBy, if (isAscending) Query.Direction.ASCENDING else Query.Direction.DESCENDING)
+        } else {
+            db.collection("food").whereEqualTo("Category", category)
+                .whereGreaterThanOrEqualTo(orderBy, currentDate)
+                .whereLessThanOrEqualTo(orderBy, targetDate)
+                .orderBy(orderBy, if (isAscending) Query.Direction.ASCENDING else Query.Direction.DESCENDING)
+        }
+
+        query.get()
+            .addOnSuccessListener { documents ->
+                val myList = ArrayList<Food>()
+                for (document in documents) {
+                    val myModel = document.toObject(Food::class.java)
+                    myList.add(myModel)
+                }
+                myAdapter = MyAdapter(myList, this)
+                binding.recyclerView.adapter = myAdapter
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error getting documents", exception)
+                // Handle the exception here.
+            }
+    }
+
+
+    private fun fetchDataFromDatabaseExpired(category: String) {
+        currentSortType = "ExpirationDate"
+        currentCategory = category
+
+        val db = Firebase.firestore
+        val currentDate = Calendar.getInstance().time
+
+        val query = if (category == "All") {
+            db.collection("food").whereLessThan("ExpirationDate", currentDate)
+        } else {
+            db.collection("food").whereEqualTo("Category", category)
+                .whereLessThan("ExpirationDate", currentDate)
+        }
+
+        query.get()
+            .addOnSuccessListener { documents ->
+                val myList = ArrayList<Food>()
+                for (document in documents) {
+                    val myModel = document.toObject(Food::class.java)
+                    myList.add(myModel)
+                }
+                myAdapter = MyAdapter(myList, this)
+                binding.recyclerView.adapter = myAdapter
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error getting documents", exception)
+                // Handle the exception here.
+            }
+    }
 
     private fun deleteItemFromDatabase(food: Food) {
         val db = Firebase.firestore
@@ -141,11 +265,12 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     // Implement the listener method
     override fun onDatabaseUpdated() {
         // Refresh your RecyclerView here by calling the function that fetches data from the database
-        fetchDataFromDatabase(currentSortType,currentSortAscending)
+        fetchDataFromDatabaseWithCategory(currentSortType,currentSortAscending,currentCategory)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

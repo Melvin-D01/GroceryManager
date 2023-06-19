@@ -1,6 +1,7 @@
 package project.stn991614740.grocerymanagerapp
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -29,6 +30,8 @@ import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ScannerFragment : Fragment() {
 
@@ -41,6 +44,10 @@ class ScannerFragment : Fragment() {
     private lateinit var expDate: String
 
     private var imageUri: Uri? = null
+
+    // UI Views
+    private lateinit var datePickerDialog: DatePickerDialog
+    private val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
 
 
@@ -126,10 +133,19 @@ class ScannerFragment : Fragment() {
             val descText = binding.categoryText.text.toString()
             val expText =  binding.expirationText.text.toString()
 
+            // Parse expiration date from string to Date
+            val expDate = dateFormat.parse(expText)
+
+            // If the parsing was unsuccessful, expDate will be null
+            if (expDate == null) {
+                showToast("Invalid date format. Please use dd-MM-yyyy.")
+                return@setOnClickListener
+            }
+
             // sets the corresponding values and passes it to the hashmap to be uploaded to firestore
             val descriptionString = catText
             val categoryString = descText
-            val expirationString = expText
+            val expirationDate = com.google.firebase.Timestamp(expDate)
             val catImageString = data3
 
             // collects the data and adds it to the firestore db
@@ -149,7 +165,7 @@ class ScannerFragment : Fragment() {
                 "UID" to dF,
                 "Description" to descriptionString,
                 "Category" to categoryString,
-                "ExpirationDate" to expirationString,
+                "ExpirationDate" to expirationDate,
                 "CategoryImage" to catImageString
             )
             documentRef.set(data)
@@ -158,6 +174,19 @@ class ScannerFragment : Fragment() {
 
             // once add is completed, it will take user to the MyFridge view and show updated list of food items
             findNavController().navigate(R.id.action_scannerFragment_to_fridgeFragment)
+        }
+
+        val calendar = Calendar.getInstance()
+        datePickerDialog = DatePickerDialog(requireContext(), { _, year, monthOfYear, dayOfMonth ->
+            val selectedDate = Calendar.getInstance()
+            selectedDate.set(Calendar.YEAR, year)
+            selectedDate.set(Calendar.MONTH, monthOfYear)
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            binding.expirationText.setText(dateFormat.format(selectedDate.time))
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+        binding.expirationBtn.setOnClickListener {
+            datePickerDialog.show()
         }
     }
 

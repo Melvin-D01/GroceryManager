@@ -10,6 +10,9 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MyAdapter(private val myList: ArrayList<Food>, private val databaseUpdateListener: DatabaseUpdateListener) :
 RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
@@ -39,7 +42,9 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         // Set the values of the views to the corresponding properties of the Food object.
         holder.textView.text = myModel.Category
         holder.textView1.text = myModel.Description
-        holder.textView2.text = myModel.ExpirationDate
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val expirationDate: Date = myModel.ExpirationDate!!.toDate()
+        holder.textView2.text = dateFormat.format(expirationDate)
         // Set the image based on the resource ID of the category image.
         val resourceId = holder.itemView.context.resources.getIdentifier(
             myModel.CategoryImage, "drawable", holder.itemView.context.packageName
@@ -59,7 +64,9 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
             inputLayout.addView(descriptionEditText)
             val expirationEditText = EditText(holder.itemView.context)
             expirationEditText.hint = "Expiration Date (MM/DD/YYYY)"
-            expirationEditText.setText(myModel.ExpirationDate)
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val expirationDate: Date = myModel.ExpirationDate!!.toDate()
+            expirationEditText.setText(dateFormat.format(expirationDate))
             inputLayout.addView(expirationEditText)
             builder.setView(inputLayout)
             builder.setPositiveButton(android.R.string.ok) { _, _ ->

@@ -85,7 +85,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="12"
-                    android:hint="Expire Date" />
+                    android:hint="Expire Date"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+
+                <Button
+                    android:id="@+id/expirationBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text ="Add Expiration Date"
+                    android:textSize="13dp"/>
 
             </LinearLayout>
 
@@ -94,10 +104,7 @@
                 android:layout_width="328dp"
                 android:layout_height="56dp"
                 android:text="Add To Fridge"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="41dp"
-                tools:layout_editor_absoluteY="516dp"
-                android:layout_gravity="center"/>
+                android:textSize="24dp"/>
 
         </LinearLayout>
 

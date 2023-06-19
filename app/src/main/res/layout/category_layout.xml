@@ -11,7 +11,8 @@
         android:src="@drawable/ic_launcher_background"
         android:scaleType="fitXY"
         android:focusable="false"
-        android:clickable="false" />
+        android:clickable="false"
+        />
 
     <TextView
         android:id="@+id/textView"
