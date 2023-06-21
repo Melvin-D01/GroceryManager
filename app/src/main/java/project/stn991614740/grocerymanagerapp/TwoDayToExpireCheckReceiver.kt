@@ -69,6 +69,6 @@ class TwoDayToExpireCheckReceiver : BroadcastReceiver() {
         // Send the notification.
         notificationManager.notify(notificationId, notificationBuilder.build())
 
-        MainActivity.setupDailyAlarm(context, TwoDayToExpireCheckReceiver::class.java, 15, 27, 0)
+        MainActivity.setupDailyAlarm(context, TwoDayToExpireCheckReceiver::class.java, 11, 0, 0)
     }
 }

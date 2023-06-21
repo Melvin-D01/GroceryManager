@@ -54,6 +54,6 @@ class ExpiryCheckReceiver : BroadcastReceiver() {
         // Send the notification.
         notificationManager.notify(notificationId, notificationBuilder.build())
 
-        MainActivity.setupDailyAlarm(context, ExpiryCheckReceiver::class.java, 15, 25, 0)
+        MainActivity.setupDailyAlarm(context, ExpiryCheckReceiver::class.java, 12, 0, 0)
     }
 }

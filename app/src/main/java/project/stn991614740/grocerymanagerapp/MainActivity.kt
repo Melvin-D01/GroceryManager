@@ -136,9 +136,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupDailyAlarms() {
-        MainActivity.setupDailyAlarm(this, ExpiryCheckReceiver::class.java, 15, 25, 0)
-        MainActivity.setupDailyAlarm(this, TwoDayToExpireCheckReceiver::class.java, 15 , 27, 1)
-        MainActivity.setupDailyAlarm(this, FiveDayToExpireCheckReceiver::class.java, 15, 30, 2)
+        MainActivity.setupDailyAlarm(this, ExpiryCheckReceiver::class.java, 12, 0, 0)
+        MainActivity.setupDailyAlarm(this, TwoDayToExpireCheckReceiver::class.java, 11 , 0, 1)
+        MainActivity.setupDailyAlarm(this, FiveDayToExpireCheckReceiver::class.java, 13, 26, 2)
     }
 
 

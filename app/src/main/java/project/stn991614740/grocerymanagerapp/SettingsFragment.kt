@@ -1,7 +1,10 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -55,21 +58,40 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        binding.buttonSendNotification.setOnClickListener {
-            val intent = Intent(requireContext(), ExpiryCheckReceiver::class.java)
-            context?.sendBroadcast(intent)
-        }
+        // Initialize notification switches
+        val isExpiryNotificationEnabled = sharedPreferences.getBoolean("Notification_ExpiryCheck", false)
+        val isTwoDayToExpireNotificationEnabled = sharedPreferences.getBoolean("Notification_TwoDayExpire", false)
+        val isFiveDayToExpireNotificationEnabled = sharedPreferences.getBoolean("Notification_FiveDayExpire", false)
 
-        binding.buttonSendNotification2.setOnClickListener {
-            val intent = Intent(requireContext(), TwoDayToExpireCheckReceiver::class.java)
-            context?.sendBroadcast(intent)
-        }
+        binding.switchNotificationExpiry.isChecked = isExpiryNotificationEnabled
+        binding.switchNotificationTwoDayToExpire.isChecked = isTwoDayToExpireNotificationEnabled
+        binding.switchNotificationFiveDayToExpire.isChecked = isFiveDayToExpireNotificationEnabled
 
-        binding.buttonSendNotification3.setOnClickListener {
-            val intent = Intent(requireContext(), TwoDayToExpireCheckReceiver::class.java)
-            context?.sendBroadcast(intent)
+        // Set listeners
+        binding.switchNotificationExpiry.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("Notification_ExpiryCheck", isChecked).apply()
+            if (isChecked) MainActivity.setupDailyAlarm(requireContext(), ExpiryCheckReceiver::class.java, 12, 0, 0)
+            else cancelAlarm(requireContext(), 0)
         }
+        binding.switchNotificationTwoDayToExpire.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("Notification_TwoDayExpire", isChecked).apply()
+            if (isChecked) MainActivity.setupDailyAlarm(requireContext(), TwoDayToExpireCheckReceiver::class.java, 11 , 0, 1)
+            else cancelAlarm(requireContext(), 1)
+        }
+        binding.switchNotificationFiveDayToExpire.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("Notification_FiveDayExpire", isChecked).apply()
+            if (isChecked) MainActivity.setupDailyAlarm(requireContext(), FiveDayToExpireCheckReceiver::class.java, 13, 0, 2)
+            else cancelAlarm(requireContext(), 2)
+        }
+    }
 
+    private fun cancelAlarm(context: Context, requestCode: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
+        )
+        alarmManager.cancel(pendingIntent)
     }
 
 }

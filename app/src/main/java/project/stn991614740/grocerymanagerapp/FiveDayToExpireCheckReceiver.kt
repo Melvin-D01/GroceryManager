@@ -69,6 +69,6 @@ class FiveDayToExpireCheckReceiver : BroadcastReceiver() {
         // Send the notification.
         notificationManager.notify(notificationId, notificationBuilder.build())
 
-        MainActivity.setupDailyAlarm(context, FiveDayToExpireCheckReceiver::class.java, 15, 30, 0)
+        MainActivity.setupDailyAlarm(context, FiveDayToExpireCheckReceiver::class.java, 13, 0, 0)
     }
 }
