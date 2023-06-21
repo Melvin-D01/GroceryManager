@@ -1,14 +1,13 @@
 package project.stn991614740.grocerymanagerapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SwitchCompat
-import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
 import project.stn991614740.grocerymanagerapp.databinding.FragmentSettingsBinding
 
 
@@ -55,6 +54,22 @@ class SettingsFragment : Fragment() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
+
+        binding.buttonSendNotification.setOnClickListener {
+            val intent = Intent(requireContext(), ExpiryCheckReceiver::class.java)
+            context?.sendBroadcast(intent)
+        }
+
+        binding.buttonSendNotification2.setOnClickListener {
+            val intent = Intent(requireContext(), TwoDayToExpireCheckReceiver::class.java)
+            context?.sendBroadcast(intent)
+        }
+
+        binding.buttonSendNotification3.setOnClickListener {
+            val intent = Intent(requireContext(), TwoDayToExpireCheckReceiver::class.java)
+            context?.sendBroadcast(intent)
+        }
+
     }
 
 }

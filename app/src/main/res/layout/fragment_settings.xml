@@ -32,4 +32,25 @@
         android:layout_height="wrap_content"
         android:text="Enable Dark Mode"/>
 
+    <Button
+        android:id="@+id/button_send_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expired Notification"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/button_send_notification2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2 Day Notification"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/button_send_notification3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5 Day Notification"
+        android:layout_marginTop="20dp"/>
+
 </LinearLayout>

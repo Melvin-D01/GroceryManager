@@ -1,6 +1,7 @@
 package project.stn991614740.grocerymanagerapp
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -62,21 +64,36 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
             descriptionEditText.hint = "Description"
             descriptionEditText.setText(myModel.Description)
             inputLayout.addView(descriptionEditText)
-            val expirationEditText = EditText(holder.itemView.context)
-            expirationEditText.hint = "Expiration Date (MM/DD/YYYY)"
+            val expirationButton = Button(holder.itemView.context)
+            expirationButton.text = "Set Expiration Date"
             val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-            val expirationDate: Date = myModel.ExpirationDate!!.toDate()
-            expirationEditText.setText(dateFormat.format(expirationDate))
-            inputLayout.addView(expirationEditText)
+            var expirationDate: Date = myModel.ExpirationDate!!.toDate()
+            expirationButton.setOnClickListener {
+                val calendar = Calendar.getInstance()
+                calendar.time = expirationDate
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH)
+                val day = calendar.get(Calendar.DAY_OF_MONTH)
+                val datePickerDialog = DatePickerDialog(
+                    holder.itemView.context,
+                    { _, year, month, dayOfMonth ->
+                        calendar.set(year, month, dayOfMonth)
+                        expirationDate = calendar.time
+                        expirationButton.text = dateFormat.format(expirationDate)
+                    }, year, month, day
+                )
+                datePickerDialog.show()
+            }
+            expirationButton.text = dateFormat.format(expirationDate)
+            inputLayout.addView(expirationButton)
             builder.setView(inputLayout)
             builder.setPositiveButton(android.R.string.ok) { _, _ ->
                 val db = Firebase.firestore
                 val UID = myModel.UID
                 val description = descriptionEditText.text.toString().trim()
-                val expirationDate = expirationEditText.text.toString().trim()
                 val updateData = hashMapOf(
                     "Description" to description,
-                    "ExpirationDate" to expirationDate
+                    "ExpirationDate" to Timestamp(expirationDate)
                 )
                 db.collection("food").document(UID).update(updateData as Map<String, Any>)
                     .addOnSuccessListener {
@@ -91,6 +108,7 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
             builder.setNegativeButton(android.R.string.cancel, null)
             builder.show()
         }
+
 
         // Reset the translation of the itemView
         holder.itemView.translationX = 0f

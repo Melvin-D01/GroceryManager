@@ -30,7 +30,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
 
     private lateinit var myAdapter: MyAdapter
     private var currentSortType = "ExpirationDate"
-    private var currentSortAscending = false
+    private var currentSortAscending = true
     private var currentCategory = "All"
 
     override fun onCreateView(
@@ -62,11 +62,11 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                 if (view != null) {
                     when (parent.getItemAtPosition(pos).toString()) {
                         "Date (Soonest)" -> {
-                            currentSortAscending = false
+                            currentSortAscending = true
                             fetchDataFromDatabaseWithCategory("ExpirationDate", currentSortAscending, currentCategory)
                         }
                         "Date (Furthest)" -> {
-                            currentSortAscending = true
+                            currentSortAscending = false
                             fetchDataFromDatabaseWithCategory("ExpirationDate", currentSortAscending, currentCategory)
                         }
                         "Category (A-Z)" -> {
@@ -81,7 +81,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                             currentSortAscending = true
                             fetchDataFromDatabaseWithCategoryAndDate("ExpirationDate", currentSortAscending, currentCategory, 5)
                         }
-                        "Expiring Now (2 Day)" -> {
+                        "Expiring Now (2 Days)" -> {
                             currentSortAscending = true
                             fetchDataFromDatabaseWithCategoryAndDate("ExpirationDate", currentSortAscending, currentCategory, 2)
                         }

@@ -5,14 +5,14 @@
         <item>Category (A-Z)</item>
         <item>Category (Z-A)</item>
         <item>Expiring soon (5 Days)</item>
-        <item>Expiring Now (2 Day)</item>
+        <item>Expiring Now (2 Days)</item>
         <item>Expired</item>
     </string-array>
     <string-array name="sort_array_date_only">
         <item>Date (Soonest)</item>
         <item>Date (Furthest)</item>
         <item>Expiring soon (5 Days)</item>
-        <item>Expiring Now (2 Day)</item>
+        <item>Expiring Now (2 Days)</item>
         <item>Expired</item>
     </string-array>
     <string-array name="cat_array">
