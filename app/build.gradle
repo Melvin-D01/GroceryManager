@@ -42,11 +42,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -54,10 +55,11 @@ dependencies {
     //Add Text Recognition Google ML library
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:18.0.0'
-    implementation 'com.google.firebase:firebase-common-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-common-ktx:20.3.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.android.volley:volley:1.2.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -65,7 +67,7 @@ dependencies {
 
 
     //google dependency
-    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
 
     //github glide
     implementation 'com.github.bumptech.glide:glide:4.15.0'
@@ -77,10 +79,17 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation 'com.google.firebase:firebase-core:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
 
     // recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    // Firebase Auth
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    implementation 'com.google.firebase:firebase-auth:22.0.0'
+    implementation 'com.google.firebase:firebase-bom:32.2.0'
+    implementation 'com.google.firebase:firebase-auth-ktx'
 
 }

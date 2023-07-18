@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.ktx.auth
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -32,6 +33,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+
+
 
 class ScannerFragment : Fragment() {
 
@@ -49,8 +52,6 @@ class ScannerFragment : Fragment() {
     private lateinit var datePickerDialog: DatePickerDialog
     private val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
-
-
     // View Binding
     private var _binding: FragmentScannerBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
@@ -64,6 +65,7 @@ class ScannerFragment : Fragment() {
     // firestore
     // This variable is used to connect to the Firebase Firestore database
     private val db = Firebase.firestore
+    private val auth = Firebase.auth  // Firebase Authentication instance
 
     companion object {
         private const val TAG = "ScannerFragment"
@@ -148,11 +150,17 @@ class ScannerFragment : Fragment() {
             val expirationDate = com.google.firebase.Timestamp(expDate)
             val catImageString = data3
 
+            val userId = auth.currentUser?.uid
+            if (userId == null) {
+                Log.d(TAG, "Error: no user signed in.")
+                return@setOnClickListener
+            }
+
             // collects the data and adds it to the firestore db
-            val dF = db.collection("food").document().id
+            val dF = db.collection("users").document(userId).collection("food").document().id
 
             // Get the Firestore collection reference
-            val collectionRef = Firebase.firestore.collection("food")
+            val collectionRef = db.collection("users").document(userId).collection("food")
 
             // Set a custom ID for the new document
             val customId = dF
@@ -184,6 +192,10 @@ class ScannerFragment : Fragment() {
             selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             binding.expirationText.setText(dateFormat.format(selectedDate.time))
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+        // set default date to one week from today
+        calendar.add(Calendar.DAY_OF_YEAR, 7)
+        binding.expirationText.setText(dateFormat.format(calendar.time))
 
         binding.expirationBtn.setOnClickListener {
             datePickerDialog.show()

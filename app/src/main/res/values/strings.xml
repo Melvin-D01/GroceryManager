@@ -16,4 +16,12 @@
     <string name="description_text">Description</string>
     <string name="expiration_text">Expiration</string>
     <string name="edit_button_text">Edit</string>
+    <string name="logout">Logout</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login">login</string>
+    <string name="register">Register</string>
+    <string name="login_with_twitter">Login With Twitter</string>
+    <string name="google_login">Login With Google</string>
+
 </resources>

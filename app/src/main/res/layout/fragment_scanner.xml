@@ -94,7 +94,7 @@
                     android:id="@+id/expirationBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text ="Add Expiration Date"
+                    android:text ="Change Expiration Date"
                     android:textSize="13dp"/>
 
             </LinearLayout>
