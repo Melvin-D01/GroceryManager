@@ -2,6 +2,7 @@ package project.stn991614740.grocerymanagerapp
 
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,11 @@ class StartFragment : Fragment() {
                                 val user = auth.currentUser
                                 addUserToFirestore(user)
                                 updateUI(user)
+
+                                user?.let {
+                                    saveUserIdToSharedPreferences(it.uid)
+                                }
+
                             } else {
                                 Log.w(TAG, "signInWithEmail:failure", task.exception)
                                 updateUI(null)
@@ -114,7 +120,12 @@ class StartFragment : Fragment() {
             // Twitter login was successful
             val user = auth.currentUser
             addUserToFirestore(user)
+
+            user?.let {
+                saveUserIdToSharedPreferences(it.uid)
+            }
         }
+
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
@@ -126,6 +137,11 @@ class StartFragment : Fragment() {
                     // Add user to Firestore
                     addUserToFirestore(user)
                     Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
+
+                    user?.let {
+                        saveUserIdToSharedPreferences(it.uid)
+                    }
+
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     updateUI(null)
@@ -197,6 +213,14 @@ class StartFragment : Fragment() {
                     Log.w(TAG, "Error checking document", task.exception)
                 }
             }
+        }
+    }
+
+    private fun saveUserIdToSharedPreferences(uid: String) {
+        val sharedPref = requireActivity().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("currentUserId", uid)
+            apply()
         }
     }
 

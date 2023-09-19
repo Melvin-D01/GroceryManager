@@ -19,23 +19,24 @@ class AddFragment : Fragment() {
     // A binding object instance, corresponding to the fragment layout
     private var _binding: FragmentAddBinding? = null
 
-    // Get the current binding object instance
+    // This property delegates the access to _binding and throws an exception if it's null.
     private val binding get() = _binding!!
 
-    // Inflate the layout for this fragment
+    // Method to inflate the fragment's layout.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout using data binding and assign it to the _binding variable.
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    // Called immediately after onCreateView has returned, perform any additional setup here
+    // Method called after the onCreateView. This is where you can perform additional setup.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Create a list of food categories for the grid
+        // Create a hardcoded list of food categories for the grid.
         val catDataSet = listOf(
             CatGridItem(R.drawable.fruits, "Fruit", "fruits"),
             CatGridItem(R.drawable.vegetable, "Vegetable", "vegetable"),
@@ -55,28 +56,28 @@ class AddFragment : Fragment() {
             CatGridItem(R.drawable.menu, "Other Food", "menu")
         )
 
-        // Set up a GridLayoutManager with 4 columns for the RecyclerView
+        // Configure the RecyclerView layout manager to display items in a grid with 4 columns.
         val numColumns = 4 // or however many columns you want to display
         binding.myRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColumns)
 
-        // Set the onClick listener for each grid item
+        // Define an onClick listener for each grid item.
         val onClick: (CatGridItem) -> Unit = { item ->
             addItem(item.text, item.imageName)
         }
 
-        // Set up the RecyclerView adapter
+        // Initialize and set the RecyclerView adapter with the data and onClick listener.
         val myAdapter = CatGridAdapter(requireContext(), catDataSet, onClick)
         binding.myRecyclerView.adapter = myAdapter
 
     }
 
-    // Function to validate the food item name entered by the user
+    // Function to check if the entered food item name is valid.
     fun isValidFoodItemName(foodItemName: String): Boolean {
         // A name is valid if it's not blank and its length doesn't exceed 50
         return foodItemName.isNotBlank() && foodItemName.length <= 50
     }
 
-    // Function to handle the addition of a new food item
+    // Function to show a dialog to the user to enter a new food item's name.
     fun handleFoodItemName(foodItemName: String) {
         // Display a short message indicating that the food item has been added
         Toast.makeText(requireContext(), "Added $foodItemName to list", Toast.LENGTH_SHORT).show()
@@ -89,12 +90,12 @@ class AddFragment : Fragment() {
         builder.setTitle("Add Food Item")
         builder.setMessage("Please enter the name of the food item:")
 
-        // Set up the input field
+        // Create an EditText input field for user to enter food item's name.
         val input = EditText(requireContext())
         input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
-        // Set up the OK button to alert box
+        // Set the action for the OK button.
         builder.setPositiveButton("OK") { dialog, which ->
             val foodItemName = input.text.toString().trim()
             if (isValidFoodItemName(foodItemName)) {
@@ -108,16 +109,16 @@ class AddFragment : Fragment() {
                 Toast.makeText(requireContext(), "Invalid food item name", Toast.LENGTH_SHORT).show()
             }
         }
-        // Set Cancel button to alert box
+        // Set the action for the Cancel button.
         builder.setNegativeButton("Cancel") { dialog, which ->
             dialog.cancel()
         }
 
-        // Show the alert dialog
+        // Display the created alert dialog to the user.
         builder.show()
     }
 
-    // Set _binding to null when the view is destroyed to avoid memory leaks
+    // Cleanup method to avoid memory leaks by setting _binding to null when the fragment's view is destroyed.
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

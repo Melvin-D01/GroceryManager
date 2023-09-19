@@ -17,6 +17,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.provider.Settings
 import java.util.*
 
 
@@ -26,13 +27,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigationView: BottomNavigationView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set up alarms to check for item expiration
         setupDailyAlarms()
 
-        // Load the setting
+        // Load the user's theme preferences
         val sharedPreferences = this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
         val isDarkModeEnabled = sharedPreferences.getBoolean("DarkMode", false)
         if (isDarkModeEnabled) {
@@ -41,26 +42,29 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
+        // Inflate the main layout
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set up NavController for navigation between fragments
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        // Setup BottomNavigationView
+        // Setup BottomNavigationView and get its instance
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        // Setting up BottomNavigationView with NavController
+        // Bind the BottomNavigationView to the NavController
         bottomNavigationView.setupWithNavController(navController)
 
+        // Toggle visibility of the BottomNavigationView based on the active destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.startFragment) {
+            if (destination.id == R.id.startFragment) {
                 bottomNavigationView.visibility = View.GONE
             } else {
                 bottomNavigationView.visibility = View.VISIBLE
             }
         }
 
-        // Add navigation item selection listener
+        // Handle item selection in the BottomNavigationView
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.fridgeFragment -> {
@@ -81,12 +85,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the main menu; this adds items to the action bar
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
@@ -94,11 +99,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        // Handle the action to navigate up within the app's navigation hierarchy
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     companion object {
+        // Helper function to set up daily alarms at specified times
         fun setupDailyAlarm(context: Context, receiverClass: Class<*>, hour: Int, minute: Int, requestCode: Int) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, receiverClass)
@@ -112,12 +119,12 @@ class MainActivity : AppCompatActivity() {
                 set(Calendar.MINUTE, minute)
             }
 
-            // If the calendar is set to a time before the current time, increment the day to the next day
+            // If the alarm time is set for a past time, schedule it for the next day
             if (calendar.timeInMillis <= System.currentTimeMillis()) {
                 calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
 
-            // Set the alarm to start at approximately the specified hour and minute, and repeat every day.
+            // Set the alarm, with different methods depending on Android version
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
@@ -134,12 +141,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    // Set up daily alarms for checking food expiration
     private fun setupDailyAlarms() {
         MainActivity.setupDailyAlarm(this, ExpiryCheckReceiver::class.java, 12, 0, 0)
-        MainActivity.setupDailyAlarm(this, TwoDayToExpireCheckReceiver::class.java, 11 , 0, 1)
-        MainActivity.setupDailyAlarm(this, FiveDayToExpireCheckReceiver::class.java, 13, 26, 2)
+        MainActivity.setupDailyAlarm(this, TwoDayToExpireCheckReceiver::class.java, 13, 0, 1)
+        MainActivity.setupDailyAlarm(this, FiveDayToExpireCheckReceiver::class.java, 11, 0, 2)
     }
-
-
 }
+
