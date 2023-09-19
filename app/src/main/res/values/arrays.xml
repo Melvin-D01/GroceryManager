@@ -1,0 +1,37 @@
+<resources>
+    <string-array name="sort_array">
+        <item>Date (Soonest)</item>
+        <item>Date (Furthest)</item>
+        <item>Category (A-Z)</item>
+        <item>Category (Z-A)</item>
+        <item>Expiring soon (5 Days)</item>
+        <item>Expiring Now (2 Days)</item>
+        <item>Expired</item>
+    </string-array>
+    <string-array name="sort_array_date_only">
+        <item>Date (Soonest)</item>
+        <item>Date (Furthest)</item>
+        <item>Expiring soon (5 Days)</item>
+        <item>Expiring Now (2 Days)</item>
+        <item>Expired</item>
+    </string-array>
+    <string-array name="cat_array">
+        <item>All</item>
+        <item>Fruit</item>
+        <item>Vegetable</item>
+        <item>Meat</item>
+        <item>Seafood</item>
+        <item>Dairy</item>
+        <item>Grains</item>
+        <item>Canned Goods</item>
+        <item>Snacks</item>
+        <item>Beverages</item>
+        <item>Condiments</item>
+        <item>Baked Goods</item>
+        <item>Frozen Foods</item>
+        <item>Prepped Meals</item>
+        <item>Baby Food</item>
+        <item>Pet Food</item>
+        <item>Other Food</item>
+    </string-array>
+</resources>

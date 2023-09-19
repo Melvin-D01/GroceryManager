@@ -1,6 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+
+    // firebase
+    id 'com.google.gms.google-services'
+
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -9,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "project.stn991614740.grocerymanagerapp"
-        minSdk 33
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -23,6 +29,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures{
+        viewBinding true
+    }
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,15 +42,54 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    //Add Text Recognition Google ML library
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:18.0.0'
+    implementation 'com.google.firebase:firebase-common-ktx:20.3.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.android.volley:volley:1.2.1'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+    //google dependency
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+
+    //github glide
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    // Declare the dependency for the Cloud Firestore library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
+
+    // recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    // Firebase Auth
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    implementation 'com.google.firebase:firebase-auth:22.0.0'
+    implementation 'com.google.firebase:firebase-bom:32.2.0'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
 }

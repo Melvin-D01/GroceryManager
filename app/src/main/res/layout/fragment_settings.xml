@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context=".SettingsFragment">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:textColor="@color/material_dynamic_neutral60"
+        android:textSize="100px" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="5dp"
+        android:background="@color/material_dynamic_neutral60" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_dark_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Dark Mode"/>
+
+    <Switch
+        android:id="@+id/switchNotificationExpiry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expiry Notification" />
+
+    <Switch
+        android:id="@+id/switchNotificationTwoDayToExpire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Two Day To Expire Notification" />
+
+    <Switch
+        android:id="@+id/switchNotificationFiveDayToExpire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Five Day To Expire Notification" />
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        android:layout_gravity="center|bottom"
+        android:layout_marginTop="350dp"
+        android:layout_marginBottom="16dp"/>
+</LinearLayout>
+

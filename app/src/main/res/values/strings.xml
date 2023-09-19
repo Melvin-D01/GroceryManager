@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">GroceryManagerApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_fridge">FridgeActivity</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_text">Title</string>
+    <string name="description_text">Description</string>
+    <string name="expiration_text">Expiration</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="logout">Logout</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login">login</string>
+    <string name="register">Register</string>
+    <string name="login_with_twitter">Login With Twitter</string>
+    <string name="google_login">Login With Google</string>
+
 </resources>
