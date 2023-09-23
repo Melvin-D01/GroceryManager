@@ -1,8 +1,10 @@
 package project.stn991614740.grocerymanagerapp
 
 import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Menu
 import android.widget.*
@@ -66,6 +69,24 @@ class ScannerFragment : Fragment() {
     // This variable is used to connect to the Firebase Firestore database
     private val db = Firebase.firestore
     private val auth = Firebase.auth  // Firebase Authentication instance
+
+    // voice to text results for expiration date and sets text to output
+    private val voiceActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val matches: List<String>? = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val voiceInput = matches?.get(0) // Taking the first match which is typically the most accurate
+            binding.expirationText.setText(voiceInput)
+        }
+    }
+
+    // voice to text results for item description and sets text to output
+    private val voiceActivityResultLauncher2 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val matches: List<String>? = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val voiceInput = matches?.get(0) // Taking the first match which is typically the most accurate
+            binding.testText.setText(voiceInput)
+        }
+    }
 
     companion object {
         private const val TAG = "ScannerFragment"
@@ -200,8 +221,35 @@ class ScannerFragment : Fragment() {
         binding.expirationBtn.setOnClickListener {
             datePickerDialog.show()
         }
-    }
 
+        // listenerand voice to text call for the expiration voice to text btn
+        binding.expirationVoiceBtn.setOnClickListener {
+            // Launch voice-to-text input
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the expiration date")
+
+            try {
+                voiceActivityResultLauncher.launch(intent)
+            } catch (e: ActivityNotFoundException) {
+                showToast("Your device doesn't support voice input.")
+            }
+        }
+
+        // listener and voice to text call for the item description voice to text btn
+        binding.voiceBtn.setOnClickListener {
+            // Launch voice-to-text input
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the food item name!")
+
+            try {
+                voiceActivityResultLauncher2.launch(intent)
+            } catch (e: ActivityNotFoundException) {
+                showToast("Your device doesn't support voice input.")
+            }
+        }
+    }
 
     // function that prompts the user an option to upload image via gallery or snapping a picture
     private fun showInputImageDialog() {

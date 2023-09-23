@@ -15,7 +15,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inputImageBtn"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_weight="1"
             app:icon="@drawable/ic_baseline_add_a_photo_24"
             android:text="Take Image"
@@ -73,28 +73,57 @@
                     android:focusable="false"
                     android:clickable="false"/>
 
-                <EditText
-                    android:id="@+id/testText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="12"
-                    android:hint="Item Description" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/expirationText"
+                    <EditText
+                        android:id="@+id/testText"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:ems="12"
+                        android:hint="Item Description" />
+
+                    <ImageButton
+                        android:id="@+id/voiceBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:contentDescription="Voice input for item description" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="12"
-                    android:hint="Expire Date"
-                    android:focusable="false"
-                    android:clickable="false" />
+                    android:orientation="horizontal">
 
+                    <EditText
+                        android:id="@+id/expirationText"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:ems="12"
+                        android:hint="Expire Date"
+                        android:focusable="false"
+                        android:clickable="false" />
+
+                    <ImageButton
+                        android:id="@+id/expirationVoiceBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:contentDescription="Voice input for expiration date" />
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/expirationBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text ="Change Expiration Date"
+                    android:text="Change Expiration Date"
                     android:textSize="13dp"/>
 
             </LinearLayout>

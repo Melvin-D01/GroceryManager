@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import project.stn991614740.grocerymanagerapp.databinding.FragmentAddBinding
-import android.text.InputType
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
@@ -22,6 +21,7 @@ import java.util.*
 
 class AddFragment : Fragment() {
 
+    // properties for diologExitText and REQUEST_CODE_SPEECH_INPUT
     private var dialogEditText: EditText? = null
     private val REQUEST_CODE_SPEECH_INPUT = 100
 
@@ -107,7 +107,7 @@ class AddFragment : Fragment() {
         builder.setView(dialogView)
 
         // Access the EditText and the VoiceInput button from the custom layout
-        dialogEditText = dialogView.findViewById<EditText>(R.id.editTextInput)
+        dialogEditText = dialogView.findViewById(R.id.editTextInput)
         val voiceInputButton = dialogView.findViewById<ImageButton>(R.id.buttonVoiceInput)
 
         // Set the action for voice input button
@@ -138,6 +138,7 @@ class AddFragment : Fragment() {
         builder.show()
     }
 
+    // function to get speech input
     private fun getSpeechInput() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -150,6 +151,7 @@ class AddFragment : Fragment() {
         }
     }
 
+    // function that handles updating the dialog text
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK) {
@@ -163,8 +165,6 @@ class AddFragment : Fragment() {
             }
         }
     }
-
-
 
     // Cleanup method to avoid memory leaks by setting _binding to null when the fragment's view is destroyed.
     override fun onDestroyView() {
