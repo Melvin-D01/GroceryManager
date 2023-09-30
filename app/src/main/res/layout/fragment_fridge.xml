@@ -23,17 +23,38 @@
             android:textColor="@color/material_dynamic_neutral60"
             android:textSize="100px" />
 
+        <!-- "Generate Recipe" button -->
+        <Button
+            android:id="@+id/generateRecipeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Generate Recipe"
+            android:elevation="3dp"
+            android:textColor="@android:color/white" />
+
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/generateRecipeButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/textView"
+            android:layout_below="@+id/generateRecipeButton"
             android:layout_marginTop="5dp"
             android:background="@color/material_dynamic_neutral60" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
+            android:layout_below="@+id/generateRecipeButton"
             android:orientation="horizontal"
             android:gravity="end">
 
@@ -54,8 +75,6 @@
                 android:paddingRight="15dp"/>
 
         </LinearLayout>
-
-
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

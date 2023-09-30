@@ -1,5 +1,6 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.ActivityNotFoundException
@@ -11,9 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -24,10 +22,22 @@ import com.google.firebase.ktx.Firebase
 import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
 import java.util.*
 import android.provider.Settings
+import android.widget.*
 import kotlin.collections.ArrayList
+import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 
 // Fragment representing the fridge view and interactions.
 class FridgeFragment : Fragment(), DatabaseUpdateListener {
+
+    private lateinit var progressBar: ProgressBar
+
+    private val client = OkHttpClient()
 
     // Binding variables for the fragment.
     private var _binding: FragmentFridgeBinding? = null
@@ -170,6 +180,12 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+
+        binding.generateRecipeButton.setOnClickListener {
+            fetchRecipeForExpiringItems()
+        }
+
+        progressBar = binding.loadingProgressBar
     }
 
     // Fetch data from the database based on category and sorting order.
@@ -327,9 +343,128 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             .show()
     }
 
+    // Fetch and display recipes for items that are about to expire.
+    @SuppressLint("SuspiciousIndentation")
+    private fun fetchRecipeForExpiringItems() {
+        // shows loading indicator
+        showLoadingIndicator()
+        // Fetch top items about to expire from the database
+        val db = Firebase.firestore
+        val userCollection = db.collection("users").document(userId).collection("food")
+
+        val currentDate = Calendar.getInstance().time
+
+        // Let's fetch the top 3 items closest to their expiration date.
+        val query = userCollection
+            .whereGreaterThan("ExpirationDate", currentDate)  // Fetch items that are still good but are about to expire
+            .orderBy("ExpirationDate", Query.Direction.ASCENDING)  // Order by closest expiration date
+            .limit(10)  // Limit to top 10 items
+
+        query.get()
+            .addOnSuccessListener { documents ->
+                val expiringItemsList = ArrayList<String>()  // List to store descriptions
+                for (document in documents) {
+                    val foodItem = document.toObject(Food::class.java)
+                    val description = foodItem.Description   // Assuming 'Description' is the field name in your Food class
+                    expiringItemsList.add(description)
+
+                }
+
+                val promptText = "Provide a recipe for a dish using ${expiringItemsList.joinToString(", ")}. Make sure that the title has *** on each side to highlight it."
+                getRepsonse(promptText){response ->
+                    activity?.runOnUiThread{
+                        val text = response
+
+                        val alertDialog = AlertDialog.Builder(context)
+                            .setTitle("AI Generated Recipe Just For You!")
+                            .setMessage(text)
+                            .setPositiveButton("OK") { dialog, which ->
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Save") { dialog, which ->
+                                saveRecipeToDatabase(text)
+                                dialog.dismiss()
+                            }
+                            .create()
+                            // Hides the loading indicator once the data is fetched successfully.
+                            hideLoadingIndicator()
+                            alertDialog.show()
+                    }
+                }
+            }
+    }
+    // Fetch a response from OpenAI's API.
+    fun getRepsonse(promptText:String, callback: (String) -> Unit) {
+        val apiKey = "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"
+        val url = "https://api.openai.com/v1/completions"
+
+        val requestBody = """
+            {
+            "model": "gpt-3.5-turbo-instruct",
+            "prompt": "$promptText",
+            "max_tokens": 500,
+            "temperature": 0
+            }
+        """.trimIndent()
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Authorization", "Bearer $apiKey")
+            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("error", "API Failed", e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body != null) {
+                    Log.v("data", body)
+                } else {
+                    Log.v("data","empty")
+                }
+                val jsonObject = JSONObject(body)
+                val jsonArray:JSONArray=jsonObject.getJSONArray("choices")
+                val textResult = jsonArray.getJSONObject(0).getString("text")
+                callback(textResult)
+            }
+        })
+    }
+
+    // function that saves the AI generated recipe
+    fun saveRecipeToDatabase(recipeText: String) {
+        val db = Firebase.firestore
+        val recipeMap = hashMapOf(
+            "recipe" to recipeText,
+            "creationDate" to Calendar.getInstance().time
+        )
+
+        db.collection("users").document(userId).collection("recipes").add(recipeMap)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(context, "Recipe saved successfully!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error saving recipe: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // function that shows the loading indicator when user is waiting for the AI recipe generator
+    private fun showLoadingIndicator() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    // function that hides the loading indicator when the AI recipe generator is done computing
+    private fun hideLoadingIndicator() {
+        progressBar.visibility = View.GONE
+    }
+
     // Cleanup on fragment view destruction.
     override fun onDestroyView() {
         super.onDestroyView()
+
         notificationDialog?.dismiss()
         _binding = null
     }
