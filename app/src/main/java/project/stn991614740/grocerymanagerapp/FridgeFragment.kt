@@ -395,7 +395,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
     }
     // Fetch a response from OpenAI's API.
     fun getRepsonse(promptText:String, callback: (String) -> Unit) {
-        val apiKey = "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"
+        val apiKey = BuildConfig.OPENAI_API_KEY
         val url = "https://api.openai.com/v1/completions"
 
         val requestBody = """
