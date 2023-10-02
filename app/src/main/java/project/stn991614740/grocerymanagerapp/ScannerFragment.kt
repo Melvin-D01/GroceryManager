@@ -2,6 +2,7 @@ package project.stn991614740.grocerymanagerapp
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.content.ActivityNotFoundException
@@ -34,6 +35,12 @@ import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,7 +82,20 @@ class ScannerFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             val matches: List<String>? = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             val voiceInput = matches?.get(0) // Taking the first match which is typically the most accurate
-            binding.expirationText.setText(voiceInput)
+
+            // take the voice input of the date and format it
+            val prompt = "convert ${voiceInput} to the format of 'DD-MM-YYYY', making sure to remove any white spaces"
+            getRepsonse(prompt){response ->
+                activity?.runOnUiThread{
+                    val formattedDate = response
+
+                    // remove all whitespace in response
+                    val expText = formattedDate.replace("\n","")
+                    binding.expirationText.setText(expText.toString())
+
+                }
+            }
+
         }
     }
 
@@ -87,6 +107,9 @@ class ScannerFragment : Fragment() {
             binding.testText.setText(voiceInput)
         }
     }
+
+    // connect to internet
+    private val client = OkHttpClient()
 
     companion object {
         private const val TAG = "ScannerFragment"
@@ -433,6 +456,47 @@ class ScannerFragment : Fragment() {
     // function that shows a toast message
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    // Fetch a response from OpenAI's API.
+    fun getRepsonse(promptText:String, callback: (String) -> Unit) {
+        val apiKey = BuildConfig.OPENAI_API_KEY
+        val url = "https://api.openai.com/v1/completions"
+
+        val requestBody = """
+            {
+            "model": "gpt-3.5-turbo-instruct",
+            "prompt": "$promptText",
+            "max_tokens": 500,
+            "temperature": 0
+            }
+        """.trimIndent()
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Authorization", "Bearer $apiKey")
+            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("error", "API Failed", e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body != null) {
+                    Log.v("data", body)
+                } else {
+                    Log.v("data","empty")
+                }
+                val jsonObject = JSONObject(body)
+                val jsonArray: JSONArray =jsonObject.getJSONArray("choices")
+                val textResult = jsonArray.getJSONObject(0).getString("text")
+                callback(textResult)
+            }
+        })
     }
 
 }

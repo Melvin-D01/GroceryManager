@@ -17,9 +17,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import okhttp3.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 import java.util.*
 
 class AddFragment : Fragment() {
+
+
 
     // properties for diologExitText and REQUEST_CODE_SPEECH_INPUT
     private var dialogEditText: EditText? = null
@@ -165,6 +171,8 @@ class AddFragment : Fragment() {
             }
         }
     }
+
+
 
     // Cleanup method to avoid memory leaks by setting _binding to null when the fragment's view is destroyed.
     override fun onDestroyView() {
