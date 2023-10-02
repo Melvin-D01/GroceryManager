@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 class AddFragment : Fragment() {
 
     // A binding object instance, corresponding to the fragment layout
-    private var _binding: FragmentAddBinding? = null
+    var _binding: FragmentAddBinding? = null
 
     // This property delegates the access to _binding and throws an exception if it's null.
     private val binding get() = _binding!!
