@@ -33,18 +33,6 @@
         app:lottie_rawRes="@raw/animation_lmzb3j4h"
         android:layout_gravity="center_horizontal"/>
 
-
-    <!--
-    <ImageView
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/grocery"
-        android:layout_gravity="center_horizontal"/>
-
-    -->
-
-
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="360dp"
@@ -158,24 +146,13 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/facebook_sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_margin="16dp"
-                android:backgroundTint="@color/forgotpassword"
-                app:srcCompat="@drawable/facebook"
-                android:contentDescription="Sign in with Facebook"/>
-
-
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebook_sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
 
     </LinearLayout>
 

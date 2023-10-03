@@ -89,6 +89,12 @@ class StartFragment : Fragment() {
                 startActivityForResult(intent, TWITTER_SIGN_IN)
             }
 
+            binding.facebookSignInButton.setOnClickListener {
+                val intent = Intent(requireContext(), FacebookActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                startActivityForResult(intent, FACEBOOK_SIGN_IN)
+            }
+
             binding.buttonLogin.setOnClickListener {
                 val email = binding.editTextEmail.text.toString()
                 val password = binding.editTextPassword.text.toString()
@@ -143,6 +149,16 @@ class StartFragment : Fragment() {
 
         if (requestCode == TWITTER_SIGN_IN && resultCode == Activity.RESULT_OK) {
             // Twitter login was successful
+            val user = auth.currentUser
+            addUserToFirestore(user)
+
+            user?.let {
+                saveUserIdToSharedPreferences(it.uid)
+            }
+        }
+
+        if (requestCode == FACEBOOK_SIGN_IN && resultCode == Activity.RESULT_OK) {
+            // Facebook login was successful
             val user = auth.currentUser
             addUserToFirestore(user)
 
@@ -257,5 +273,6 @@ class StartFragment : Fragment() {
     companion object {
         private const val RC_SIGN_IN = 9001
         private const val TWITTER_SIGN_IN = 9002
+        private const val FACEBOOK_SIGN_IN = 64206  // This is the default request code used by Facebook SDK
     }
 }

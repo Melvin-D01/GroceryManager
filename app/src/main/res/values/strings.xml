@@ -24,4 +24,8 @@
     <string name="login_with_twitter">Login With Twitter</string>
     <string name="google_login">Login With Google</string>
 
+    <string name="login_with_facebook">Login With Facebook</string>
+    <string name="facebook_app_id">1104326933862812</string>
+    <string name="fb_login_protocol_scheme">975fc403205900c719ed3821a80bfd52</string>
+    <string name="facebook_client_token">d15f3836c40c6892b90eddc101d63934</string>
 </resources>
