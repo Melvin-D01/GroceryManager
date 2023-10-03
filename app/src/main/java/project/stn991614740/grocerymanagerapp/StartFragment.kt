@@ -5,6 +5,8 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,9 +23,20 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 
-
-
 class StartFragment : Fragment() {
+
+    // lottie animation
+    private val repeatRunnable = object : Runnable {
+        override fun run() {
+            if (isRescheduleAllowed) {
+                binding.animationView.playAnimation()
+                handler.postDelayed(this, 10000) // Delay for 10 seconds
+            }
+        }
+    }
+
+    // lottie animation
+    private var isRescheduleAllowed = true
 
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
@@ -35,6 +48,9 @@ class StartFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("users")
 
+    // delay animation
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +61,9 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // lottie animation
+        handler.postDelayed(repeatRunnable, 10000)
 
         auth = FirebaseAuth.getInstance()
 
@@ -100,6 +119,12 @@ class StartFragment : Fragment() {
             binding.buttonRegister.setOnClickListener {
                 findNavController().navigate(R.id.action_startFragment_to_registerFragment)
             }
+
+            // Delay the Lottie animation by 5 seconds
+            handler.postDelayed({
+                val animationView = binding.animationView // Make sure the ID matches your XML layout
+                animationView.playAnimation()
+            }, 2000)
         }
     }
 
@@ -125,7 +150,6 @@ class StartFragment : Fragment() {
                 saveUserIdToSharedPreferences(it.uid)
             }
         }
-
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
@@ -226,6 +250,7 @@ class StartFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        isRescheduleAllowed = false  // Prevent the runnable from rescheduling itself
         _binding = null
     }
 

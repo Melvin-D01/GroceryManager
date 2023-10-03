@@ -92,4 +92,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-bom:32.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx'
 
+
+    implementation 'com.airbnb.android:lottie:3.0.7'
+
 }

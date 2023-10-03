@@ -4,74 +4,179 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:layout_margin="10dp"
-    android:layout_gravity="center"
-    android:padding="10dp"
+    android:orientation="vertical"
+    android:background="@color/background"
     tools:context=".StartFragment">
 
-    <LinearLayout
+
+    <ImageView
+        android:id="@+id/shape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/shape" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:text="Welcome Back!"
+        android:textAlignment="center"
+        android:textColor="@color/forgotpassword"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="-40dp"/>
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:lottie_rawRes="@raw/animation_lmzb3j4h"
+        android:layout_gravity="center_horizontal"/>
+
+
+    <!--
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/grocery"
+        android:layout_gravity="center_horizontal"/>
+
+    -->
+
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="360dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="15dp"
+        android:hint="Username"
+        android:textColorHint="@color/forgotpassword"
+        android:textColor="@color/forgotpassword"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/input"/>
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:inputType="textPassword"
+        android:layout_width="360dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="20dp"
+        android:hint="Password"
+        android:textColorHint="@color/forgotpassword"
+        android:textColor="@color/forgotpassword"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/input"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password"
+        android:textAlignment="center"
+        android:layout_marginTop="25dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/forgotpassword"/>
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="360dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp"
+        android:text="Login"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:backgroundTint="@color/forgotpassword"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="Login"
-            android:textSize="35dp"
-            android:layout_marginBottom="50dp"/>
+            android:textColor="@color/black"
+            android:text="Don't have an account?"/>
 
-
-        <EditText
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="@string/hint_email"
-            android:layout_marginBottom="16dp" />
-
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/hint_password"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/buttonLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login"
-            android:layout_marginBottom="10dp"/>
-        <Button
+        <TextView
             android:id="@+id/buttonRegister"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/register"
-            android:layout_marginBottom="10dp"/>
-
-        <Button
-            android:id="@+id/google_sign_in_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/google_login"
-            android:drawableLeft="@drawable/google"
-            android:layout_gravity="center" />
-        <Button
-            android:id="@+id/twitter_sign_in_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login_with_twitter"
-            android:drawableLeft="@drawable/twitter"
-            android:layout_gravity="center" />
-
+            android:textColor="@color/forgotpassword"
+            android:textStyle="bold"
+            android:text=" Sign up"/>
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/twitter_sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/forgotpassword"
+                app:srcCompat="@drawable/twitter"
+                android:contentDescription="Sign in with Twitter"/>
+
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/google_sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/forgotpassword"
+                app:srcCompat="@drawable/google"
+                android:contentDescription="Sign in with Google"/>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/facebook_sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/forgotpassword"
+                app:srcCompat="@drawable/facebook"
+                android:contentDescription="Sign in with Facebook"/>
+
+
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
