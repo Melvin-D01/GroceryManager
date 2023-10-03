@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import project.stn991614740.grocerymanagerapp.databinding.FragmentStartBinding
@@ -61,6 +62,12 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val forgotPasswordButton = view.findViewById<TextView>(R.id.forgot_password_text)
+        forgotPasswordButton.setOnClickListener {
+            val intent = Intent(requireContext(), ResetPassword::class.java)
+            startActivity(intent)
+        }
 
         // lottie animation
         handler.postDelayed(repeatRunnable, 10000)

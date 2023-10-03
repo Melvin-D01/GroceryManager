@@ -47,6 +47,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ResetPassword"
+            android:exported="false" />
+        <activity
             android:name=".FacebookActivity"
             android:exported="false" />
         <activity

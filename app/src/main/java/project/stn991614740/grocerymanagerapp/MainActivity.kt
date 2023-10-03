@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.provider.Settings
+import android.widget.Button
+import android.widget.TextView
 import java.util.*
 
 
@@ -29,6 +31,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // forget password
+        val forgotPasswordText = findViewById<Button>(R.id.forgot_password_text)
+        forgotPasswordText?.setOnClickListener {
+            val intent = Intent(this, ResetPassword::class.java)
+            startActivity(intent)
+        }
 
         // Set up alarms to check for item expiration
         setupDailyAlarms()
