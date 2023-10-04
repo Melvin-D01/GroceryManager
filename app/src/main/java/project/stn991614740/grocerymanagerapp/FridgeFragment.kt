@@ -8,32 +8,38 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.HttpsCallableResult
 import com.google.firebase.ktx.Firebase
-import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
-import java.util.*
-import android.provider.Settings
-import android.widget.*
-import kotlin.collections.ArrayList
-import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.internal.concurrent.Task
 import org.json.JSONArray
 import org.json.JSONObject
+import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
 import java.io.IOException
+import java.util.*
+
 
 // Fragment representing the fridge view and interactions.
 class FridgeFragment : Fragment(), DatabaseUpdateListener {
+
+    val functions = FirebaseFunctions.getInstance()
 
     private lateinit var progressBar: ProgressBar
 
@@ -182,7 +188,8 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
         binding.generateRecipeButton.setOnClickListener {
-            fetchRecipeForExpiringItems()
+            callOpenAIForRecipes()
+            //fetchRecipeForExpiringItems()
         }
 
         progressBar = binding.loadingProgressBar
@@ -342,97 +349,47 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
-    // Fetch and display recipes for items that are about to expire.
-    @SuppressLint("SuspiciousIndentation")
-    private fun fetchRecipeForExpiringItems() {
-        // shows loading indicator
-        showLoadingIndicator()
-        // Fetch top items about to expire from the database
-        val db = Firebase.firestore
-        val userCollection = db.collection("users").document(userId).collection("food")
-
-        val currentDate = Calendar.getInstance().time
-
-        // Let's fetch the top 3 items closest to their expiration date.
-        val query = userCollection
-            .whereGreaterThan("ExpirationDate", currentDate)  // Fetch items that are still good but are about to expire
-            .orderBy("ExpirationDate", Query.Direction.ASCENDING)  // Order by closest expiration date
-            .limit(10)  // Limit to top 10 items
-
-        query.get()
-            .addOnSuccessListener { documents ->
-                val expiringItemsList = ArrayList<String>()  // List to store descriptions
-                for (document in documents) {
-                    val foodItem = document.toObject(Food::class.java)
-                    val description = foodItem.Description   // Assuming 'Description' is the field name in your Food class
-                    expiringItemsList.add(description)
-
+    private fun callOpenAIForRecipes() {
+        // Initialize the Cloud Function call
+        functions.getHttpsCallable("callOpenAIForRecipes")
+            .call()
+            .addOnCompleteListener { task ->
+                // Check if the Cloud Function call was successful
+                if (!task.isSuccessful) {
+                    val e = task.exception
+                    // TODO: Properly handle the error, e.g., show an error message or log it
                 }
 
-                val promptText = "Provide a recipe for a dish using ${expiringItemsList.joinToString(", ")}. Make sure that the title has *** on each side to highlight it."
-                getRepsonse(promptText){response ->
-                    activity?.runOnUiThread{
-                        val text = response
+                // The function call returned successfully. Extract the recipe from the result
+                val recipe = task.result?.data as? String
 
-                        val alertDialog = AlertDialog.Builder(context)
-                            .setTitle("AI Generated Recipe Just For You!")
-                            .setMessage(text)
-                            .setPositiveButton("OK") { dialog, which ->
-                                dialog.dismiss()
-                            }
-                            .setNegativeButton("Save") { dialog, which ->
-                                saveRecipeToDatabase(text)
-                                dialog.dismiss()
-                            }
-                            .create()
-                            // Hides the loading indicator once the data is fetched successfully.
-                            hideLoadingIndicator()
-                            alertDialog.show()
+                // Construct an AlertDialog to display the AI-generated recipe
+                val alertDialog = AlertDialog.Builder(context)
+                    .setTitle("AI Generated Recipe Just For You!")
+                    .setMessage(recipe)  // Display the recipe in the AlertDialog
+                    .setPositiveButton("OK") { dialog, _ ->
+                        // Dismiss the AlertDialog when the "OK" button is pressed
+                        dialog.dismiss()
                     }
-                }
+                    .setNegativeButton("Save") { dialog, _ ->
+                        // Save the recipe if it's not null when the "Save" button is pressed
+                        if (recipe != null) {
+                            saveRecipeToDatabase(recipe)
+                        }
+                        // Dismiss the AlertDialog after saving
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                // If you have a loading indicator shown before this function was called,
+                // hide it now that the data has been fetched
+                hideLoadingIndicator()
+
+                // Finally, display the AlertDialog
+                alertDialog.show()
             }
     }
-    // Fetch a response from OpenAI's API.
-    fun getRepsonse(promptText:String, callback: (String) -> Unit) {
-        val apiKey = BuildConfig.OPENAI_API_KEY
-        val url = "https://api.openai.com/v1/completions"
 
-        val requestBody = """
-            {
-            "model": "gpt-3.5-turbo-instruct",
-            "prompt": "$promptText",
-            "max_tokens": 500,
-            "temperature": 0
-            }
-        """.trimIndent()
-
-        val request = Request.Builder()
-            .url(url)
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", "Bearer $apiKey")
-            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("error", "API Failed", e)
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                if (body != null) {
-                    Log.v("data", body)
-                } else {
-                    Log.v("data","empty")
-                }
-                val jsonObject = JSONObject(body)
-                val jsonArray:JSONArray=jsonObject.getJSONArray("choices")
-                val textResult = jsonArray.getJSONObject(0).getString("text")
-                callback(textResult)
-            }
-        })
-    }
 
     // function that saves the AI generated recipe
     fun saveRecipeToDatabase(recipeText: String) {
