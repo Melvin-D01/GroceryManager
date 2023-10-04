@@ -350,6 +350,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             .show()
     }
     private fun callOpenAIForRecipes() {
+        showLoadingIndicator()
         // Initialize the Cloud Function call
         functions.getHttpsCallable("callOpenAIForRecipes")
             .call()
