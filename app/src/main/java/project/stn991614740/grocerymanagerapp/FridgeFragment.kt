@@ -11,9 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -24,10 +21,19 @@ import com.google.firebase.ktx.Firebase
 import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
 import java.util.*
 import android.provider.Settings
+import android.widget.*
+import com.google.firebase.functions.FirebaseFunctions
+import okhttp3.OkHttpClient
 import kotlin.collections.ArrayList
 
 // Fragment representing the fridge view and interactions.
 class FridgeFragment : Fragment(), DatabaseUpdateListener {
+
+    val functions = FirebaseFunctions.getInstance()
+
+    private lateinit var progressBar: ProgressBar
+
+    private val client = OkHttpClient()
 
     // Binding variables for the fragment.
     private var _binding: FragmentFridgeBinding? = null
@@ -75,6 +81,12 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         fetchDataFromDatabaseWithCategory("ExpirationDate", currentSortAscending, "All")
 
         setupItemSwipeToDelete()
+        binding.generateRecipeButton.setOnClickListener {
+            callOpenAIForRecipes()
+            //fetchRecipeForExpiringItems()
+        }
+
+        progressBar = binding.loadingProgressBar
     }
 
     // Fetch data from the database based on category and sorting order.
@@ -312,6 +324,76 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+    }
+
+    private fun callOpenAIForRecipes() {
+        showLoadingIndicator()
+        // Initialize the Cloud Function call
+        functions.getHttpsCallable("callOpenAIForRecipes")
+            .call()
+            .addOnCompleteListener { task ->
+                // Check if the Cloud Function call was successful
+                if (!task.isSuccessful) {
+                    val e = task.exception
+                    // TODO: Properly handle the error, e.g., show an error message or log it
+                }
+
+                // The function call returned successfully. Extract the recipe from the result
+                val recipe = task.result?.data as? String
+
+                // Construct an AlertDialog to display the AI-generated recipe
+                val alertDialog = AlertDialog.Builder(context)
+                    .setTitle("AI Generated Recipe Just For You!")
+                    .setMessage(recipe)  // Display the recipe in the AlertDialog
+                    .setPositiveButton("OK") { dialog, _ ->
+                        // Dismiss the AlertDialog when the "OK" button is pressed
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Save") { dialog, _ ->
+                        // Save the recipe if it's not null when the "Save" button is pressed
+                        if (recipe != null) {
+                            saveRecipeToDatabase(recipe)
+                        }
+                        // Dismiss the AlertDialog after saving
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                // If you have a loading indicator shown before this function was called,
+                // hide it now that the data has been fetched
+                hideLoadingIndicator()
+
+                // Finally, display the AlertDialog
+                alertDialog.show()
+            }
+    }
+
+
+    // function that saves the AI generated recipe
+    fun saveRecipeToDatabase(recipeText: String) {
+        val db = Firebase.firestore
+        val recipeMap = hashMapOf(
+            "recipe" to recipeText,
+            "creationDate" to Calendar.getInstance().time
+        )
+
+        db.collection("users").document(userId).collection("recipes").add(recipeMap)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(context, "Recipe saved successfully!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error saving recipe: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // function that shows the loading indicator when user is waiting for the AI recipe generator
+    private fun showLoadingIndicator() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    // function that hides the loading indicator when the AI recipe generator is done computing
+    private fun hideLoadingIndicator() {
+        progressBar.visibility = View.GONE
     }
 
 

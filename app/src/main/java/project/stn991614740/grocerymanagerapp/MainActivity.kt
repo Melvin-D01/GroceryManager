@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.provider.Settings
+import com.google.firebase.FirebaseApp
 import java.util.*
 
 
@@ -29,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(this)
 
         // Set up alarms to check for item expiration
         setupDailyAlarms()

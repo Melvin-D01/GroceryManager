@@ -1,6 +1,10 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +13,18 @@ import project.stn991614740.grocerymanagerapp.databinding.FragmentAddBinding
 import android.text.InputType
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import java.util.*
 
 class AddFragment : Fragment() {
+
+    // properties for diologExitText and REQUEST_CODE_SPEECH_INPUT
+    private var dialogEditText: EditText? = null
+    private val REQUEST_CODE_SPEECH_INPUT = 100
 
     // A binding object instance, corresponding to the fragment layout
     var _binding: FragmentAddBinding? = null
@@ -90,14 +100,23 @@ class AddFragment : Fragment() {
         builder.setTitle("Add Food Item")
         builder.setMessage("Please enter the name of the food item:")
 
-        // Create an EditText input field for user to enter food item's name.
-        val input = EditText(requireContext())
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(input)
+        // Inflate custom layout
+        val inflater = this.layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_input_layout, null)
+        builder.setView(dialogView)
+
+        // Access the EditText and the VoiceInput button from the custom layout
+        dialogEditText = dialogView.findViewById(R.id.editTextInput)
+        val voiceInputButton = dialogView.findViewById<ImageButton>(R.id.buttonVoiceInput)
+
+        // Set the action for voice input button
+        voiceInputButton.setOnClickListener {
+            getSpeechInput()
+        }
 
         // Set the action for the OK button.
         builder.setPositiveButton("OK") { dialog, which ->
-            val foodItemName = input.text.toString().trim()
+            val foodItemName = dialogEditText?.text.toString().trim()
             if (isValidFoodItemName(foodItemName)) {
                 handleFoodItemName(foodItemName)
                 Log.d("TAG", foodItemName)
@@ -116,6 +135,34 @@ class AddFragment : Fragment() {
 
         // Display the created alert dialog to the user.
         builder.show()
+    }
+
+    // function to get speech input
+    private fun getSpeechInput() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the food item name!")
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), "Speech recognition is not supported on this device.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // function that handles updating the dialog text
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == Activity.RESULT_OK) {
+            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            result?.let {
+                if (it.isNotEmpty()) {
+                    val spokenText = it[0]
+                    // Use the class-level variable dialogEditText to set the text
+                    dialogEditText?.setText(spokenText)
+                }
+            }
+        }
     }
 
     // Cleanup method to avoid memory leaks by setting _binding to null when the fragment's view is destroyed.
