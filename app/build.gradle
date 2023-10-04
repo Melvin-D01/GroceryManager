@@ -14,16 +14,6 @@ android {
     compileSdk 33
 
     defaultConfig {
-        // Load the local.properties file
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-        // Check if the property exists and set the BuildConfig field
-        if (properties.containsKey('OPENAI_API_KEY')) {
-            buildConfigField 'String', 'OPENAI_API_KEY', properties['OPENAI_API_KEY']
-        } else {
-            throw new GradleException("OPENAI_API_KEY not found in local.properties!")
-        }
         applicationId "project.stn991614740.grocerymanagerapp"
         minSdk 26
         targetSdk 33
