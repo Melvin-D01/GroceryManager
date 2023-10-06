@@ -39,16 +39,20 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.camera.view.PreviewView
 import com.google.firebase.Timestamp
+import com.google.firebase.functions.FirebaseFunctions
+import kotlinx.coroutines.*
 import java.io.File
 
 
 class ScannerFragment : Fragment() {
+
+    val functions = FirebaseFunctions.getInstance()
+
+    //private lateinit var progressBar: ProgressBar
 
     private lateinit var imageCapture: ImageCapture
 
@@ -146,6 +150,10 @@ class ScannerFragment : Fragment() {
         }
 
         binding.takeImage.setOnClickListener {
+            takePhoto()
+        }
+
+        binding.viewFinder.setOnClickListener {
             takePhoto()
         }
 
@@ -405,11 +413,16 @@ class ScannerFragment : Fragment() {
         val inputImage = InputImage.fromBitmap(bitmap, 0)
         textRecognizer.process(inputImage)
             .addOnSuccessListener { text ->
-                showToast("I see the iamge")
                 // Handle successful text recognition here
-                val detectedText = text.text // text.text gives the whole text recognized from image.
-                Log.d("RecognizedText", "Recognized Text: $detectedText")
-                binding.expirationText.setText(detectedText) // Update expirationText with recognized text
+                if (!text.text.isNullOrBlank()) {
+                    val detectedText = text.text.trim()
+                    Log.d("RecognizedText", "Recognized Text: $detectedText")
+                    callOpenAIWithUserInput(detectedText) // Update expirationText with recognized text
+                }
+                else
+                {
+                    showToast("Did not find any date in the image.")
+                }
             }
             .addOnFailureListener { exception ->
                 // Handle failed text recognition here
@@ -426,6 +439,38 @@ class ScannerFragment : Fragment() {
             mediaDir
         else
             requireContext().filesDir
+    }
+
+    private fun callOpenAIWithUserInput(userInput: String) {
+        // Initialize the Cloud Function call with the user input as an argument
+        functions.getHttpsCallable("callOpenAIForImageDateParse")
+            .call(mapOf("userInput" to userInput))
+            .addOnCompleteListener { task ->
+
+                    if (!task.isSuccessful) {
+                        val e = task.exception
+                    }
+
+                    val userDate = (task.result?.data as? String)
+                Log.d("RecognizedText", "Recognized Text: $userDate")
+                    // Update expirationText with recognized text after userDate is initialized
+                // Check if userDate matches the DD-MM-YYYY format using regex
+                if (isValidDate(userDate)) {
+                    Log.d("RecognizedText", "Recognized Text: $userDate")
+                    // Update expirationText with recognized text after userDate is validated
+                    binding.expirationText.setText(userDate)
+                } else {
+                    Log.d("RecognizedText", "Text is not in the correct format: $userDate")
+                    showToast("Failed to find date in the image")
+                }
+
+            }
+    }
+
+    private fun isValidDate(date: String?): Boolean {
+        // Regular expression to match the format DD-MM-YYYY
+        val regex = """\d{2}-\d{2}-\d{4}""".toRegex()
+        return date?.matches(regex) == true
     }
 
     override fun onDestroyView() {
