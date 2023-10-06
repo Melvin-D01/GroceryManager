@@ -1,6 +1,6 @@
 package project.stn991614740.grocerymanagerapp
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import project.stn991614740.grocerymanagerapp.databinding.FragmentAddBinding
+import android.text.InputType
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
@@ -26,7 +27,7 @@ class AddFragment : Fragment() {
     private val REQUEST_CODE_SPEECH_INPUT = 100
 
     // A binding object instance, corresponding to the fragment layout
-    private var _binding: FragmentAddBinding? = null
+    var _binding: FragmentAddBinding? = null
 
     // This property delegates the access to _binding and throws an exception if it's null.
     private val binding get() = _binding!!
@@ -93,9 +94,7 @@ class AddFragment : Fragment() {
     }
 
     // Function to display a dialog box for the user to add a new food item
-
-
-    fun addItem(category: String, image: String) {
+    fun addItem(category: String, image: String){
         // Prepare a dialog builder
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Add Food Item")
@@ -115,26 +114,26 @@ class AddFragment : Fragment() {
             getSpeechInput()
         }
 
-        // Set the action for the OK button
-        builder.setPositiveButton("OK") { dialog, _ ->
+        // Set the action for the OK button.
+        builder.setPositiveButton("OK") { dialog, which ->
             val foodItemName = dialogEditText?.text.toString().trim()
             if (isValidFoodItemName(foodItemName)) {
                 handleFoodItemName(foodItemName)
                 Log.d("TAG", foodItemName)
                 val directions = AddFragmentDirections.actionAddFragmentToScannerFragment(foodItemName, category, image)
                 findNavController().navigate(directions)
+
             } else {
                 // Show an error message if the entered food item name is invalid
                 Toast.makeText(requireContext(), "Invalid food item name", Toast.LENGTH_SHORT).show()
             }
         }
-
-        // Set the action for the Cancel button
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        // Set the action for the Cancel button.
+        builder.setNegativeButton("Cancel") { dialog, which ->
             dialog.cancel()
         }
 
-        // Display the created alert dialog to the user
+        // Display the created alert dialog to the user.
         builder.show()
     }
 
@@ -154,7 +153,7 @@ class AddFragment : Fragment() {
     // function that handles updating the dialog text
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == Activity.RESULT_OK) {
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             result?.let {
                 if (it.isNotEmpty()) {

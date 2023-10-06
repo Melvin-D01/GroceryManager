@@ -1,85 +1,92 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:orientation="vertical"
     tools:context=".FridgeFragment"
     tools:layout="@layout/fragment_fridge">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="My Fridge"
-        android:textColor="@color/material_dynamic_neutral60"
-        android:textSize="100px" />
-
-    <!-- "Generate Recipe" button -->
-
-    <Button
-        android:id="@+id/generateRecipeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:text="Generate\nRecipe"
-        android:textSize="14sp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:elevation="3dp"
-        android:textColor="@android:color/white" />
-
-    <ProgressBar
-        android:id="@+id/loadingProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/generateRecipeButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:visibility="gone" />
-
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/generateRecipeButton"
-        android:layout_marginTop="5dp"
-        android:background="@color/material_dynamic_neutral60" />
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/spinnerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/generateRecipeButton"
-        android:orientation="horizontal"
-        android:gravity="end">
-
-        <Spinner
-            android:id="@+id/categorySpinner"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingRight="15dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="My Fridge"
+            android:textAlignment="center"
+            android:textColor="@color/material_dynamic_neutral60"
+            android:textSize="100px" />
 
-        <Spinner
-            android:id="@+id/sortSpinner"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/generateRecipeButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingRight="15dp"/>
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:text="Generate\nRecipe"
+            android:textSize="14sp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:elevation="3dp"
+            android:textColor="@android:color/white" />
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/generateRecipeButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="5dp"
+            android:background="@color/material_dynamic_neutral60" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"/>
+
+            <Spinner
+                android:id="@+id/sortSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/spinnerLayout"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -90,4 +97,4 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"/>
 
-</RelativeLayout>
+</LinearLayout>
