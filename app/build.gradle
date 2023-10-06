@@ -54,8 +54,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     //Add Text Recognition Google ML library
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:18.0.0'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.0'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0'
     implementation 'com.google.firebase:firebase-common-ktx:20.3.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'

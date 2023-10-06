@@ -335,7 +335,6 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                 // Check if the Cloud Function call was successful
                 if (!task.isSuccessful) {
                     val e = task.exception
-                    // TODO: Properly handle the error, e.g., show an error message or log it
                 }
 
                 // The function call returned successfully. Extract the recipe from the result
