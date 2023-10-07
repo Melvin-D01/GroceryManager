@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         FirebaseApp.initializeApp(this)
-
         // Set up alarms to check for item expiration
         setupDailyAlarms()
 
@@ -55,9 +54,6 @@ class MainActivity : AppCompatActivity() {
         // Setup BottomNavigationView and get its instance
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        // Bind the BottomNavigationView to the NavController
-        bottomNavigationView.setupWithNavController(navController)
-
         // Toggle visibility of the BottomNavigationView based on the active destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.startFragment) {
@@ -67,24 +63,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Handle item selection in the BottomNavigationView
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.fridgeFragment -> {
-                    navController.navigate(R.id.fridgeFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.addFragment -> {
-                    navController.navigate(R.id.addFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.settingsFragment -> {
-                    navController.navigate(R.id.settingsFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-            }
-            false
-        }
+        // Bind the BottomNavigationView to the NavController
+        bottomNavigationView.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

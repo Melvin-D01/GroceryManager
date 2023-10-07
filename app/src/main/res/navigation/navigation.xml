@@ -68,4 +68,14 @@
         android:name="project.stn991614740.grocerymanagerapp.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
+
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="project.stn991614740.grocerymanagerapp.RecipeFragment"
+        android:label="Recipes"
+        tools:layout="@layout/fragment_recipe" >
+    <action
+        android:id="@+id/action_recipeFragment_to_startFragment"
+        app:destination="@id/startFragment" />
+    </fragment>
 </navigation>
