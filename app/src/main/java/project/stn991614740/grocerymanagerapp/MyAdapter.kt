@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -18,6 +19,9 @@ import kotlin.collections.ArrayList
 
 class MyAdapter(private val myList: ArrayList<Food>, private val databaseUpdateListener: DatabaseUpdateListener) :
 RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+    val user = FirebaseAuth.getInstance().currentUser
+    val userId = user!!.uid
 
     // Get the Food item at the specified position
     fun getItem(position: Int): Food {
@@ -95,7 +99,7 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
                     "Description" to description,
                     "ExpirationDate" to Timestamp(expirationDate)
                 )
-                db.collection("food").document(UID).update(updateData as Map<String, Any>)
+                db.collection("users").document(userId).collection("food").document(UID).update(updateData as Map<String, Any>)
                     .addOnSuccessListener {
                         Log.d(TAG, "DocumentSnapshot successfully updated!")
                         // Notify the listener that the database has been updated.
