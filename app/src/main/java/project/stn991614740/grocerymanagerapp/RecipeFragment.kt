@@ -91,13 +91,10 @@ class RecipeFragment : Fragment() {
             }
 
         // Set up the swipe-to-delete functionality
+        // Define the swipe callback
         val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false // Don't support item movement
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false  // Not needed as we're only implementing swipe to delete.
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -108,6 +105,7 @@ class RecipeFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Delete Recipe")
                     .setMessage("Are you sure you want to delete this recipe?")
+                    .setCancelable(false)  // Prevent dismissal by touch outside or back press
                     .setPositiveButton("Delete") { dialog, _ ->
                         // Delete the recipe from Firestore if the user confirms
                         recipesRef.document(recipeToDelete.id).delete()
