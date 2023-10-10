@@ -168,12 +168,16 @@ class StartFragment : Fragment() {
                     if (task.result?.exists() == true) {
                         // User document exists, navigate to the desired destination
                         if (isAdded) {
-                            findNavController().navigate(R.id.action_startFragment_to_fridgeFragment)
+                            if (findNavController().currentDestination?.id != R.id.fridgeFragment) {
+                                findNavController().navigate(R.id.action_startFragment_to_fridgeFragment)
+                            }
                         }
                     } else {
                         // User document does not exist, navigate to profile creation or registration destination
                         if (isAdded) {
-                            findNavController().navigate(R.id.action_startFragment_to_registerFragment)
+                            if (findNavController().currentDestination?.id != R.id.registerFragment) {
+                                findNavController().navigate(R.id.action_startFragment_to_registerFragment)
+                            }
                         }
                     }
                 } else {

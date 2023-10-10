@@ -65,6 +65,29 @@ class MainActivity : AppCompatActivity() {
 
         // Bind the BottomNavigationView to the NavController
         bottomNavigationView.setupWithNavController(navController)
+
+        // Handle item selection in the BottomNavigationView
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.fridgeFragment -> {
+                    navController.navigate(R.id.fridgeFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.addFragment -> {
+                    navController.navigate(R.id.addFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.recipeFragment -> {
+                    navController.navigate(R.id.recipeFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.settingsFragment -> {
+                    navController.navigate(R.id.settingsFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+            }
+            false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

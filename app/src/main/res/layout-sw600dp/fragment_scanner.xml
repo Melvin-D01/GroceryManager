@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".ScannerFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/inputImageBtn"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_baseline_add_a_photo_24"
+            android:text="Scan Date"
+            android:textSize="40sp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/takeImage"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_baseline_add_a_photo_24"
+            android:text="Take Picture"
+            android:textSize="40sp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.camera.view.PreviewView
+                android:id="@+id/viewFinder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/imageIv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_baseline_image_24" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/categoryText"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    android:layout_gravity="center"
+                    android:ems="12"
+                    android:hint="Item Category"
+                    android:focusable="false"
+                    android:clickable="false"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/testText"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:textSize="40sp"
+                        android:layout_height="wrap_content"
+                        android:ems="12"
+                        android:hint="Item Description" />
+
+                    <ImageButton
+                        android:id="@+id/voiceBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:contentDescription="Voice input for item description" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/expirationText"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:textSize="40sp"
+                        android:layout_height="wrap_content"
+                        android:ems="12"
+                        android:hint="Expire Date"
+                        android:focusable="false"
+                        android:clickable="false" />
+
+                    <ImageButton
+                        android:id="@+id/expirationVoiceBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:contentDescription="Voice input for expiration date" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/expirationBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Change Expiration Date"
+                    android:textSize="25sp"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/AddToFridgeButton"
+                android:layout_width="600dp"
+                android:layout_height="120dp"
+                android:text="Add To Fridge"
+                android:textSize="40sp"
+                android:layout_marginTop="30dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

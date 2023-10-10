@@ -70,6 +70,7 @@ class AddFragment : Fragment() {
         val numColumns = 4 // or however many columns you want to display
         binding.myRecyclerView.layoutManager = GridLayoutManager(requireContext(), numColumns)
 
+
         // Define an onClick listener for each grid item.
         val onClick: (CatGridItem) -> Unit = { item ->
             addItem(item.text, item.imageName)
