@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.provider.Settings
+import com.google.firebase.FirebaseApp
 import java.util.*
 
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        FirebaseApp.initializeApp(this)
         // Set up alarms to check for item expiration
         setupDailyAlarms()
 
@@ -52,9 +54,6 @@ class MainActivity : AppCompatActivity() {
         // Setup BottomNavigationView and get its instance
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        // Bind the BottomNavigationView to the NavController
-        bottomNavigationView.setupWithNavController(navController)
-
         // Toggle visibility of the BottomNavigationView based on the active destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.startFragment) {
@@ -63,6 +62,9 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.visibility = View.VISIBLE
             }
         }
+
+        // Bind the BottomNavigationView to the NavController
+        bottomNavigationView.setupWithNavController(navController)
 
         // Handle item selection in the BottomNavigationView
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -73,6 +75,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.addFragment -> {
                     navController.navigate(R.id.addFragment)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.recipeFragment -> {
+                    navController.navigate(R.id.recipeFragment)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.settingsFragment -> {

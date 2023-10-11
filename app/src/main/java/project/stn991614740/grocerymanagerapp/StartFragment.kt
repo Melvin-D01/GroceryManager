@@ -165,15 +165,9 @@ class StartFragment : Fragment() {
         userDocument.get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    if (task.result?.exists() == true) {
-                        // User document exists, navigate to the desired destination
-                        if (isAdded) {
+                    if (isAdded) {
+                        if (findNavController().currentDestination?.id != R.id.fridgeFragment) {
                             findNavController().navigate(R.id.action_startFragment_to_fridgeFragment)
-                        }
-                    } else {
-                        // User document does not exist, navigate to profile creation or registration destination
-                        if (isAdded) {
-                            findNavController().navigate(R.id.action_startFragment_to_registerFragment)
                         }
                     }
                 } else {

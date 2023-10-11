@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    android:layout_gravity="center"
+    android:padding="10dp"
+    tools:context=".StartFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="Grocery Manager"
+            android:textSize="50sp"
+            android:layout_marginBottom="-20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="Login"
+            android:textSize="50sp"
+            android:layout_marginBottom="30dp" />
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="600dp"
+            android:layout_height="75dp"
+            android:inputType="textEmailAddress"
+            android:hint="@string/hint_email"
+            android:textSize="35sp"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="600dp"
+            android:layout_height="75dp"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password"
+            android:textSize="35sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textSize="40sp"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:textSize="40sp"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Google Sign In Button -->
+        <Button
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:text="@string/google_login"
+            android:textSize="40sp"
+            android:drawableLeft="@drawable/google"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center" />
+
+        <!-- Twitter Sign In Button -->
+        <Button
+            android:id="@+id/twitter_sign_in_button"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login_with_twitter"
+            android:textSize="40sp"
+            android:drawableLeft="@drawable/twitter"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+</LinearLayout>

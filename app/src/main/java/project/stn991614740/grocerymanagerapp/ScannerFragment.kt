@@ -1,8 +1,10 @@
 package project.stn991614740.grocerymanagerapp
 
 import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,13 +16,21 @@ import project.stn991614740.grocerymanagerapp.databinding.FragmentScannerBinding
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Menu
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,46 +39,68 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-
+import androidx.camera.view.PreviewView
+import com.google.firebase.Timestamp
+import com.google.firebase.functions.FirebaseFunctions
+import kotlinx.coroutines.*
+import java.io.File
 
 
 class ScannerFragment : Fragment() {
 
-    // UI Views
-    // These variables are views used in the UI
-    // Mostly Deprecated by Peter and viewbinding
+    val functions = FirebaseFunctions.getInstance()
+
+    //private lateinit var progressBar: ProgressBar
+
+    private lateinit var imageCapture: ImageCapture
+
     private lateinit var progressDialog: ProgressDialog
     private lateinit var textRecognizer: TextRecognizer
     private lateinit var imageIv: ImageView
     private lateinit var expDate: String
-
     private var imageUri: Uri? = null
 
-    // UI Views
+    private val cameraProviderFuture by lazy { ProcessCameraProvider.getInstance(requireContext()) }
+
     private lateinit var datePickerDialog: DatePickerDialog
     private val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
-    // View Binding
     private var _binding: FragmentScannerBinding? = null
-    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-    // Camera and storage permission arrays
-    // These variables are used to store the required permissions for camera and storage
     private lateinit var cameraPermissions: Array<String>
     private lateinit var storagePermissions: Array<String>
 
-    // firestore
-    // This variable is used to connect to the Firebase Firestore database
     private val db = Firebase.firestore
-    private val auth = Firebase.auth  // Firebase Authentication instance
+    private val auth = Firebase.auth
+
+    // voice to text results for expiration date and sets text to output
+    private val voiceActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val matches: List<String>? = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val voiceInput = matches?.get(0) // Taking the first match which is typically the most accurate
+            binding.expirationText.setText(voiceInput)
+        }
+    }
+
+    // voice to text results for item description and sets text to output
+    private val voiceActivityResultLauncher2 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val matches: List<String>? = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val voiceInput = matches?.get(0) // Taking the first match which is typically the most accurate
+            binding.testText.setText(voiceInput)
+        }
+    }
+
+    private lateinit var outputDirectory: File
+
 
     companion object {
         private const val TAG = "ScannerFragment"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
     override fun onCreateView(
@@ -81,73 +113,72 @@ class ScannerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        imageIv = binding.imageIv
 
         val bundle = arguments
-
-        // check if arguments arrived
         if (bundle == null) {
             Log.d("Confirmation", "Fragment 2 didn't receive any info")
             return
         }
-
-        // assign arguments to value
         val args = ScannerFragmentArgs.fromBundle(bundle)
 
-        // Initialize arrays of permissions required for camera and gallery
-        // These variables are initialized with the permissions required for camera and storage
+        outputDirectory = getOutputDirectory()
+
+        binding.takeImage.visibility = View.GONE
+
         cameraPermissions = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
         storagePermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-        // Initialize progress dialog
-        // This variable is initialized with a new ProgressDialog object
         progressDialog = ProgressDialog(requireContext())
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
 
-        // Initialize TextRecognizer
-        // This variable is initialized with a new TextRecognizer object
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-        // Handle click, show input image dialog
-        // This function sets a click listener to the inputImageBtn and calls showInpitImageDialog function
         binding.inputImageBtn.setOnClickListener {
-            showInputImageDialog()
+            if (allPermissionsGranted()) {
+                startCamera()
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    REQUIRED_PERMISSIONS,
+                    REQUEST_CODE_PERMISSIONS
+                )
+            }
         }
 
+        binding.takeImage.setOnClickListener {
+            takePhoto()
+        }
 
-        // passing data by args from fragment
+        binding.viewFinder.setOnClickListener {
+            takePhoto()
+        }
+
         val data = args.description
         binding.testText.setText(data)
         val data2 = args.category
         binding.categoryText.setText(data2)
         val data3 = args.image
 
-        // Handle click, takes you to MyFridge activity and adds what user had inputted
-        // This function sets a click listener to the addToFridgeButton and starts a new activity
         binding.AddToFridgeButton.setOnClickListener {
 
-            // these sets the text from category and description inputted by the user from the previous step
             val catText = binding.testText.text.toString()
             val descText = binding.categoryText.text.toString()
-            val expText =  binding.expirationText.text.toString()
+            val expText = binding.expirationText.text.toString()
 
-            // Parse expiration date from string to Date
             val expDate = dateFormat.parse(expText)
 
-            // If the parsing was unsuccessful, expDate will be null
             if (expDate == null) {
                 showToast("Invalid date format. Please use dd-MM-yyyy.")
                 return@setOnClickListener
             }
 
-            // sets the corresponding values and passes it to the hashmap to be uploaded to firestore
             val descriptionString = catText
             val categoryString = descText
-            val expirationDate = com.google.firebase.Timestamp(expDate)
+            val expirationDate = Timestamp(expDate)
             val catImageString = data3
 
             val userId = auth.currentUser?.uid
@@ -156,32 +187,21 @@ class ScannerFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // collects the data and adds it to the firestore db
-            val dF = db.collection("users").document(userId).collection("food").document().id
-
-            // Get the Firestore collection reference
-            val collectionRef = db.collection("users").document(userId).collection("food")
-
-            // Set a custom ID for the new document
-            val customId = dF
-
-            // Create a new document with the custom ID
-            val documentRef = collectionRef.document(customId)
-
-            // Set the data for the new document
-            val data = hashMapOf(
-                "UID" to dF,
-                "Description" to descriptionString,
-                "Category" to categoryString,
-                "ExpirationDate" to expirationDate,
-                "CategoryImage" to catImageString
-            )
-            documentRef.set(data)
-                .addOnSuccessListener { Log.d(TAG, "Document added with ID: $customId") }
-                .addOnFailureListener { e -> Log.w(TAG, "Error adding document", e) }
-
-            // once add is completed, it will take user to the MyFridge view and show updated list of food items
-            findNavController().navigate(R.id.action_scannerFragment_to_fridgeFragment)
+            val dbManager = DatabaseManager(userId)
+            if (catImageString != null) {
+                dbManager.addFoodItem(
+                    category = descText,
+                    description = catText,
+                    expirationDate = expDate,
+                    categoryImage = catImageString,
+                    onSuccess = {
+                        Log.d(TAG, "Document added successfully.")
+                        findNavController().navigate(R.id.action_scannerFragment_to_fridgeFragment)
+                    }
+                ) { exception ->
+                    Log.w(TAG, "Error adding document", exception)
+                }
+            }
         }
 
         val calendar = Calendar.getInstance()
@@ -193,44 +213,60 @@ class ScannerFragment : Fragment() {
             binding.expirationText.setText(dateFormat.format(selectedDate.time))
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
 
-        // set default date to one week from today
         calendar.add(Calendar.DAY_OF_YEAR, 7)
         binding.expirationText.setText(dateFormat.format(calendar.time))
 
         binding.expirationBtn.setOnClickListener {
             datePickerDialog.show()
         }
+        // listenerand voice to text call for the expiration voice to text btn
+        binding.expirationVoiceBtn.setOnClickListener {
+            // Launch voice-to-text input
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the expiration date")
+
+            try {
+                voiceActivityResultLauncher.launch(intent)
+            } catch (e: ActivityNotFoundException) {
+                showToast("Your device doesn't support voice input.")
+            }
+        }
+
+        // listener and voice to text call for the item description voice to text btn
+        binding.voiceBtn.setOnClickListener {
+            // Launch voice-to-text input
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the food item name!")
+
+            try {
+                voiceActivityResultLauncher2.launch(intent)
+            } catch (e: ActivityNotFoundException) {
+                showToast("Your device doesn't support voice input.")
+            }
+        }
     }
 
 
-    // function that prompts the user an option to upload image via gallery or snapping a picture
+
     private fun showInputImageDialog() {
         val popupMenu = PopupMenu(requireContext(), binding.inputImageBtn)
-
         popupMenu.menu.add(Menu.NONE, 1, 1, "Camera")
         popupMenu. menu.add(Menu.NONE, 2, 2, "Gallery")
-        // Show popup menu
         popupMenu.show()
-        // Handle popup menu item clicks
         popupMenu.setOnMenuItemClickListener { menuItem ->
-            // Get item id that is clicked from popup menu
             val id = menuItem.itemId
             if (id == 1) {
-                // Camera clicked
                 if (!checkCameraPermission()) {
-                    // Camera permission not allowed, request it
                     requestCameraPermission()
                 } else {
-                    // Permission allowed, pick image from camera
                     pickImageCamera()
                 }
             } else if (id == 2) {
-                // Gallery clicked
                 if (!checkStoragePermission()) {
-                    // Storage permission not allowed, request it
                     requestStoragePermission()
                 } else {
-                    // Permission allowed, pick image from gallery
                     pickImageGallery()
                 }
             }
@@ -238,14 +274,11 @@ class ScannerFragment : Fragment() {
         }
     }
 
-    // function that checks for camera permissions
     private fun checkCameraPermission(): Boolean {
-        // Check if camera permission is enabled
-        val cameraResult =
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
+        val cameraResult = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
         val storageResult = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -253,138 +286,195 @@ class ScannerFragment : Fragment() {
         return cameraResult && storageResult
     }
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            if (permissions.all { it.value }) {
-                // All permissions granted, you can continue with your function
-            } else {
-                // Not all permissions were granted
-            }
-        }
-
-
-    // function that request camera permissions
-    private fun requestCameraPermission() {
-        // Request runtime camera permission
-        requestPermissionLauncher.launch(cameraPermissions)
-    }
-
-    // function that checks for storage permissions
     private fun checkStoragePermission(): Boolean {
-        // Check if storage permission is enabled
-        return ContextCompat.checkSelfPermission(
+        val storageResult = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
+        return storageResult
+    }
+
+    private fun requestCameraPermission() {
+        requestPermissions(cameraPermissions, 100)
+    }
+
+    private fun requestStoragePermission() {
+        requestPermissions(storagePermissions, 101)
     }
 
     private fun pickImageCamera() {
-        // Readies the image data to store
         val values = ContentValues()
-        values.put(MediaStore.Images.Media.TITLE, "NewPic")
-        values.put(MediaStore.Images.Media.DESCRIPTION, "Image to text")
-        // Image Uri
+        values.put(MediaStore.Images.Media.TITLE, "Image Title")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "Image Description")
         imageUri = requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        // Intent to start camera
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-        cameraActivityResultLauncher.launch(intent)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        startForResultCamera.launch(cameraIntent)
     }
 
-    private val cameraActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        // This will receive the image, if picked
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            // Image picked
-            // Set to imageView -> imageIv
-            imageIv.setImageURI(imageUri)
-            // Coroutines delay
-            lifecycleScope.launch {
-                delay(1000) // Wait for 1 second
-                recognizeTextFromImage()
-            }
+    private val startForResultCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val thumbnail = it.data?.extras?.get("data") as Bitmap
+            binding.imageIv.setImageBitmap(thumbnail)  // assuming you have defined imageView correctly in your binding
+            recognizeText(thumbnail)
         } else {
-            // Cancelled
-            showToast("Cancelled")
+            showToast("Failed to capture image")
         }
     }
 
-    private val requestStoragePermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            if (permissions.all { it.value }) {
-                // All permissions granted, you can continue with your function
-            } else {
-                // Not all permissions were granted
-            }
-        }
-
-    private fun requestStoragePermission() {
-        requestStoragePermissionLauncher.launch(storagePermissions)
-    }
-
-    // function that handles an image that was picked from gallery
     private fun pickImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
-
         intent.type = "image/*"
-        galleryActivityResultLauncher.launch(intent)
+        startForResultGallery.launch(intent)
     }
 
-    private val galleryActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        // This will receive the image, if picked
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            // Image picked
-            val data = result.data
-            imageUri = data!!.data
-            // Set to imageView -> imageIv
-            imageIv.setImageURI(imageUri)
-            recognizeTextFromImage()
-        } else {
-            // Cancelled
-            showToast("Cancelled")
-        }
+    private val startForResultGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        imageUri = it.data?.data
+        binding.imageIv.setImageURI(imageUri)
+
+        val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
+        recognizeText(bitmap)
     }
 
-    // function that handles image to text recognition
-    private fun recognizeTextFromImage() {
+    private fun startCamera() {
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+            bindPreview(cameraProvider)
+            binding.takeImage.visibility = View.VISIBLE
+            binding.inputImageBtn.visibility = View.GONE
+            binding.imageIv.visibility = View.GONE
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
 
-        Log.d(TAG, "Recognizing text...")  // Log start of recognition
+    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+        val preview = Preview.Builder()
+            .build()
+            .also {
+                it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+            }
+
+        imageCapture = ImageCapture.Builder()
+            .build()
+
+        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
         try {
-            val inputImage = InputImage.fromFilePath(requireContext(), imageUri!!)
-
-            val textTaskResult = textRecognizer.process(inputImage)
-                .addOnSuccessListener { text ->
-                    // Task completed successfully
-
-                    val recognizedText = text.text
-
-                    val obj = ExpirationDateParser()
-
-                    val output = obj.parseExpirationDate(recognizedText).toString()
-
-                    expDate = output
-
-                    binding.expirationText.setText(output)
-
-                    Log.d(TAG, "Text recognition completed successfully.")  // Log end of recognition
-
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    Log.w(TAG, "Failed to recognize text due to: ${e.message}")
-                }
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to prepare image due to: ${e.message}")
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+        } catch (exc: Exception) {
+            Log.e(TAG, "Use case binding failed", exc)
         }
     }
 
-    // function that shows a toast message
+    private fun takePhoto() {
+        // Create timestamped output file to hold the image
+        val photoFile = File(
+            outputDirectory,
+            SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg"
+        )
+
+        // Create output options object which contains file + metadata
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+        // Set up image capture listener, which is triggered after photo has been taken
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    val savedUri = Uri.fromFile(photoFile)
+                    val msg = "Photo capture succeeded: $savedUri"
+                    Log.d(TAG, msg)
+
+                    // Load the captured image into a Bitmap
+                    val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, savedUri)
+                    // Now call recognizeText with the captured bitmap
+                    recognizeText(bitmap)
+                }
+
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                }
+            }
+        )
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
+    private fun recognizeText(bitmap: Bitmap) {
+        val inputImage = InputImage.fromBitmap(bitmap, 0)
+        textRecognizer.process(inputImage)
+            .addOnSuccessListener { text ->
+                // Handle successful text recognition here
+                if (!text.text.isNullOrBlank()) {
+                    val detectedText = text.text.trim()
+                    Log.d("RecognizedText", "Recognized Text: $detectedText")
+                    callOpenAIWithUserInput(detectedText) // Update expirationText with recognized text
+                }
+                else
+                {
+                    showToast("Did not find any date in the image.")
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle failed text recognition here
+                showToast("Text Recognition failed: ${exception.message}")
+                Log.d("RecognizedText", "Failed")
+            }
+    }
+
+    private fun getOutputDirectory(): File {
+        val mediaDir = requireContext().externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
+        return if (mediaDir != null && mediaDir.exists())
+            mediaDir
+        else
+            requireContext().filesDir
+    }
+
+    private fun callOpenAIWithUserInput(userInput: String) {
+        // Initialize the Cloud Function call with the user input as an argument
+        functions.getHttpsCallable("callOpenAIForImageDateParse")
+            .call(mapOf("userInput" to userInput))
+            .addOnCompleteListener { task ->
+
+                    if (!task.isSuccessful) {
+                        val e = task.exception
+                    }
+
+                    val userDate = (task.result?.data as? String)
+                Log.d("RecognizedText", "Recognized Text: $userDate")
+                    // Update expirationText with recognized text after userDate is initialized
+                // Check if userDate matches the DD-MM-YYYY format using regex
+                if (isValidDate(userDate)) {
+                    Log.d("RecognizedText", "Recognized Text: $userDate")
+                    // Update expirationText with recognized text after userDate is validated
+                    binding.expirationText.setText(userDate)
+                } else {
+                    Log.d("RecognizedText", "Text is not in the correct format: $userDate")
+                    showToast("Failed to find date in the image")
+                }
+
+            }
+    }
+
+    private fun isValidDate(date: String?): Boolean {
+        // Regular expression to match the format DD-MM-YYYY
+        val regex = """\d{2}-\d{2}-\d{4}""".toRegex()
+        return date?.matches(regex) == true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

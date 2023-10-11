@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="20dp"
     tools:context=".ScannerFragment">
 
     <LinearLayout
@@ -18,29 +18,31 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             app:icon="@drawable/ic_baseline_add_a_photo_24"
-            android:text="Scan Date
-"
-            android:layout_marginEnd="5dp"
+            android:text="Scan Date"
+            android:textSize="40sp"
+            android:layout_marginEnd="10dp"
             android:layout_height="match_parent"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/takeImage"
             android:layout_width="match_parent"
             android:layout_weight="1"
             app:icon="@drawable/ic_baseline_add_a_photo_24"
             android:text="Take Picture"
-            android:layout_marginEnd="5dp"
+            android:textSize="40sp"
+            android:layout_marginEnd="10dp"
             android:layout_height="match_parent"/>
 
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.camera.view.PreviewView
@@ -55,15 +57,15 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_baseline_image_24" />
 
-
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -79,8 +81,9 @@
 
                 <EditText
                     android:id="@+id/categoryText"
-                    android:layout_width="329dp"
+                    android:layout_width="600dp"
                     android:layout_height="wrap_content"
+                    android:textSize="40sp"
                     android:layout_gravity="center"
                     android:ems="12"
                     android:hint="Item Category"
@@ -96,6 +99,7 @@
                         android:id="@+id/testText"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:textSize="40sp"
                         android:layout_height="wrap_content"
                         android:ems="12"
                         android:hint="Item Description" />
@@ -118,6 +122,7 @@
                         android:id="@+id/expirationText"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:textSize="40sp"
                         android:layout_height="wrap_content"
                         android:ems="12"
                         android:hint="Expire Date"
@@ -138,19 +143,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Change Expiration Date"
-                    android:textSize="13dp"/>
+                    android:textSize="25sp"/>
 
             </LinearLayout>
 
             <Button
                 android:id="@+id/AddToFridgeButton"
-                android:layout_width="328dp"
-                android:layout_height="56dp"
+                android:layout_width="600dp"
+                android:layout_height="120dp"
                 android:text="Add To Fridge"
-                android:textSize="24dp"/>
+                android:textSize="40sp"
+                android:layout_marginTop="30dp"/>
 
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>
