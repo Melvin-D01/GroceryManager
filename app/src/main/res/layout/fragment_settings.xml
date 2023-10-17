@@ -50,12 +50,27 @@
         android:layout_height="wrap_content"
         android:text="Five Day To Expire Notification" />
     <Button
+        android:id="@+id/deleteFridgeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Fridge Data"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+    <Button
+        android:id="@+id/recipeDeleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Recipe Data"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+    <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        android:layout_gravity="center|bottom"
-        android:layout_marginTop="350dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>
 

@@ -1,6 +1,7 @@
 package project.stn991614740.grocerymanagerapp
 
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -10,10 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import project.stn991614740.grocerymanagerapp.databinding.FragmentSettingsBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class SettingsFragment : Fragment() {
@@ -33,7 +36,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Load the setting
+        // Load the settings
         val sharedPreferences = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
         val isDarkModeEnabled = sharedPreferences.getBoolean("DarkMode", false)
 
@@ -60,6 +63,33 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        // Expiry notification switch initialization
+        binding.switchNotificationExpiry.isChecked = sharedPreferences.getBoolean("Notification_ExpiryCheck", true)
+        binding.switchNotificationExpiry.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("Notification_ExpiryCheck", isChecked).apply()
+            if (!isChecked) {
+                cancelAlarm(ExpiryCheckReceiver::class.java, 0)
+            }
+        }
+
+        // Two day to expire notification switch initialization
+        binding.switchNotificationTwoDayToExpire.isChecked = sharedPreferences.getBoolean("Notification_TwoDayExpire", true)
+        binding.switchNotificationTwoDayToExpire.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("Notification_TwoDayExpire", isChecked).apply()
+            if (!isChecked) {
+                cancelAlarm(TwoDayToExpireCheckReceiver::class.java, 1)
+            }
+        }
+
+        // Five day to expire notification switch initialization
+        binding.switchNotificationFiveDayToExpire.isChecked = sharedPreferences.getBoolean("Notification_FiveDayExpire", true)
+        binding.switchNotificationFiveDayToExpire.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("Notification_FiveDayExpire", isChecked).apply()
+            if (!isChecked) {
+                cancelAlarm(FiveDayToExpireCheckReceiver::class.java, 2)
+            }
+        }
+
         // Set the logout button click listener
         binding?.logoutButton?.setOnClickListener {
             // Implement your logout logic here
@@ -70,6 +100,88 @@ class SettingsFragment : Fragment() {
             val action = SettingsFragmentDirections.actionSettingsFragmentToStartFragment()
             findNavController().navigate(action)
         }
+
+        binding.deleteFridgeBtn?.setOnClickListener {
+            // Show confirmation dialog
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Confirm Deletion")
+            builder.setMessage("Are you sure you want to delete all your fridge data? This action cannot be undone.")
+            builder.setPositiveButton("Delete") { _, _ ->
+                // Create an instance of DatabaseManager with the current userId
+                val databaseManager = DatabaseManager(FirebaseAuth.getInstance().currentUser?.uid ?: return@setPositiveButton)
+
+                // Call the method to delete the entire food collection
+                databaseManager.deleteEntireFoodCollection(
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "Fridge deleted successfully", Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = { exception ->
+                        Toast.makeText(requireContext(), "Error deleting Fridge: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
+        }
+
+        binding.recipeDeleteBtn?.setOnClickListener {
+            // Show confirmation dialog
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Confirm Deletion")
+            builder.setMessage("Are you sure you want to delete all your recipes? This action cannot be undone.")
+            builder.setPositiveButton("Delete") { _, _ ->
+                // Get the user's ID
+                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@setPositiveButton
+
+                // Set up the Firestore reference to the user's recipes
+                val db = FirebaseFirestore.getInstance()
+                val recipesRef = db.collection("users").document(userId).collection("recipes")
+
+                // Fetch the recipes from Firestore again to make sure we have the most recent data
+                recipesRef.get()
+                    .addOnSuccessListener { documents ->
+                        val batch = db.batch() // Create a batch for deleting multiple documents
+
+                        // Loop through each document and add it to the batch for deletion
+                        for (document in documents) {
+                            val docRef = recipesRef.document(document.id)
+                            batch.delete(docRef)
+                        }
+
+                        // Commit the batch
+                        batch.commit()
+                            .addOnSuccessListener {
+                                Toast.makeText(requireContext(), "All recipes deleted successfully", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { exception ->
+                                Toast.makeText(requireContext(), "Error deleting recipes: ${exception.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(requireContext(), "Error fetching recipes: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
+        }
+
+
+    }
+
+
+
+    private fun cancelAlarm(receiverClass: Class<*>, requestCode: Int) {
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+        val intent = Intent(requireContext(), receiverClass)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(), requestCode, intent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
+        )
+        alarmManager?.cancel(pendingIntent)
     }
 
 }

@@ -149,9 +149,19 @@ class MainActivity : AppCompatActivity() {
 
     // Set up daily alarms for checking food expiration
     private fun setupDailyAlarms() {
-        MainActivity.setupDailyAlarm(this, ExpiryCheckReceiver::class.java, 12, 0, 0)
-        MainActivity.setupDailyAlarm(this, TwoDayToExpireCheckReceiver::class.java, 13, 0, 1)
-        MainActivity.setupDailyAlarm(this, FiveDayToExpireCheckReceiver::class.java, 11, 0, 2)
+        val sharedPreferences = this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getBoolean("Notification_ExpiryCheck", true)) {
+            MainActivity.setupDailyAlarm(this, ExpiryCheckReceiver::class.java, 12, 0, 0)
+        }
+
+        if (sharedPreferences.getBoolean("Notification_TwoDayExpire", true)) {
+            MainActivity.setupDailyAlarm(this, TwoDayToExpireCheckReceiver::class.java, 13, 0, 1)
+        }
+
+        if (sharedPreferences.getBoolean("Notification_FiveDayExpire", true)) {
+            MainActivity.setupDailyAlarm(this, FiveDayToExpireCheckReceiver::class.java, 11, 0, 2)
+        }
     }
 }
 

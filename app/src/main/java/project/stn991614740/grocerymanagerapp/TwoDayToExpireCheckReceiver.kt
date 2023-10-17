@@ -20,6 +20,15 @@ class TwoDayToExpireCheckReceiver : BroadcastReceiver() {
 
     // This method is called when the BroadcastReceiver receives an Intent broadcast.
     override fun onReceive(context: Context, intent: Intent) {
+        // Check shared preferences if this notification is enabled
+        val notificationSharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val isAlarmEnabled = notificationSharedPreferences.getBoolean("Notification_TwoDayExpire", true)
+
+        if (!isAlarmEnabled) {
+            // If this notification is disabled, don't proceed further
+            return
+        }
+
         // Initialize Firebase Firestore database.
         val db = Firebase.firestore
 
