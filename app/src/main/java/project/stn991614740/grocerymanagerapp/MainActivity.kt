@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // forget password
-        val forgotPasswordText = findViewById<Button>(R.id.forgot_password_text)
+        val forgotPasswordText = findViewById<TextView>(R.id.forgot_password_text)
         forgotPasswordText?.setOnClickListener {
             val intent = Intent(this, ResetPassword::class.java)
             startActivity(intent)
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         // Toggle visibility of the BottomNavigationView based on the active destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.startFragment) {
+            if (destination.id == R.id.startFragment || destination.id == R.id.registerFragment) {
                 bottomNavigationView.visibility = View.GONE
             } else {
                 bottomNavigationView.visibility = View.VISIBLE

@@ -1,17 +1,18 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import project.stn991614740.grocerymanagerapp.databinding.FragmentRegisterBinding
-
 
 class RegisterFragment : Fragment() {
 
@@ -35,6 +36,9 @@ class RegisterFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+        val blurOverlay = view.findViewById<View>(R.id.blurOverlay)
+        val lottieAnimationView = view.findViewById<com.airbnb.lottie.LottieAnimationView>(R.id.lottieAnimationView)
+
         binding.buttonRegister.setOnClickListener {
             val email = binding.editTextEmail.text.toString()
             val password = binding.editTextPassword.text.toString()
@@ -54,19 +58,25 @@ class RegisterFragment : Fragment() {
                                     usersCollection.document(user.uid)
                                         .set(newUser)
                                         .addOnSuccessListener {
-                                            // User registration and data insertion success, navigate back to login screen
-                                            findNavController().popBackStack()
+                                            blurOverlay.visibility = View.VISIBLE  // Show blur overlay
+                                            lottieAnimationView.visibility = View.VISIBLE  // Show Lottie animation view
+                                            lottieAnimationView.playAnimation()  // Play Lottie animation
+
+                                            // Set an animation listener to navigate to the next screen when the animation is done
+                                            lottieAnimationView.addAnimatorListener(object : AnimatorListenerAdapter() {
+                                                override fun onAnimationEnd(animation: Animator) {
+                                                    super.onAnimationEnd(animation)
+                                                    findNavController().popBackStack()  // Navigate to the next screen
+                                                }
+                                            })
                                         }
                                         .addOnFailureListener { exception ->
-                                            // Handle the exception here.
                                             Toast.makeText(context, "User registration failed: ${exception.message}", Toast.LENGTH_SHORT).show()
                                         }
                                 } else {
-                                    // User is null
                                     Toast.makeText(context, "User registration failed.", Toast.LENGTH_SHORT).show()
                                 }
                             } else {
-                                // If sign up fails, display a message to the user.
                                 val exception = task.exception
                                 Toast.makeText(context, "Registration failed: ${exception?.message}", Toast.LENGTH_SHORT).show()
                             }

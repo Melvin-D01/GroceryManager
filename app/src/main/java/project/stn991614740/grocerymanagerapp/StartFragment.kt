@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import project.stn991614740.grocerymanagerapp.databinding.FragmentStartBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -26,18 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class StartFragment : Fragment() {
 
-    // lottie animation
-    private val repeatRunnable = object : Runnable {
+    private lateinit var animationView: LottieAnimationView
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = object : Runnable {
         override fun run() {
-            if (isRescheduleAllowed) {
-                binding.animationView.playAnimation()
-                handler.postDelayed(this, 10000) // Delay for 10 seconds
-            }
+            animationView.playAnimation()
+            handler.postDelayed(this, 10000) // replay every 10 seconds
         }
     }
-
-    // lottie animation
-    private var isRescheduleAllowed = true
 
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
@@ -45,12 +42,8 @@ class StartFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("users")
-
-    // delay animation
-    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,14 +56,23 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        animationView = view.findViewById(R.id.animationView)
+        handler.post(runnable)
+
+        val currentAuth = FirebaseAuth.getInstance()
+        if (currentAuth.currentUser != null) {
+            // Log the situation to investigate further
+            Log.e(TAG, "User is not null after logout: ${currentAuth.currentUser}")
+        } else {
+            Log.d(TAG, "User is null as expected after logout")
+        }
+
         val forgotPasswordButton = view.findViewById<TextView>(R.id.forgot_password_text)
         forgotPasswordButton.setOnClickListener {
             val intent = Intent(requireContext(), ResetPassword::class.java)
             startActivity(intent)
         }
 
-        // lottie animation
-        handler.postDelayed(repeatRunnable, 10000)
 
         auth = FirebaseAuth.getInstance()
 
@@ -94,12 +96,6 @@ class StartFragment : Fragment() {
                 val intent = Intent(requireContext(), TwitterActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 startActivityForResult(intent, TWITTER_SIGN_IN)
-            }
-
-            binding.facebookSignInButton.setOnClickListener {
-                val intent = Intent(requireContext(), FacebookActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-                startActivityForResult(intent, FACEBOOK_SIGN_IN)
             }
 
             binding.buttonLogin.setOnClickListener {
@@ -132,12 +128,6 @@ class StartFragment : Fragment() {
             binding.buttonRegister.setOnClickListener {
                 findNavController().navigate(R.id.action_startFragment_to_registerFragment)
             }
-
-            // Delay the Lottie animation by 5 seconds
-            handler.postDelayed({
-                val animationView = binding.animationView // Make sure the ID matches your XML layout
-                animationView.playAnimation()
-            }, 2000)
         }
     }
 
@@ -156,16 +146,6 @@ class StartFragment : Fragment() {
 
         if (requestCode == TWITTER_SIGN_IN && resultCode == Activity.RESULT_OK) {
             // Twitter login was successful
-            val user = auth.currentUser
-            addUserToFirestore(user)
-
-            user?.let {
-                saveUserIdToSharedPreferences(it.uid)
-            }
-        }
-
-        if (requestCode == FACEBOOK_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            // Facebook login was successful
             val user = auth.currentUser
             addUserToFirestore(user)
 
@@ -273,13 +253,11 @@ class StartFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        isRescheduleAllowed = false  // Prevent the runnable from rescheduling itself
-        _binding = null
+        handler.removeCallbacks(runnable) // stop handler when the fragment is destroyed
     }
 
     companion object {
         private const val RC_SIGN_IN = 9001
         private const val TWITTER_SIGN_IN = 9002
-        private const val FACEBOOK_SIGN_IN = 64206  // This is the default request code used by Facebook SDK
     }
 }

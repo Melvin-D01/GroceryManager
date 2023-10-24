@@ -70,6 +70,7 @@ class SettingsFragment : Fragment() {
             val action = SettingsFragmentDirections.actionSettingsFragmentToStartFragment()
             findNavController().navigate(action)
         }
+
     }
 
 }

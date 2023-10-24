@@ -13,7 +13,7 @@
         android:id="@+id/shape"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/shape" />
+        android:src="@drawable/shape"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -25,13 +25,13 @@
         android:textStyle="bold"
         android:layout_marginTop="-40dp"/>
 
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:lottie_rawRes="@raw/animation_lmzb3j4h"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"/>
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -147,14 +147,5 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/facebook_sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
-
     </LinearLayout>
-
 </LinearLayout>

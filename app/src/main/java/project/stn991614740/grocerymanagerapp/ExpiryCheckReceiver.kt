@@ -18,6 +18,7 @@ import java.util.*
 class ExpiryCheckReceiver : BroadcastReceiver() {
     // This method is called when the BroadcastReceiver receives an Intent broadcast.
     override fun onReceive(context: Context, intent: Intent) {
+
         // Initialize Firebase Firestore database.
         val db = Firebase.firestore
 
