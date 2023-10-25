@@ -318,13 +318,29 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val foodItem = myAdapter.getItem(position)
-                deleteItemFromDatabase(foodItem)
-                myAdapter.removeItem(position)
+
+                // Show confirmation dialog
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Confirm Delete")
+                builder.setMessage("Are you sure you want to delete this item?")
+                builder.setCancelable(false)  // Prevent dismissal by touch outside or back press
+                builder.setPositiveButton("Yes") { _, _ ->
+                    deleteItemFromDatabase(foodItem)
+                    myAdapter.removeItem(position)
+                }
+                builder.setNegativeButton("No") { dialog, _ ->
+                    // Restore item in the view (prevent swipe away)
+                    myAdapter.notifyItemChanged(position)
+                    dialog.dismiss()
+                }
+                builder.show()
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
+
+
 
     private fun callOpenAIForRecipes() {
         showLoadingIndicator()

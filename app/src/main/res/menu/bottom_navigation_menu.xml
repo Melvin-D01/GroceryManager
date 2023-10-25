@@ -8,6 +8,10 @@
         android:icon="@mipmap/ic_add"
         android:title="Add" />
     <item
+        android:id="@+id/recipeFragment"
+        android:icon="@drawable/ic_recipe_icon"
+        android:title="Recipes" />
+    <item
         android:id="@+id/settingsFragment"
         android:icon="@mipmap/ic_settings"
         android:title="Settings" />

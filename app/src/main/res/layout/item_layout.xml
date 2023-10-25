@@ -25,24 +25,23 @@
             android:id="@+id/categoryView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_text" />
+            android:text="@string/title_text"
+            android:textSize="@dimen/recycler_item_title_text_size" />
 
         <TextView
             android:id="@+id/descriptionView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/description_text" />
+            android:text="@string/description_text"
+            android:textSize="@dimen/recycler_item_description_text_size" />
 
         <TextView
             android:id="@+id/expirationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/expiration_text" />
-<!--        <TextView-->
-<!--            android:id="@+id/idView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="ID" />-->
+            android:text="@string/expiration_text"
+            android:textSize="@dimen/recycler_item_expiration_text_size" />
+
 
     </LinearLayout>
 
@@ -54,9 +53,10 @@
 
         <Button
             android:id="@+id/editButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/recycler_edit_button_width"
+            android:layout_height="@dimen/recycler_edit_button_height"
             android:text="@string/edit_button_text"
+            android:textSize="@dimen/recycler_edit_button_text_size"
             android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
