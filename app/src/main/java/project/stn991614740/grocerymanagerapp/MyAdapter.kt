@@ -1,13 +1,20 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.ContentValues.TAG
+import android.content.Intent
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -16,9 +23,13 @@ import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.text.InputType
+
 
 class MyAdapter(private val myList: ArrayList<Food>, private val databaseUpdateListener: DatabaseUpdateListener) :
 RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+    private val REQUEST_CODE_SPEECH_INPUT = 100
 
     val user = FirebaseAuth.getInstance().currentUser
     val userId = user!!.uid
@@ -68,6 +79,17 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
             descriptionEditText.hint = "Description"
             descriptionEditText.setText(myModel.Description)
             inputLayout.addView(descriptionEditText)
+
+            val nameVoiceToTextButton = Button(holder.itemView.context)
+            nameVoiceToTextButton.text = "Click me to speak the item name!"
+            val expDateVoiceToTextButton = Button(holder.itemView.context)
+            expDateVoiceToTextButton.text = "Click me to speak the date!"
+
+//            val dialogView = inflater.inflate(R.layout.dialog_input_layout, null)
+//            builder.setView(dialogView)
+//            val voiceInputButton = dialogView.findViewById<ImageButton>(R.id.buttonVoiceInput)
+
+
             val expirationButton = Button(holder.itemView.context)
             expirationButton.text = "Set Expiration Date"
             val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -90,6 +112,8 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
             }
             expirationButton.text = dateFormat.format(expirationDate)
             inputLayout.addView(expirationButton)
+            inputLayout.addView(nameVoiceToTextButton)
+            inputLayout.addView(expDateVoiceToTextButton)
             builder.setView(inputLayout)
             builder.setPositiveButton(android.R.string.ok) { _, _ ->
                 val db = Firebase.firestore
@@ -128,5 +152,34 @@ RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         val textView2: TextView = itemView.findViewById(R.id.expirationView)
         val imageView: ImageView = itemView.findViewById(R.id.myImageView)
         val editButton: Button = itemView.findViewById(R.id.editButton)
+        //val nameVoiceToTextButton: Button = itemView.findViewById(R.id.nameVoiceToTextButton)
     }
+
+//    private fun getSpeechInput() {
+//        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+//        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the food item name!")
+//        try {
+//            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+//        } catch (e: ActivityNotFoundException) {
+//            Toast.makeText(requireContext(), "Speech recognition is not supported on this device.", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == Activity.RESULT_OK) {
+//            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+//            result?.let {
+//                if (it.isNotEmpty()) {
+//                    val spokenText = it[0]
+//                    // Use the class-level variable dialogEditText to set the text
+//                    //dialogEditText?.setText(spokenText)
+//                }
+//            }
+//        }
+//    }
+
+
 }
