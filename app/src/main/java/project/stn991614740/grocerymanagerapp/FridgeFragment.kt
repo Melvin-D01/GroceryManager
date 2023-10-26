@@ -1,39 +1,38 @@
 package project.stn991614740.grocerymanagerapp
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
 import project.stn991614740.grocerymanagerapp.databinding.FragmentFridgeBinding
 import java.util.*
-import android.provider.Settings
-import android.widget.*
-import com.google.firebase.functions.FirebaseFunctions
-import okhttp3.OkHttpClient
 import kotlin.collections.ArrayList
 
 // Fragment representing the fridge view and interactions.
 class FridgeFragment : Fragment(), DatabaseUpdateListener {
 
-    val functions = FirebaseFunctions.getInstance()
-
+    private val functions = FirebaseFunctions.getInstance()
     private lateinit var progressBar: ProgressBar
-
-    private val client = OkHttpClient()
 
     // Binding variables for the fragment.
     private var _binding: FragmentFridgeBinding? = null
@@ -105,7 +104,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                         // Directly add document to myList
                         myList.add(document)
                     }
-                    myAdapter = MyAdapter(myList, this)
+                    myAdapter = MyAdapter(myList, this, requireActivity())
                     binding.recyclerView.adapter = myAdapter
                 }
             },
@@ -136,7 +135,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                         // Directly add document to myList, since it's already a Food object
                         myList.add(document)
                     }
-                    myAdapter = MyAdapter(myList, this)
+                    myAdapter = MyAdapter(myList, this, requireActivity())
                     binding.recyclerView.adapter = myAdapter
                 }
             },
@@ -161,7 +160,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
                     val myList = ArrayList<Food>().apply {
                         addAll(documents)  // As documents is already a List<Food>, use addAll to add all elements to myList
                     }
-                    myAdapter = MyAdapter(myList, this)
+                    myAdapter = MyAdapter(myList, this, requireActivity())
                     binding.recyclerView.adapter = myAdapter
                 }
             },
@@ -170,7 +169,6 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
         )
     }
-
 
     // Delete a food item from the database.
     private fun deleteItemFromDatabase(food: Food) {
@@ -340,8 +338,6 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-
-
     private fun callOpenAIForRecipes() {
         showLoadingIndicator()
         // Initialize the Cloud Function call
@@ -383,8 +379,7 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
     }
 
-
-    // function that saves the AI generated recipe
+    // Function that saves the AI-generated recipe
     fun saveRecipeToDatabase(recipeText: String) {
         val db = Firebase.firestore
         val recipeMap = hashMapOf(
@@ -401,14 +396,42 @@ class FridgeFragment : Fragment(), DatabaseUpdateListener {
             }
     }
 
-    // function that shows the loading indicator when user is waiting for the AI recipe generator
+    // Function that shows the loading indicator when the user is waiting for the AI recipe generator
     private fun showLoadingIndicator() {
         progressBar.visibility = View.VISIBLE
     }
 
-    // function that hides the loading indicator when the AI recipe generator is done computing
+    // Function that hides the loading indicator when the AI recipe generator is done computing
     private fun hideLoadingIndicator() {
         progressBar.visibility = View.GONE
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // Handle the permissions result
+        if (requestCode == MyAdapter.MY_PERMISSIONS_REQUEST_RECORD_AUDIO) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted
+            } else {
+                // Permission was denied
+            }
+        }
+    }
+
+    companion object {
+        const val VOICE_RECOGNITION_REQUEST_CODE = 1001
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val matches = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            if (matches != null && matches.isNotEmpty()) {
+                val text = matches[0]
+                // Do something with the recognized text, such as updating a TextView or EditText
+            }
+        }
     }
 
 
