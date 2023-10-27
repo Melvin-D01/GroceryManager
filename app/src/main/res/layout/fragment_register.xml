@@ -36,7 +36,6 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"/>
 
-
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="360dp"
