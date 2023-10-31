@@ -5,13 +5,17 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import project.stn991614740.grocerymanagerapp.databinding.FragmentStartBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -21,16 +25,22 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 
-
-
 class StartFragment : Fragment() {
+
+    private lateinit var animationView: LottieAnimationView
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = object : Runnable {
+        override fun run() {
+            animationView.playAnimation()
+            handler.postDelayed(this, 10000) // replay every 10 seconds
+        }
+    }
 
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-
 
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("users")
@@ -45,6 +55,24 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        animationView = view.findViewById(R.id.animationView)
+        handler.post(runnable)
+
+        val currentAuth = FirebaseAuth.getInstance()
+        if (currentAuth.currentUser != null) {
+            // Log the situation to investigate further
+            Log.e(TAG, "User is not null after logout: ${currentAuth.currentUser}")
+        } else {
+            Log.d(TAG, "User is null as expected after logout")
+        }
+
+        val forgotPasswordButton = view.findViewById<TextView>(R.id.forgot_password_text)
+        forgotPasswordButton.setOnClickListener {
+            val intent = Intent(requireContext(), ResetPassword::class.java)
+            startActivity(intent)
+        }
+
 
         auth = FirebaseAuth.getInstance()
 
@@ -125,7 +153,6 @@ class StartFragment : Fragment() {
                 saveUserIdToSharedPreferences(it.uid)
             }
         }
-
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
@@ -220,7 +247,7 @@ class StartFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        handler.removeCallbacks(runnable) // stop handler when the fragment is destroyed
     }
 
     companion object {

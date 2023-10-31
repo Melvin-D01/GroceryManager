@@ -19,6 +19,8 @@ import project.stn991614740.grocerymanagerapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.provider.Settings
 import com.google.firebase.FirebaseApp
+import android.widget.Button
+import android.widget.TextView
 import java.util.*
 
 
@@ -32,6 +34,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         FirebaseApp.initializeApp(this)
+        // forget password
+        val forgotPasswordText = findViewById<TextView>(R.id.forgot_password_text)
+        forgotPasswordText?.setOnClickListener {
+            val intent = Intent(this, ResetPassword::class.java)
+            startActivity(intent)
+        }
+
         // Set up alarms to check for item expiration
         setupDailyAlarms()
 
@@ -56,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         // Toggle visibility of the BottomNavigationView based on the active destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.startFragment) {
+            if (destination.id == R.id.startFragment || destination.id == R.id.registerFragment) {
                 bottomNavigationView.visibility = View.GONE
             } else {
                 bottomNavigationView.visibility = View.VISIBLE
