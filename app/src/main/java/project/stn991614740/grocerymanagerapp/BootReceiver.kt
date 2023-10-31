@@ -15,9 +15,19 @@ class BootReceiver : BroadcastReceiver() {
         // Check if the received intent is the BOOT_COMPLETED action
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             // Set up daily alarms for different notification types based on user preferences.
-            setupDailyAlarm(context, ExpiryCheckReceiver::class.java, 12, 0, 0, "Notification_ExpiryCheck")
-            setupDailyAlarm(context, TwoDayToExpireCheckReceiver::class.java, 11, 0, 1, "Notification_TwoDayExpire")
-            setupDailyAlarm(context, FiveDayToExpireCheckReceiver::class.java, 13, 0, 2, "Notification_FiveDayExpire")
+            val sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+
+            if (sharedPreferences.getBoolean("Notification_ExpiryCheck", true)) {
+                setupDailyAlarm(context, ExpiryCheckReceiver::class.java, 12, 0, 0, "Notification_ExpiryCheck")
+            }
+
+            if (sharedPreferences.getBoolean("Notification_TwoDayExpire", true)) {
+                setupDailyAlarm(context, TwoDayToExpireCheckReceiver::class.java, 11, 0, 1, "Notification_TwoDayExpire")
+            }
+
+            if (sharedPreferences.getBoolean("Notification_FiveDayExpire", true)) {
+                setupDailyAlarm(context, FiveDayToExpireCheckReceiver::class.java, 13, 0, 2, "Notification_FiveDayExpire")
+            }
         }
     }
 

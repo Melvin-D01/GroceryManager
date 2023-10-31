@@ -162,4 +162,34 @@ class DatabaseManager(private val userId: String) {
                 onFailure(exception)
             }
     }
+
+    fun deleteEntireFoodCollection(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        // Get a reference to the food collection
+        val foodCollection = db.collection("users").document(userId).collection("food")
+
+        // Fetch all documents to delete them
+        foodCollection.get()
+            .addOnSuccessListener { documents ->
+                // Using a batch to delete multiple documents at once
+                val batch = db.batch()
+
+                // Loop through all documents and schedule them for deletion
+                for (document in documents) {
+                    batch.delete(document.reference)
+                }
+
+                // Commit the batch
+                batch.commit().addOnSuccessListener {
+                    onSuccess()
+                }.addOnFailureListener { exception ->
+                    onFailure(exception)
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
 }
