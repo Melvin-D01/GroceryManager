@@ -455,20 +455,40 @@ class ScannerFragment : Fragment() {
                         val e = task.exception
                     }
 
-                    val userDate = (task.result?.data as? String)
-                Log.d("RecognizedText", "Recognized Text: $userDate")
+                    val userDateStr = (task.result?.data as? String)
+                Log.d("RecognizedText", "Recognized Text: $userDateStr")
                     // Update expirationText with recognized text after userDate is initialized
                 // Check if userDate matches the DD-MM-YYYY format using regex
-                if (isValidDate(userDate)) {
-                    Log.d("RecognizedText", "Recognized Text: $userDate")
+                // Check if userDate matches the DD-MM-YYYY format using regex
+                if (isValidDate(userDateStr)) {
+                    val updatedDate = updateYearToCurrentOrNext(userDateStr.toString())
+                    Log.d("RecognizedText", "Updated Date: $updatedDate")
                     // Update expirationText with recognized text after userDate is validated
-                    binding.expirationText.setText(userDate)
+                    binding.expirationText.setText(updatedDate)
                 } else {
-                    Log.d("RecognizedText", "Text is not in the correct format: $userDate")
-                    showToast("Failed to find date in the image")
+                    Log.d("RecognizedText", "Text is not in the correct format: $userDateStr")
+                    showToast("Failed to find date in the correct format")
                 }
 
             }
+    }
+
+    private fun updateYearToCurrentOrNext(dateStr: String): String {
+        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val recognizedDate = sdf.parse(dateStr) ?: return dateStr // Return original date if parsing fails
+
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        calendar.time = recognizedDate
+        calendar.set(Calendar.YEAR, currentYear)
+
+        val currentDate = Calendar.getInstance()
+        if (calendar.before(currentDate)) {
+            calendar.add(Calendar.YEAR, 1)
+        }
+
+        return sdf.format(calendar.time)
     }
 
     private fun isValidDate(date: String?): Boolean {

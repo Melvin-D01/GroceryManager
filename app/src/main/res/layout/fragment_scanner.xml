@@ -152,5 +152,10 @@
         </LinearLayout>
 
     </ScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"/>
 
 </LinearLayout>

@@ -26,29 +26,47 @@
         android:layout_marginTop="5dp"
         android:background="@color/material_dynamic_neutral60" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_dark_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable Dark Mode"/>
+        android:text="Enable Dark Mode"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"/>
 
     <Switch
         android:id="@+id/switchNotificationExpiry"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Expiry Notification" />
+        android:layout_height="50dp"
+        android:text="Expiry Notification"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"/>
 
     <Switch
         android:id="@+id/switchNotificationTwoDayToExpire"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Two Day To Expire Notification" />
+        android:layout_height="50dp"
+        android:text="Two Day To Expire Notification"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"/>
 
     <Switch
         android:id="@+id/switchNotificationFiveDayToExpire"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Five Day To Expire Notification" />
+        android:layout_height="50dp"
+        android:text="Five Day To Expire Notification"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"/>
 
     <Button
         android:id="@+id/reportBugButton"
@@ -56,32 +74,28 @@
         android:layout_height="wrap_content"
         android:text="Report a Bug"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp" />
     <Button
         android:id="@+id/deleteFridgeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete Fridge Data"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp" />
     <Button
         android:id="@+id/recipeDeleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete Recipe Data"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp" />
     <Button
         android:id="@+id/deleteAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete Account"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp" />
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
@@ -101,5 +115,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"/>
 </LinearLayout>
 
