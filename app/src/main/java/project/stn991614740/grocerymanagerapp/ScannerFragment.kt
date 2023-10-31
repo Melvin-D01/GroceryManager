@@ -81,7 +81,10 @@ class ScannerFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             val matches: List<String>? = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             val voiceInput = matches?.get(0) // Taking the first match which is typically the most accurate
-            binding.expirationText.setText(voiceInput)
+            //binding.expirationText.setText(voiceInput)
+
+            // parse the user's voice input
+            callOpenAIWithUserInput(voiceInput.toString())
         }
     }
 
@@ -167,6 +170,7 @@ class ScannerFragment : Fragment() {
 
             val catText = binding.testText.text.toString()
             val descText = binding.categoryText.text.toString()
+
             val expText = binding.expirationText.text.toString()
 
             val expDate = dateFormat.parse(expText)

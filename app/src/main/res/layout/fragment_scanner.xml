@@ -15,7 +15,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/inputImageBtn"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_weight="1"
             app:icon="@drawable/ic_baseline_add_a_photo_24"
             android:text="Scan Date
