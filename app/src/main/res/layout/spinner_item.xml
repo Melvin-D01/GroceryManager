@@ -7,4 +7,5 @@
     android:gravity="end"
     android:paddingRight="28dp"
     android:textSize="14sp"
+    android:textColor="@color/forgotpassword"
     />

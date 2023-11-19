@@ -20,7 +20,11 @@
     <fragment
         android:id="@+id/fridgeFragment"
         android:name="project.stn991614740.grocerymanagerapp.FridgeFragment"
-        android:label="FridgeFragment" />
+        android:label="FridgeFragment" >
+        <action
+            android:id="@+id/action_fridgeFragment_to_addFragment"
+            app:destination="@id/addFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="project.stn991614740.grocerymanagerapp.AddFragment"

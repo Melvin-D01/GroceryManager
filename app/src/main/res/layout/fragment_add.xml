@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     tools:context=".AddFragment"
-    tools:layout="@layout/fragment_add">
+    tools:layout="@layout/fragment_add"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/textView"
@@ -14,19 +15,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Categories"
-        android:textAlignment="center"
-        android:textColor="@color/material_dynamic_neutral60"
+        android:textColor="@color/forgotpassword"
         android:textSize="100px"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="15dp"
+        android:textStyle="bold"/>
 
     <View
         android:id="@+id/lineView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
-        android:background="@color/material_dynamic_neutral60"
+        android:background="@color/forgotpassword"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

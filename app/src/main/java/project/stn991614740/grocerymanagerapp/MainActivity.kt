@@ -82,10 +82,6 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.fridgeFragment)
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.addFragment -> {
-                    navController.navigate(R.id.addFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
                 R.id.recipeFragment -> {
                     navController.navigate(R.id.recipeFragment)
                     return@setOnNavigationItemSelectedListener true

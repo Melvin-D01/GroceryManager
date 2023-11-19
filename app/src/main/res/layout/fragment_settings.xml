@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:orientation="vertical"
-    tools:context=".SettingsFragment">
+    tools:context=".SettingsFragment"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/textView"
@@ -15,16 +16,17 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="Settings"
-        android:textAlignment="center"
-        android:textColor="@color/material_dynamic_neutral60"
-        android:textSize="100px" />
+        android:textColor="@color/forgotpassword"
+        android:textSize="30sp"
+        android:layout_marginLeft="15dp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/textView"
         android:layout_marginTop="5dp"
-        android:background="@color/material_dynamic_neutral60" />
+        android:background="@color/forgotpassword" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,7 +44,9 @@
         android:layout_height="wrap_content"
         android:text="Enable Dark Mode"
         android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/forgotpassword"
+        android:textStyle="bold"/>
 
     <Switch
         android:id="@+id/switchNotificationExpiry"
@@ -50,7 +54,9 @@
         android:layout_height="50dp"
         android:text="Expiry Notification"
         android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/forgotpassword"
+        android:textStyle="bold"/>
 
     <Switch
         android:id="@+id/switchNotificationTwoDayToExpire"
@@ -58,7 +64,9 @@
         android:layout_height="50dp"
         android:text="Two Day To Expire Notification"
         android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/forgotpassword"
+        android:textStyle="bold"/>
 
     <Switch
         android:id="@+id/switchNotificationFiveDayToExpire"
@@ -66,7 +74,9 @@
         android:layout_height="50dp"
         android:text="Five Day To Expire Notification"
         android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/forgotpassword"
+        android:textStyle="bold"/>
 
     <Button
         android:id="@+id/reportBugButton"
@@ -74,7 +84,8 @@
         android:layout_height="wrap_content"
         android:text="Report a Bug"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        />
     <Button
         android:id="@+id/deleteFridgeBtn"
         android:layout_width="wrap_content"
