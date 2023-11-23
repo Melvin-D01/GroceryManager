@@ -11,6 +11,6 @@
     <color name="background">#F0F4F3</color>
     <color name="statusbar">#50C2C9</color>
 
-    <color name = "forgotpassword">#FF5050</color>
+    <color name = "forgotpassword">#74BE3B</color>
     <color name="signup">#134B4F</color>
 </resources>
