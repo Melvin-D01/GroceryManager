@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="?attr/colorSecondary">
 
         <TextView
             android:id="@+id/recipeTextView"
@@ -18,7 +19,8 @@
             android:layout_height="wrap_content"
             android:text="Recipe Name Goes Here"
             android:textSize="20sp"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@color/forgotpassword"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/creationDateTextView"
@@ -26,7 +28,8 @@
             android:layout_height="wrap_content"
             android:text="Creation Date Goes Here"
             android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/forgotpassword"/>
 
     </LinearLayout>
 

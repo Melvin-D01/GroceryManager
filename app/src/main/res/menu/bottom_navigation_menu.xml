@@ -3,10 +3,7 @@
         android:id="@+id/fridgeFragment"
         android:icon="@mipmap/ic_fridge"
         android:title="Fridge" />
-    <item
-        android:id="@+id/addFragment"
-        android:icon="@mipmap/ic_add"
-        android:title="Add" />
+
     <item
         android:id="@+id/recipeFragment"
         android:icon="@drawable/ic_recipe_icon"

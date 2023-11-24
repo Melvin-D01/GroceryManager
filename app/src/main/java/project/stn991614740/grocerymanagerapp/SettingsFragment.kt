@@ -71,8 +71,8 @@ class SettingsFragment : Fragment() {
         }
 
         // Expiry notification switch initialization
-        binding.switchNotificationExpiry.isChecked = sharedPreferences.getBoolean("Notification_ExpiryCheck", true)
-        binding.switchNotificationExpiry.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchNotificationExpiry!!.isChecked = sharedPreferences.getBoolean("Notification_ExpiryCheck", true)
+        binding.switchNotificationExpiry!!.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean("Notification_ExpiryCheck", isChecked).apply()
             if (!isChecked) {
                 cancelAlarm(ExpiryCheckReceiver::class.java, 0)
@@ -80,8 +80,8 @@ class SettingsFragment : Fragment() {
         }
 
         // Two day to expire notification switch initialization
-        binding.switchNotificationTwoDayToExpire.isChecked = sharedPreferences.getBoolean("Notification_TwoDayExpire", true)
-        binding.switchNotificationTwoDayToExpire.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchNotificationTwoDayToExpire!!.isChecked = sharedPreferences.getBoolean("Notification_TwoDayExpire", true)
+        binding.switchNotificationTwoDayToExpire!!.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean("Notification_TwoDayExpire", isChecked).apply()
             if (!isChecked) {
                 cancelAlarm(TwoDayToExpireCheckReceiver::class.java, 1)
@@ -89,8 +89,8 @@ class SettingsFragment : Fragment() {
         }
 
         // Five day to expire notification switch initialization
-        binding.switchNotificationFiveDayToExpire.isChecked = sharedPreferences.getBoolean("Notification_FiveDayExpire", true)
-        binding.switchNotificationFiveDayToExpire.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchNotificationFiveDayToExpire!!.isChecked = sharedPreferences.getBoolean("Notification_FiveDayExpire", true)
+        binding.switchNotificationFiveDayToExpire!!.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean("Notification_FiveDayExpire", isChecked).apply()
             if (!isChecked) {
                 cancelAlarm(FiveDayToExpireCheckReceiver::class.java, 2)
@@ -210,6 +210,20 @@ class SettingsFragment : Fragment() {
                 dialog.dismiss()
             }
             builder.show()
+        }
+
+
+        binding.rlDarkMode?.setOnClickListener {
+            binding.switchDarkMode.isChecked = !binding.switchDarkMode.isChecked
+        }
+        binding.rlExpired?.setOnClickListener {
+            binding.switchNotificationExpiry.isChecked = !binding.switchNotificationExpiry.isChecked
+        }
+        binding.rlExpiredTwoDay?.setOnClickListener {
+            binding.switchNotificationTwoDayToExpire.isChecked = !binding.switchNotificationTwoDayToExpire.isChecked
+        }
+        binding.rlExpiredFiveDay?.setOnClickListener {
+            binding.switchNotificationFiveDayToExpire.isChecked = !binding.switchNotificationFiveDayToExpire.isChecked
         }
 
 

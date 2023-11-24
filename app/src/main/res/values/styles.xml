@@ -16,4 +16,13 @@
     <style name="SpinnerStyle" parent="Widget.AppCompat.Spinner.Underlined">
         <item name="android:dropDownItemStyle">@style/SpinnerDropdownItemStyle</item>
     </style>
+
+    <style name="CommonFabStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:src">@drawable/add_icon</item>
+        <item name="android:backgroundTint">?attr/colorAccent</item>
+    </style>
 </resources>

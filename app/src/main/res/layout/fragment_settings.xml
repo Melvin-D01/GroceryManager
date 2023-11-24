@@ -15,16 +15,17 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="Settings"
-        android:textAlignment="center"
-        android:textColor="@color/material_dynamic_neutral60"
-        android:textSize="100px" />
+        android:textColor="@color/forgotpassword"
+        android:textSize="30sp"
+        android:layout_marginLeft="15dp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/textView"
         android:layout_marginTop="5dp"
-        android:background="@color/material_dynamic_neutral60" />
+        android:background="@color/forgotpassword" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -36,73 +37,212 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_dark_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enable Dark Mode"
-        android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+            <RelativeLayout
+                android:id="@+id/rlDarkMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true">
 
-    <Switch
-        android:id="@+id/switchNotificationExpiry"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Expiry Notification"
-        android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/textViewSwitchLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Enable Dark Mode"
+                    android:textSize="20sp"
+                    android:textColor="@color/forgotpassword"
+                    android:textStyle="bold"/>
 
-    <Switch
-        android:id="@+id/switchNotificationTwoDayToExpire"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Two Day To Expire Notification"
-        android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_dark_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
 
-    <Switch
-        android:id="@+id/switchNotificationFiveDayToExpire"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Five Day To Expire Notification"
-        android:textSize="20sp"
-        android:layout_marginBottom="10dp"/>
+            </RelativeLayout>
 
-    <Button
-        android:id="@+id/reportBugButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Report a Bug"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
-    <Button
-        android:id="@+id/deleteFridgeBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Fridge Data"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
-    <Button
-        android:id="@+id/recipeDeleteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Recipe Data"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
-    <Button
-        android:id="@+id/deleteAccountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Account"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"/>
+            <RelativeLayout
+                android:id="@+id/rlExpired"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/textViewSwitchLabel2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Expired Notifications"
+                    android:textSize="20sp"
+                    android:textColor="@color/forgotpassword"
+                    android:textStyle="bold"/>
+
+                <Switch
+                    android:id="@+id/switchNotificationExpiry"
+                    android:layout_width="wrap_content"
+                    android:layout_height= "48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlExpiredTwoDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/textViewSwitchLabel3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Two Day To Expire Notifications"
+                    android:textSize="20sp"
+                    android:textColor="@color/forgotpassword"
+                    android:textStyle="bold"/>
+
+                <Switch
+                    android:id="@+id/switchNotificationTwoDayToExpire"
+                    android:layout_width="wrap_content"
+                    android:layout_height= "48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlExpiredFiveDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/textViewSwitchLabel4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Five Day To Expire Notifications"
+                    android:textSize="20sp"
+                    android:textColor="@color/forgotpassword"
+                    android:textStyle="bold"/>
+
+                <Switch
+                    android:id="@+id/switchNotificationFiveDayToExpire"
+                    android:layout_width="wrap_content"
+                    android:layout_height= "48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/reportBugButton"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="  Report a bug"
+                android:textSize="20sp"
+                android:textColor="@color/forgotpassword"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="start|center"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/deleteFridgeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="  Delete Fridge Data"
+                android:textSize="20sp"
+                android:textColor="@color/forgotpassword"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="start|center"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/recipeDeleteBtn"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="  Delete Recipe Data"
+                android:textSize="20sp"
+                android:textColor="@color/forgotpassword"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="start|center"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/deleteAccountButton"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="  Delete Account"
+                android:textSize="20sp"
+                android:textColor="@color/forgotpassword"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="start|center"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/logoutButton"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="  Logout"
+                android:textSize="20sp"
+                android:textColor="@color/forgotpassword"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="start|center"
+                android:background="@drawable/rounded_corners"
+                android:layout_marginTop="10dp" />
+
+
+
 
     <TextView
         android:id="@+id/textViewAppVersion"
