@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="#e5e5e5">
+        android:background="?attr/colorSecondary">
 
         <TextView
             android:id="@+id/recipeTextView"

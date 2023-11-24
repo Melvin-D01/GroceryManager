@@ -6,12 +6,17 @@
         <item name="colorPrimaryVariant">#74BE3B</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">#e5e5e5</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/white</item>
+        <!-- Accent color. -->
+        <item name="colorAccent">#74BE3B</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- Background color -->
+        <item name="android:windowBackground">@color/background</item>
+
     </style>
 
     <style name="Theme.GroceryManagerApp.NoActionBar">

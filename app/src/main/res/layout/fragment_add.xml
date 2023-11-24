@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     tools:context=".AddFragment"
-    tools:layout="@layout/fragment_add"
-    android:background="@color/background">
+    tools:layout="@layout/fragment_add">
 
     <TextView
         android:id="@+id/textView"
